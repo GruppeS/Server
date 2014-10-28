@@ -5,7 +5,7 @@ public class QOTD {
 	private String quote;
 	private String author;
 	private String topic;
-	
+
 	public QOTD(String quote, String author, String topic) {
 		super();
 		this.quote = quote;
@@ -30,7 +30,4 @@ public class QOTD {
 	public void setTopic(String topic) {
 		this.topic = topic;
 	}
-	
-	
 }
-

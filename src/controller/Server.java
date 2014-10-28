@@ -17,7 +17,7 @@ public class Server {
 
 	public static void main(String args[]) {
 
-		new Thread( new adminThread() ).start();
+		//		new Thread( new adminThread() ).start();
 
 		try {
 			serverSocket = new ServerSocket(8888);
@@ -48,24 +48,21 @@ class clientThread implements Runnable {
 
 	public void run() {
 		try {
-			System.out.println("forbindelse Oprettet!");
-			//BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+			System.out.println("Ny forbindelse oprettet");
+
 			byte[] b = new byte[500000];
 			int count = clientSocket.getInputStream().read(b);
 			ByteArrayInputStream bais = new ByteArrayInputStream(b);
-			DataInputStream inFromClient = new DataInputStream(clientSocket.getInputStream());		
-			//Creates an object of the data which is to be send back to the client, via the connectionSocket
+			DataInputStream inFromClient = new DataInputStream(clientSocket.getInputStream());
 			DataOutputStream outToClient = new DataOutputStream(clientSocket.getOutputStream());
-			System.out.println("Outtoclient oprettet!");
-			//Sets client sentence equals input from client
-			//incomingJson = inFromClient.readLine();			
 
+			// Decrypts JSON string
 			String ny = cryp.decrypt(b);
 
-			//cryp.StringEncryption(inFromClient.readLine());
-			System.out.println("Besked modtaget!");
-			//Sysout recieved message
-			System.out.println("Received: " + ny);
+			// Saves incoming JSON to string
+			String incomingJson = inFromClient.readLine();			
+
+			// Saves the returned answer
 			String returnSvar = GS.GiantSwitchMethod(ny);		
 			//Sends the capitalized message back to client!!
 			outToClient.writeBytes(returnSvar + "\n");

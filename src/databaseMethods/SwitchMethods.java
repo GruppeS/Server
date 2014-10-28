@@ -9,9 +9,7 @@ public class SwitchMethods extends Model
 {
 	QueryBuilder qb = new QueryBuilder();
 	QOTDModel qm = new QOTDModel();
-	
 
-	
 	/**
 	 * Allows the client to create a new calendar
 	 * @param userName
@@ -34,33 +32,33 @@ public class SwitchMethods extends Model
 		{
 			stringToBeReturned = "The new calender has not been created!";
 		}
-		
-		
+
+
 		return stringToBeReturned;
 	}
-	
+
 	public boolean authenticateNewCalender(String newCalenderName) throws SQLException
 	{
 		getConn();
 		boolean authenticate = false;
-		
+
 		resultSet= qb.selectFrom("calendar").where("name", "=", newCalenderName).ExecuteQuery();
-				
-				//("select * from test.calender where Name = '"+newCalenderName+"';");
+
+		//("select * from test.calender where Name = '"+newCalenderName+"';");
 		while(resultSet.next())
 		{
 			authenticate = true;
 		}
 		return authenticate;
 	}
-	
+
 	public void addNewCalender (String newCalenderName, String userName, int publicOrPrivate) throws SQLException
 	{
 		String [] keys = {"Name","active","CreatedBy","PrivatePublic"};
 		String [] values = {newCalenderName,"1",userName, Integer.toString(publicOrPrivate)};
 		qb.update("calendar", keys, values).all().Execute();
-		
-//		doUpdate("insert into test.calender (Name, Active, CreatedBy, PrivatePublic) VALUES ('"+newCalenderName+"', '1', '"+userName+"', '"+publicOrPrivate+"');");
+
+		//		doUpdate("insert into test.calender (Name, Active, CreatedBy, PrivatePublic) VALUES ('"+newCalenderName+"', '1', '"+userName+"', '"+publicOrPrivate+"');");
 	}
 	/**
 	 * Allows the client to delete a calendar
@@ -76,15 +74,15 @@ public class SwitchMethods extends Model
 
 		return stringToBeReturned;
 	}
-	
+
 	public String removeCalender (String userName, String calenderName) throws SQLException
 	{
 		String stringToBeReturend = "";
 		String usernameOfCreator ="";
 		String calenderExists = "";
 		resultSet = qb.selectFrom("Calender").where("Name", "=", calenderName).ExecuteQuery();
-				
-//				("select * from calender where Name = '"+calenderName+"';");
+
+		//				("select * from calender where Name = '"+calenderName+"';");
 		while(resultSet.next())
 		{
 			calenderExists = resultSet.toString();
@@ -115,13 +113,13 @@ public class SwitchMethods extends Model
 		{
 			stringToBeReturend = "The calender you are trying to delete, does not exists.";
 		}
-		
-		
-		
+
+
+
 		return stringToBeReturend;
 	}
-	
-	
+
+
 	// Metoden faar email og password fra switchen (udtrukket fra en json) samt en boolean der skal saettes til true hvis det er serveren der logger paa, og false hvis det er en klient
 	/**
 	 * Allows the client to log in

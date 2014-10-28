@@ -4,49 +4,42 @@ package GUI;
 // Person class that represents an entry in an address book.
 public class UserInformation
 {
-  
-   private String userName;
-   private String password;
-  
 
-   // no-argument constructor
-   public UserInformation()
-   {
-   } // end no-argument Person constructor
-
-   // constructor
-   public UserInformation(  String user, String pass )
-   {
-	   
-//      setUserid(id);
-     
-      setUserName ( user );
-      setPassword ( pass );
-      
-
-   } 
+	private String userName;
+	private String password;
 
 
+	// no-argument constructor
+	public UserInformation()
+	{
+	} // end no-argument Person constructor
 
+	// constructor
+	public UserInformation(  String user, String pass )
+	{
+		//      setUserid(id);
 
-public String getUserName() {
-	return userName;
-}
+		setUserName ( user );
+		setPassword ( pass );
+	} 
 
-public void setUserName(String user) {
-	userName = user;
-}
+	public String getUserName() {
+		return userName;
+	}
 
-public String getPassword() {
-	return password;
-}
+	public void setUserName(String user) {
+		userName = user;
+	}
 
-public void setPassword(String pass) {
-	password = pass;
-}
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String pass) {
+		password = pass;
+	}
 
 }
 
 
 
- 

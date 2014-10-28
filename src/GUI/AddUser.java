@@ -1,21 +1,19 @@
 package GUI;
 
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import java.awt.Font;
-import java.awt.Color;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import java.awt.Dimension;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.BevelBorder;
-import java.awt.Cursor;
-import java.awt.event.KeyEvent;
-import java.awt.SystemColor;
+import javax.swing.border.CompoundBorder;
 
 public class AddUser extends JPanel {
 	private JTextField textField_Email;
@@ -34,12 +32,12 @@ public class AddUser extends JPanel {
 		setPreferredSize(new Dimension(1366, 768));
 		setSize(new Dimension(1366, 768));
 		setLayout(null);
-		
+
 		lblCBSlogo = new JLabel("");
 		lblCBSlogo.setIcon(new ImageIcon(UserInfo.class.getResource("/Images/CBSLogo3.png")));
 		lblCBSlogo.setBounds(10, 698, 250, 59);
 		add(lblCBSlogo);
-		
+
 
 		btnLogout = new JButton("Log out");
 		btnLogout.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.LOWERED, new Color(255, 255, 255), new Color(0, 0, 0), new Color(255, 255, 255), new Color(0, 0, 0)), new BevelBorder(BevelBorder.LOWERED, new Color(255, 255, 255), new Color(0, 0, 0), new Color(255, 255, 255), new Color(0, 0, 0))));
@@ -94,47 +92,47 @@ public class AddUser extends JPanel {
 		btnSubmit.setFont(new Font("Arial", Font.BOLD, 30));
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			//Submit changes to databases
-			//hvad sker der n�r �ndringer ved en bruger submittes
+				//Submit changes to databases
+				//hvad sker der n�r �ndringer ved en bruger submittes
 			}
 		}
-		);
+				);
 		btnSubmit.setBounds(570, 425, 239, 43);
 		add(btnSubmit);
 
-		
-				
-				btnMainMenu = new JButton("Main menu");
-				btnMainMenu.setForeground(Color.WHITE);
-				btnMainMenu.setFont(new Font("Arial", Font.BOLD, 30));
-				btnMainMenu.setContentAreaFilled(false);
-				btnMainMenu.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.LOWERED, new Color(255, 255, 255), new Color(0, 0, 0), new Color(255, 255, 255), new Color(0, 0, 0)), new BevelBorder(BevelBorder.LOWERED, new Color(255, 255, 255), new Color(0, 0, 0), new Color(255, 255, 255), new Color(0, 0, 0))));
-				btnMainMenu.setBounds(609, 467, 164, 44);
-				add(btnMainMenu);
-				
-				lblUserInfo = new JLabel("Create user");
-				lblUserInfo.setForeground(Color.WHITE);
-				lblUserInfo.setFont(new Font("Arial", Font.BOLD, 78));
-				lblUserInfo.setBounds(451, 90, 464, 90);
-				add(lblUserInfo);
-								
-				JLabel lblBackground = new JLabel("");
-				lblBackground.setSize(new Dimension(1366, 768));
-				lblBackground.setIcon(new ImageIcon(UserInfo.class.getResource("/Images/MetalBackground.jpg")));
-				lblBackground.setBounds(0, 0, 1366, 768);
-				add(lblBackground);
-		
-		
+
+
+		btnMainMenu = new JButton("Main menu");
+		btnMainMenu.setForeground(Color.WHITE);
+		btnMainMenu.setFont(new Font("Arial", Font.BOLD, 30));
+		btnMainMenu.setContentAreaFilled(false);
+		btnMainMenu.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.LOWERED, new Color(255, 255, 255), new Color(0, 0, 0), new Color(255, 255, 255), new Color(0, 0, 0)), new BevelBorder(BevelBorder.LOWERED, new Color(255, 255, 255), new Color(0, 0, 0), new Color(255, 255, 255), new Color(0, 0, 0))));
+		btnMainMenu.setBounds(609, 467, 164, 44);
+		add(btnMainMenu);
+
+		lblUserInfo = new JLabel("Create user");
+		lblUserInfo.setForeground(Color.WHITE);
+		lblUserInfo.setFont(new Font("Arial", Font.BOLD, 78));
+		lblUserInfo.setBounds(451, 90, 464, 90);
+		add(lblUserInfo);
+
+		JLabel lblBackground = new JLabel("");
+		lblBackground.setSize(new Dimension(1366, 768));
+		lblBackground.setIcon(new ImageIcon(UserInfo.class.getResource("/Images/MetalBackground.jpg")));
+		lblBackground.setBounds(0, 0, 1366, 768);
+		add(lblBackground);
+
+
 
 	}
-	
+
 	public void addActionListener(ActionListener l) {
 		btnSubmit.addActionListener(l);
 		btnLogout.addActionListener(l);
 		btnMainMenu.addActionListener(l);
 	}
 
-	
+
 
 	public JTextField getTextField_Email() {
 		return textField_Email;
@@ -148,14 +146,14 @@ public class AddUser extends JPanel {
 		return textField_Password;
 	}
 
-	
+
 	public JButton getBtnSubmit() {
 		return btnSubmit;
 	}
 	public JButton getBtnMainMenu() {
 		return btnMainMenu;
 	}
-	
+
 	public JButton getBtnLogout() {
 		return btnLogout;
 	}

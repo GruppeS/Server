@@ -1,152 +1,136 @@
 package model.QueryBuild;
 
-/**
- * Created by jesperbruun on 15/10/14.
- */
 public class QueryBuilder {
 
-    private String selectValue;
-    private String tableName;
-    private String fields;
-    private boolean softDelete;
-    private boolean isUpdate;
+	private String selectValue;
+	private String tableName;
+	private String fields;
+	private boolean softDelete;
+	private boolean isUpdate;
 
-    protected void setSoftDelete(boolean b){
-        this.softDelete = b;
-    }
-    protected boolean isSoftDelete(){
-        return softDelete;
-    }
+	protected void setSoftDelete(boolean b){
+		this.softDelete = b;
+	}
+	protected boolean isSoftDelete(){
+		return softDelete;
+	}
+	protected boolean isUpdate() {
+		return isUpdate;
+	}
+	protected void setUpdate(boolean isUpdate) {
+		this.isUpdate = isUpdate;
+	}
+	protected void setSelectValue(String selectValue) {
+		this.selectValue = selectValue;
+	}
+	protected String getSelectValue(){
+		return selectValue;
+	}
+	protected String getTableName() {
+		return tableName;
+	}
+	protected void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+	protected String getFields(){
+		return fields;
+	}
+	protected void setFields(String fields){
+		this.fields = fields;
+	}
 
-    protected boolean isUpdate() {
-        return isUpdate;
-    }
-    protected void setUpdate(boolean isUpdate) {
-        this.isUpdate = isUpdate;
-    }
+	/**
+	 * SELECT values FROM tablename
+	 * @param values String[]
+	 * @param tableName String
+	 * @return
+	 */
+	 public Where selectFrom(String[] values, String tableName) {
 
-    protected void setSelectValue(String selectValue) {
-        this.selectValue = selectValue;
-    }
-    protected String getSelectValue(){
-        return selectValue;
-    }
+		 QueryBuilder queryBuilder = new QueryBuilder();
 
-    protected String getTableName() {
-        return tableName;
-    }
-    protected void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
+		 StringBuilder sb = new StringBuilder();
+		 for (String n : values) {
+			 if (sb.length() > 0) sb.append(',');
+			 sb.append(n);
+		 }
+		 queryBuilder.setSelectValue(sb.toString());
+		 queryBuilder.setTableName(tableName);
 
-    protected String getFields(){
-        return fields;
-    }
-    protected void setFields(String fields){
-        this.fields = fields;
-    }
+		 return new Where(queryBuilder);
+	 }
 
-    /**
-     * SELECT values FROM tablename
-     * @param values String[]
-     * @param tableName String
-     * @return
-     */
-    public Where selectFrom(String[] values, String tableName) {
+	 /**
+	  * SELECT * FROM tableName
+	  * @param tableName
+	  * @return
+	  */
+	 public Where selectFrom(String tableName) {
 
-        QueryBuilder queryBuilder = new QueryBuilder();
+		 QueryBuilder queryBuilder = new QueryBuilder();
 
-        StringBuilder sb = new StringBuilder();
-        for (String n : values) {
-            if (sb.length() > 0) sb.append(',');
-            sb.append(n);
-        }
-        queryBuilder.setSelectValue(sb.toString());
-        queryBuilder.setTableName(tableName);
+		 queryBuilder.setSelectValue("*");
+		 queryBuilder.setTableName(tableName);
+		 return new Where(queryBuilder);
+	 }
 
-        return new Where(queryBuilder);
-    }
+	 /**
+	  * INSERT INTO tableName fields
+	  * @param tableName
+	  * @param fields
+	  * @return
+	  */
+	 public Values insertInto(String tableName, String[] fields){
 
-    /**
-     * SELECT * FROM tableName
-     * @param tableName
-     * @return
-     */
-    public Where selectFrom(String tableName) {
+		 QueryBuilder queryBuilder = new QueryBuilder();
+		 queryBuilder.setTableName(tableName);
 
-        QueryBuilder queryBuilder = new QueryBuilder();
+		 StringBuilder sb = new StringBuilder();
+		 for (String n : fields) {
+			 if (sb.length() > 0) {
+				 sb.append(',');
+			 }
+			 sb.append(n);
+		 }
+		 queryBuilder.setFields(sb.toString());
+		 return new Values(queryBuilder);
 
-        queryBuilder.setSelectValue("*");
-        queryBuilder.setTableName(tableName);
-        return new Where(queryBuilder);
-    }
+	 }
 
-    /**
-     * INSERT INTO tableName fields
-     * @param tableName
-     * @param fields
-     * @return
-     */
-    public Values insertInto(String tableName, String[] fields){
+	 /**
+	  * UPDATE tableName SET ([fields,values], [fields, value] ...)
+	  * @param tableName
+	  * @param fields
+	  * @param values
+	  * @return
+	  */
+	 public Where update(String tableName, String[] fields, String[] values) {
+		 QueryBuilder queryBuilder = new QueryBuilder();
+		 queryBuilder.setTableName(tableName);
 
-        QueryBuilder queryBuilder = new QueryBuilder();
-        queryBuilder.setTableName(tableName);
+		 String setQuery = "";
+		 for (int i = 0; i < fields.length; i++) {
+			 if(i != (fields.length-1)) {
+				 setQuery += fields[i] + "='" + values[i] + "',";
+			 } else {
+				 setQuery += fields[i] + "='" + values[i] + "'";
+			 }
+		 }
+		 queryBuilder.setFields(setQuery);
+		 queryBuilder.setUpdate(true);
 
-        StringBuilder sb = new StringBuilder();
-        for (String n : fields) {
-            if (sb.length() > 0) {
-                sb.append(',');
-            }
-            sb.append(n);
-        }
-        queryBuilder.setFields(sb.toString());
-        return new Values(queryBuilder);
+		 return new Where(queryBuilder);
+	 }
 
-    }
-
-    /**
-     * UPDATE tableName SET ([fields,values], [fields, value] ...)
-     * @param tableName
-     * @param fields
-     * @param values
-     * @return
-     */
-    public Where update(String tableName, String[] fields, String[] values) {
-        QueryBuilder queryBuilder = new QueryBuilder();
-        queryBuilder.setTableName(tableName);
-
-        String setQuery = "";
-        for (int i = 0; i < fields.length; i++) {
-            if(i != (fields.length-1)) {
-                setQuery += fields[i] + "='" + values[i] + "',";
-            } else {
-                setQuery += fields[i] + "='" + values[i] + "'";
-            }
-        }
-        queryBuilder.setFields(setQuery);
-        queryBuilder.setUpdate(true);
-
-        return new Where(queryBuilder);
-    }
-
-    /**
-     * Soft delete method. UPDATE tableName
-     * @param tableName
-     * @return
-     */
-    public Where deleteFrom(String tableName){
-        QueryBuilder queryBuilder = new QueryBuilder();
-        queryBuilder.setTableName(tableName);
-        queryBuilder.setSoftDelete(true);
-        return new Where(queryBuilder);
-    }
-
-
-
-
+	 /**
+	  * Soft delete method. UPDATE tableName
+	  * @param tableName
+	  * @return
+	  */
+	 public Where deleteFrom(String tableName){
+		 QueryBuilder queryBuilder = new QueryBuilder();
+		 queryBuilder.setTableName(tableName);
+		 queryBuilder.setSoftDelete(true);
+		 return new Where(queryBuilder);
+	 }
 }
-
-
-
-
-

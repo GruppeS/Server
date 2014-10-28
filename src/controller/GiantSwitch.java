@@ -26,6 +26,7 @@ public class GiantSwitch {
 		Gson gson = new GsonBuilder().create();
 		String answer = "";	
 		//Creates a switch which determines which method should be used. Methods will be applied later on
+
 		switch (Determine(jsonString)) {
 		//If the Json String contains one of the keywords below, run the relevant method.
 
@@ -43,7 +44,7 @@ public class GiantSwitch {
 		case "logIn":
 			AuthUser AU = (AuthUser)gson.fromJson(jsonString, AuthUser.class);
 			System.out.println("Recieved logIn");
-//			answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword(), AU.getAuthUserIsAdmin());
+			//			answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword(), AU.getAuthUserIsAdmin());
 			break;
 
 		case "logOut":

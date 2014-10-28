@@ -1,11 +1,11 @@
 package JsonClasses;
 public class WeatherInfo {
-	
+
 	private String weatherLocation;
 	private String weather;
 	private String temperature;
 	private String overallID = "weather";
-	
+
 	public String getWeatherLocation() {
 		return weatherLocation;
 	}
@@ -24,6 +24,6 @@ public class WeatherInfo {
 	public void setTemperature(String temperature) {
 		this.temperature = temperature;
 	}
-	
-	
+
+
 }

@@ -5,5 +5,4 @@ public class LoginInfo {
 		String username = "hej";
 		String password = "nej";
 	}
-
 }
