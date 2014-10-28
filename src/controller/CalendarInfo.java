@@ -1,3 +1,4 @@
+package controller;
 public class CalendarInfo implements java.io.Serializable {
 		private  final long serialVersionUID = 1L;
 		private String overallID = "createCourse";
@@ -11,7 +12,7 @@ public class CalendarInfo implements java.io.Serializable {
 		private  String location;
 		
 		
-		//Getters and setters for everything, bitch
+		//Getters and setters
 		public String getActivityID() {
 			return activityID;
 		}

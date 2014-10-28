@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.*;
 
  
-class Server
+class FileUpload
 {
     public void serverUpload () throws IOException
     {

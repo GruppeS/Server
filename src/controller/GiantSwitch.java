@@ -1,21 +1,19 @@
+package controller;
 import java.sql.SQLException;
 
 import model.QOTD.QOTDModel;
-import model.calendar.Event;
 import model.note.Note;
 import JsonClasses.AuthUser;
-import JsonClasses.CalendarInfo;
 import JsonClasses.CreateCalender;
 import JsonClasses.DeleteCalender;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import databaseMethods.SwitchMethods;
 
 public class GiantSwitch {
-	
-	
-	
+
 	public String GiantSwitchMethod(String jsonString) throws SQLException {
 
 		//Events eventsKlasse = new Events(0, 0, 0, jsonString, jsonString, jsonString, jsonString, jsonString);
@@ -24,7 +22,7 @@ public class GiantSwitch {
 		//ForecastModel forecastKlasse = new ForecastModel();
 		QOTDModel QOTDKlasse = new QOTDModel();
 		SwitchMethods SW = new SwitchMethods();
-		
+
 		Gson gson = new GsonBuilder().create();
 		String answer = "";	
 		//Creates a switch which determines which method should be used. Methods will be applied later on
@@ -39,39 +37,39 @@ public class GiantSwitch {
 			System.out.println("Recieved importCourse");
 			break;
 
-		/**********
-		 ** LOGIN **
-		 **********/
+			/**********
+			 ** LOGIN **
+			 **********/
 		case "logIn":
 			AuthUser AU = (AuthUser)gson.fromJson(jsonString, AuthUser.class);
 			System.out.println("Recieved logIn");
-			answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword(), AU.getAuthUserIsAdmin());
+//			answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword(), AU.getAuthUserIsAdmin());
 			break;
 
 		case "logOut":
 			System.out.println("Recieved logOut");
 			break;
 
-		/*************
-		 ** CALENDAR **
-		 *************/
+			/*************
+			 ** CALENDAR **
+			 *************/
 		case "createCalender":
 			CreateCalender CC = (CreateCalender)gson.fromJson(jsonString, CreateCalender.class);
 			System.out.println(CC.getCalenderName()+ "Den har lagt det nye ind i klassen");
 			answer = SW.createNewCalender(CC.getUserName(), CC.getCalenderName(), CC.getPublicOrPrivate());
 			break;
-		
+
 		case "deleteCalender":
 			DeleteCalender DC = (DeleteCalender)gson.fromJson(jsonString, DeleteCalender.class);
 			System.out.println(DC.getCalenderName()+ "Den har lagt det nye ind i klassen");
 			answer = SW.deleteCalender(DC.getUserName(), DC.getCalenderName());
 			break;
-		
+
 		case "saveImportedCalender":
-			
-			
+
+
 			break;
-			
+
 		case "getCalender":
 			System.out.println("Recieved getCalender");
 			break;
@@ -87,10 +85,10 @@ public class GiantSwitch {
 		case "getEventInfo":
 			System.out.println("Recieved getEventInfo");
 			break;
-			
+
 		case "deleteEvent":
 			System.out.println("Recieved deleteEvent");
-		
+
 		case "saveNote":
 			System.out.println("Recieved saveNote");
 			break;
@@ -98,35 +96,35 @@ public class GiantSwitch {
 		case "getNote":
 			System.out.println("Recieved getNote");
 			break;
-			
+
 		case "deleteNote":
 			System.out.println("Recieved deleteNote");
 			break;
 
-		/**********
-		 ** QUOTE **
-		 **********/
+			/**********
+			 ** QUOTE **
+			 **********/
 		case "getQuote":
 
-		answer = QOTDKlasse.getQuote();
+			answer = QOTDKlasse.getQuote();
 			System.out.println(answer);
-			
+
 			break;
 
-		/************
-		 ** WEATHER **
-		 ************/
+			/************
+			 ** WEATHER **
+			 ************/
 
 		case "getClientForecast":
 			System.out.println("Recieved getClientForecast");
 			break;
-		
+
 		default:
 			System.out.println("Error");
 			break;
 		}
 		return answer;
-		
+
 	}
 
 	//Creates a loooong else if statement, which checks the JSon string which keyword it contains, and returns the following 
@@ -172,6 +170,4 @@ public class GiantSwitch {
 		else
 			return "error";
 	}
-	
-
 }
