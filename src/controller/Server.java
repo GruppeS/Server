@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,7 +16,7 @@ public class Server {
 
 	public static void main(String args[]) {
 
-		//		new Thread( new adminThread() ).start();
+//		new Thread( new adminThread() ).start();
 
 		try {
 			serverSocket = new ServerSocket(8888);
@@ -48,27 +47,28 @@ class clientThread implements Runnable {
 
 	public void run() {
 		try {
-			System.out.println("Ny forbindelse oprettet");
+			System.out.println("Client connected");
 
-			byte[] b = new byte[500000];
-			int count = clientSocket.getInputStream().read(b);
-			ByteArrayInputStream bais = new ByteArrayInputStream(b);
-			DataInputStream inFromClient = new DataInputStream(clientSocket.getInputStream());
-			DataOutputStream outToClient = new DataOutputStream(clientSocket.getOutputStream());
+			byte[] incommingJson = null;
 
-			// Decrypts JSON string
-			String ny = cryp.decrypt(b);
+			DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
+			int length = dis.readInt();
 
-			// Saves incoming JSON to string
-			String incomingJson = inFromClient.readLine();			
+			if(length>0) {
+				incommingJson = new byte[length];
+				dis.readFully(incommingJson, 0, incommingJson.length);
+			}
 
-			// Saves the returned answer
-			String returnSvar = GS.GiantSwitchMethod(ny);		
-			//Sends the capitalized message back to client!!
-			outToClient.writeBytes(returnSvar + "\n");
-			System.out.println("svar sendt");
-			//BufferedWriter writer = new BufferedWriter(arg0)
+			String reply = GS.GiantSwitchMethod(cryp.xorDecrypt(incommingJson));
+
+			byte[] message = cryp.xorEncrypt(reply);
+			DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+			dos.writeInt(message.length);
+			dos.write(message);  
+			dos.flush();
+
 			clientSocket.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

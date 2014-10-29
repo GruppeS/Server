@@ -1,28 +1,32 @@
 package controller;
-import config.Configurations;
 
 public class encryption {
 
-	//	Decryption path
-	public String decrypt(byte[] b)
-	{
-		Configurations CF = new Configurations();
+	private byte key = (byte) 3.1470;
 
-		//		Defines the decryption value of the byte
-		String crypKey = CF.getFfcryptkey();
-		double gladKo = Double.parseDouble(crypKey);
-		byte ff = (byte) gladKo;
+	public byte[] xorEncrypt (String gson) {
 
-		//		Generates for loop containing decryption value
-		for(int i = 0 ; i<b.length ; i++)
+		byte[] input = gson.getBytes();
+
+		byte[] encrypted = input;
+
+		for (int i=0; i<encrypted.length; i++)
 		{
-			b[i] = (byte)(b[i]^ff);
+			encrypted[i] = (byte) (encrypted[i] ^ key);
 		}
 
-		//		Generates new String without any white spaces following or leading
-		String encrypted = new String(b).trim();
-
-		//		Returns decrypted String
 		return encrypted;
+	}
+
+	public String xorDecrypt (byte[] reply) {
+
+		byte[] decrypted = reply;
+
+		for (int i=0; i<decrypted.length; i++)
+		{
+			decrypted[i] = (byte) (decrypted[i] ^ key);
+		}
+
+		return decrypted.toString();
 	}
 }
