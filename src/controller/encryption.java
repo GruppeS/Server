@@ -1,6 +1,6 @@
 package controller;
 
-public class encryption {
+public class Encryption {
 
 	private byte key = (byte) 3.1470;
 

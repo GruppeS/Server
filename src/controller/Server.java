@@ -39,7 +39,7 @@ class clientThread implements Runnable {
 
 	private Socket clientSocket = null;
 	private GiantSwitch GS = new GiantSwitch();
-	private encryption cryp = new encryption();
+	private Encryption cryp = new Encryption();
 
 	public clientThread(Socket clientSocket) {
 		this.clientSocket = clientSocket;
@@ -59,8 +59,9 @@ class clientThread implements Runnable {
 				dis.readFully(incommingJson, 0, incommingJson.length);
 			}
 
-			String reply = GS.GiantSwitchMethod(cryp.xorDecrypt(incommingJson));
-
+			String reply = GS.GiantSwitchMethod(cryp.xorDecrypt(incommingJson));			
+			
+			System.out.println("Sending client reply");
 			byte[] message = cryp.xorEncrypt(reply);
 			DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 			dos.writeInt(message.length);
@@ -72,6 +73,8 @@ class clientThread implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

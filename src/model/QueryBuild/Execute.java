@@ -103,8 +103,9 @@ public class Execute extends Model {
 			try {
 				getConnection(false);
 				getConn();
-				String cleanSql = StringEscapeUtils.escapeSql(sql);
-				sqlStatement = getConn().prepareStatement(cleanSql);
+//				String cleanSql = StringEscapeUtils.escapeSql(sql);
+//				sqlStatement = getConn().prepareStatement(cleanSql);
+				sqlStatement = getConn().prepareStatement(sql);
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -115,8 +116,9 @@ public class Execute extends Model {
 			try {
 				getConnection(false);
 				getConn();
-				String cleanSql = StringEscapeUtils.escapeSql(sql);
-				sqlStatement = getConn().prepareStatement(cleanSql);
+//				String cleanSql = StringEscapeUtils.escapeSql(sql);
+//				sqlStatement = getConn().prepareStatement(cleanSql);
+				sqlStatement = getConn().prepareStatement(sql);
 				sqlStatement.setString(1, getWhere().getWhereValue());
 
 			} catch (SQLException e) {
