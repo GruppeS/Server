@@ -67,9 +67,17 @@ class clientThread implements Runnable {
 			dos.writeInt(message.length);
 			dos.write(message);  
 			dos.flush();
-
+			
+			if(!reply.equals("0")){
+				
+			}
+			
+			else{
+				
 			clientSocket.close();
-
+			
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
