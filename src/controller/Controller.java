@@ -23,7 +23,6 @@ public class Controller extends Model {
 		}
 	}
 
-
 	// Metoder for Notes
 
 	public void saveNotes(String text, String created) {
@@ -36,8 +35,5 @@ public class Controller extends Model {
 		catch(SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
-
-
 }

@@ -3,45 +3,16 @@ package controller;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 
-import GUI.GUILogic;
-
-public class Server {
-
-	private static ServerSocket serverSocket = null;
-	private static Socket clientSocket = null;
-
-	public static void main(String args[]) {
-
-//		new Thread( new adminThread() ).start();
-
-		try {
-			serverSocket = new ServerSocket(8888);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		while (true) {
-			try {
-				clientSocket = serverSocket.accept();
-				new Thread( new clientThread(clientSocket) ).start();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-}
-
-class clientThread implements Runnable {
+public class ClientThread implements Runnable {
 
 	private Socket clientSocket = null;
 	private GiantSwitch GS = new GiantSwitch();
 	private Encryption cryp = new Encryption();
 
-	public clientThread(Socket clientSocket) {
+	public ClientThread(Socket clientSocket) {
 		this.clientSocket = clientSocket;
 	}
 
@@ -65,19 +36,15 @@ class clientThread implements Runnable {
 			byte[] message = cryp.xorEncrypt(reply);
 			DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 			dos.writeInt(message.length);
-			dos.write(message);  
+			dos.write(message);
 			dos.flush();
 			
 			if(!reply.equals("0")){
 			
 			String calendar = GS.GiantSwitchMethod(userInfo);
 				
-			}
-			
-			else{
-				
+			} else {
 			clientSocket.close();
-			
 			}
 			
 		} catch (IOException e) {
@@ -87,12 +54,5 @@ class clientThread implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-}
-
-class adminThread implements Runnable {
-
-	public void run() {
-		new GUILogic().run();
 	}
 }

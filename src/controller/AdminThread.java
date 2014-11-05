@@ -1,4 +1,4 @@
-package GUI;
+package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,13 +6,14 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
+import GUI.Screen;
 import model.QueryBuild.QueryBuilder;
 
-public class GUILogic {
+public class AdminThread implements Runnable {
 
 	private Screen screen;	
 
-	public GUILogic(){
+	public AdminThread(){
 		screen = new Screen();
 
 		screen.getLogin().addActionListener(new LoginActionListener());
@@ -69,8 +70,6 @@ public class GUILogic {
 			if (e.getSource() == screen.getMainMenu().getBtnEventlist()){
 				screen.show(Screen.EVENTLIST);
 			}
-
-
 		}
 	}
 	private class AddEventGUIActionListener implements ActionListener {
@@ -108,8 +107,6 @@ public class GUILogic {
 						e1.printStackTrace();
 					}
 				}
-
-
 			}
 		}
 	}
