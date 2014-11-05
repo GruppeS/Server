@@ -58,8 +58,8 @@ class clientThread implements Runnable {
 				incommingJson = new byte[length];
 				dis.readFully(incommingJson, 0, incommingJson.length);
 			}
-
-			String reply = GS.GiantSwitchMethod(cryp.xorDecrypt(incommingJson));			
+			String userInfo = cryp.xorDecrypt(incommingJson);
+			String reply = GS.GiantSwitchMethod(userInfo);			
 			
 			System.out.println("Sending client reply");
 			byte[] message = cryp.xorEncrypt(reply);
@@ -69,6 +69,8 @@ class clientThread implements Runnable {
 			dos.flush();
 			
 			if(!reply.equals("0")){
+			
+			String calendar = GS.GiantSwitchMethod(userInfo);
 				
 			}
 			
