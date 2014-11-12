@@ -22,13 +22,19 @@ public class ClientThread implements Runnable {
 			DataInputStream is = new DataInputStream(clientSocket.getInputStream());
 			PrintStream os = new PrintStream(clientSocket.getOutputStream());
 
-			String json = is.readLine();
-			String userInfo = cryp.xorDecrypt(json);
-			String message = GS.GiantSwitchMethod(userInfo);			
-			String reply = cryp.xorEncrypt(message);
-			os.println(reply);
+			while(true)
+			{
+				String inFromClientC = is.readLine();
 
-			clientSocket.close();
+				if(!inFromClientC.equals(null))
+				{
+					String inFromClientD = cryp.xorDecrypt(inFromClientC);
+					String replyD = GS.GiantSwitchMethod(inFromClientD);			
+					String replyC = cryp.xorEncrypt(replyD);
+					os.println("0");
+//					os.println(replyC);
+				}
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -2,16 +2,17 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import controller.ClientThread;
 import controller.AdminThread;
+import controller.ClientThread;
 
 public class Test {
+
 	private static ServerSocket serverSocket = null;
 	private static Socket clientSocket = null;
 
 	public static void main(String args[]) {
 
-//		new Thread( new adminThread() ).start();
+//		new Thread( new AdminThread() ).start();
 
 		try {
 			serverSocket = new ServerSocket(8888);
@@ -23,6 +24,7 @@ public class Test {
 			try {
 				clientSocket = serverSocket.accept();
 				new Thread( new ClientThread(clientSocket) ).start();
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
