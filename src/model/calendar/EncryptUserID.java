@@ -8,12 +8,10 @@ public class EncryptUserID {
 	 * Constant cipher seed - DO NOT CHANGE.
 	 * http://www.miraclesalad.com/webtools/md5.php - Du kan her saette userid foerst og derefter hashkey for at teste
 	 */
-	private static final String HASHKEY = "v.eRyzeKretW0r_t";
-	private static String userId = "caha13ag";
-	private String key;
+	private final String HASHKEY = "v.eRyzeKretW0r_t";
 	private static MessageDigest digester;
 
-	static {
+	public EncryptUserID() {
 		try {
 			digester = MessageDigest.getInstance("MD5");
 		} catch (Exception e) {
@@ -22,12 +20,13 @@ public class EncryptUserID {
 	}
 
 	// Enkryptere en tekst streng som bliver parset til funktionen
-	public static String crypt(String str) {
+	public String crypt(String str) {
 		if (str == null || str.length() == 0) {
 			throw new IllegalArgumentException("Error");
 		}
 
-		digester.update(str.getBytes());
+		String stringKey = str + HASHKEY;
+		digester.update(stringKey.getBytes());
 		byte[] hash = digester.digest();
 		StringBuffer hexString = new StringBuffer();
 		for (int i = 0; i < hash.length; i++) {
@@ -40,15 +39,4 @@ public class EncryptUserID {
 		return hexString.toString();
 	}
 
-	//Quick example of how to get the hash.
-	public static void main(String[] args) {
-
-		System.out.print("Secret key: " + crypt(userId + HASHKEY));
-		String key = crypt(userId+ HASHKEY);
-
-	}
-
-	public String getKey() {
-		return key;
-	}   
 }

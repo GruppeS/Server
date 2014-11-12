@@ -2,6 +2,7 @@ package controller;
 import java.sql.SQLException;
 
 import model.QOTD.QOTDModel;
+import model.calendar.GetCalendarData;
 import model.note.Note;
 import JsonClasses.UserInfo;
 import JsonClasses.CreateCalender;
@@ -13,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import databaseMethods.SwitchMethods;
 
 public class GiantSwitch {
+	private String userID;
 
 	public String GiantSwitchMethod(String jsonString) throws Exception {
 
@@ -22,6 +24,7 @@ public class GiantSwitch {
 		//ForecastModel forecastKlasse = new ForecastModel();
 		QOTDModel QOTDKlasse = new QOTDModel();
 		SwitchMethods SW = new SwitchMethods();
+		GetCalendarData getCalendarData = new GetCalendarData();
 
 		Gson gson = new GsonBuilder().create();
 		String answer = "";	
@@ -46,6 +49,10 @@ public class GiantSwitch {
 			System.out.println("Recieved logIn");
 			
 			answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword(), AU.getAuthUserIsAdmin());
+			
+			if(answer.equals("0")){
+			userID = AU.getAuthUserEmail(); 
+			}
 			
 			return answer;
 
@@ -74,7 +81,7 @@ public class GiantSwitch {
 			break;
 
 		case "getCalender":
-			System.out.println("Recieved getCalender");
+			getCalendarData.getDataFromCalendar(userID);
 			break;
 
 		case "getEvents":
