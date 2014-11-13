@@ -1,19 +1,16 @@
 package JsonClasses;
 
-public class UserInfo implements java.io.Serializable
+import java.io.Serializable;
+
+public class UserInfo implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	private String overallID = "logIn";
 	private String email;
 	private String password;
-	private boolean isAdmin;
 
-	//Getters and setters for everything, bitch
 	public String getOverallID() {
 		return overallID;
-	}
-	public void setOverallID(String overallID) {
-		this.overallID = overallID;
 	}
 	public String getAuthUserEmail() {
 		return email;
@@ -26,11 +23,5 @@ public class UserInfo implements java.io.Serializable
 	}
 	public void setAuthUserPassword(String password) {
 		this.password = password;
-	}
-	public boolean getAuthUserIsAdmin() {
-		return isAdmin;
-	}
-	public void setAuthUserIsAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
 	}
 }

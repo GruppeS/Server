@@ -4,44 +4,42 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.sql.SQLException;
 
 public class ClientThread implements Runnable {
 
-	private Socket clientSocket = null;
+	private Socket clientSocket;
 	private GiantSwitch GS = new GiantSwitch();
-	private Encryption cryp = new Encryption();
+	private DataInputStream is;
+	private PrintStream os;
 
 	public ClientThread(Socket clientSocket) {
 		this.clientSocket = clientSocket;
-	}
 
-	public void run() {
 		try {
-
-			DataInputStream is = new DataInputStream(clientSocket.getInputStream());
-			PrintStream os = new PrintStream(clientSocket.getOutputStream());
-
-			while(true)
-			{
-				String inFromClientC = is.readLine();
-
-				if(!inFromClientC.equals(null))
-				{
-					String inFromClientD = cryp.xorDecrypt(inFromClientC);
-					String replyD = GS.GiantSwitchMethod(inFromClientD);			
-					String replyC = cryp.xorEncrypt(replyD);
-					os.println("0");
-//					os.println(replyC);
-				}
-			}
+			is = new DataInputStream(clientSocket.getInputStream());
+			os = new PrintStream(clientSocket.getOutputStream());
 
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+		}
+	}
+
+	public void run() {
+
+		while(true)
+		{
+			try {
+				String message = is.readLine();
+				System.out.println("Incomming: " + message);
+				String reply = GS.GiantSwitchMethod(message);
+				System.out.println("Reply: " + reply);
+				os.println(reply);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
