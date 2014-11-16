@@ -1,7 +1,6 @@
 package GUI;
 
 import java.awt.CardLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -9,6 +8,7 @@ import javax.swing.border.EmptyBorder;
 
 public class Screen extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	public static final String LOGIN = "name_276091497157488";
 	public static final String MAINMENU = "name_276416022878030";
 	public static final String USERINFO = "name_277892826656058";
@@ -30,26 +30,10 @@ public class Screen extends JFrame {
 
 	CardLayout c;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Screen frame = new Screen();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	public Screen() {
-		setTitle("Doek4life");
+		setTitle("AdminPanel");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 1366, 768);
 
 		JPanel contentPane = (JPanel) this.getContentPane();

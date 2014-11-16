@@ -8,10 +8,24 @@ import com.google.gson.Gson;
 
 public class GetCalendarData {
 
-	EncryptUserID e = new EncryptUserID();
+	private EncryptUserID e;
+	private Events events;
+	private Gson gson;
 
-	//henter data fra URL og l??er ind til en string
+	public GetCalendarData() {
+		e = new EncryptUserID();
+		events = new Events();
+		gson = new Gson();
+	}
+
+	public void getDataFromCalendar(String userID) throws Exception {
+
+		String json = readUrl("http://calendar.cbs.dk/events.php/"+userID+"/"+e.crypt(userID)+".json");
+		events = gson.fromJson(json, Events.class);
+	}
+
 	private static String readUrl(String urlString) throws Exception {
+
 		BufferedReader reader = null;
 		try {
 			URL url = new URL(urlString);
@@ -26,30 +40,6 @@ public class GetCalendarData {
 		} finally {
 			if (reader != null)
 				reader.close();
-		}
-	}
-	//Nu har vi alle data liggende i en string (JSON). 
-	//Saa bruger vi Google's udviklede library Json string. den kan lave det om til java objekter
-	//Events laver en arraylist af Event
-
-	/**
-	 * Allows client to retrieve CBS's calendar and then access it.
-	 * @throws Exception
-	 */
-	public void getDataFromCalendar(String userID) throws Exception {
-
-		/**
-		 * Get URL From calendar.cbs.dk -> Subscribe -> change URL to end with .json
-		 * Encrypt hash from
-		 */
-		String json = readUrl("http://calendar.cbs.dk/events.php/"+userID+"/"+e.crypt(userID)+".json");
-
-		Gson gson = new Gson();
-		Events events = gson.fromJson(json, Events.class); 
-
-		//tester events activityID's
-		for (int i = 0; i < events.getEvents().size(); i++){
-			System.out.println(events.getEvents().get(i).getActivityid());
 		}
 	}
 }

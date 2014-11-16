@@ -6,16 +6,21 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-import GUI.Screen;
 import model.QueryBuild.QueryBuilder;
+import GUI.MainScreen;
+import GUI.Screen;
 
 public class AdminThread implements Runnable {
 
-	private Screen screen;	
+	private MainScreen mainScreen;
+	private Screen screen;
 
 	public AdminThread(){
-		screen = new Screen();
 
+		mainScreen = new MainScreen();
+		mainScreen.getMain().addActionListener(new MainActionListener());
+
+		screen = new Screen();
 		screen.getLogin().addActionListener(new LoginActionListener());
 		screen.getMainMenu().addActionListener(new MainMenuActionListener());
 		screen.getUserInfo().addActionListener(new UserInfoActionListener());
@@ -27,9 +32,23 @@ public class AdminThread implements Runnable {
 	}
 
 	public void run() {
+		mainScreen.show(MainScreen.MAIN);
+		mainScreen.setVisible(true);
+	}
 
-		screen.show(Screen.LOGIN);
-		screen.setVisible(true);
+	private class MainActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+			String cmd = e.getActionCommand();
+
+			if(cmd.equals("AdminBtn")) {
+				screen.show(Screen.LOGIN);
+				screen.setVisible(true);
+			}
+			if(cmd.equals("TerminateBtn")) {
+				System.exit(0);
+			}
+		}
 	}
 
 	private class LoginActionListener implements ActionListener {
