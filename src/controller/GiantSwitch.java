@@ -2,8 +2,8 @@ package controller;
 import model.QOTD.QOTDModel;
 import model.calendar.GetCalendarData;
 import model.note.Note;
-import JsonClasses.CreateCalender;
-import JsonClasses.DeleteCalender;
+import JsonClasses.CreateCalendar;
+import JsonClasses.DeleteCalendar;
 import JsonClasses.UserInfo;
 
 import com.google.gson.Gson;
@@ -25,7 +25,7 @@ public class GiantSwitch {
 		GetCalendarData getCalendarData = new GetCalendarData();
 
 		Gson gson = new GsonBuilder().create();
-		String answer = null;	
+		String answer = null;
 
 		// Creates a switch which determines which method should be used.
 
@@ -48,8 +48,8 @@ public class GiantSwitch {
 			 **********/
 		case "logIn":
 			UserInfo AU = (UserInfo)gson.fromJson(jsonString, UserInfo.class);
-//			answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword(), false);
-			answer = "0";
+			
+			answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword(), false);
 
 			if(answer.equals("0"))
 			{
@@ -65,15 +65,15 @@ public class GiantSwitch {
 			 ** CALENDAR **
 			 *************/
 		case "createCalendar":
-			CreateCalender CC = (CreateCalender)gson.fromJson(jsonString, CreateCalender.class);
-			System.out.println(CC.getCalenderName()+ "Den har lagt det nye ind i klassen");
-			answer = SW.createNewCalender(CC.getUserName(), CC.getCalenderName(), CC.getPublicOrPrivate());
+			CreateCalendar CC = (CreateCalendar)gson.fromJson(jsonString, CreateCalendar.class);
+			System.out.println(CC.getCalendarName()+ "Den har lagt det nye ind i klassen");
+			answer = SW.createNewCalendar(CC.getUserName(), CC.getCalendarName(), CC.getPublicOrPrivate());
 			break;
 
 		case "deleteCalendar":
-			DeleteCalender DC = (DeleteCalender)gson.fromJson(jsonString, DeleteCalender.class);
-			System.out.println(DC.getCalenderName()+ "Den har lagt det nye ind i klassen");
-			answer = SW.deleteCalender(DC.getUserName(), DC.getCalenderName());
+			DeleteCalendar DC = (DeleteCalendar)gson.fromJson(jsonString, DeleteCalendar.class);
+			System.out.println(DC.getCalendarName()+ "Den har lagt det nye ind i klassen");
+			answer = SW.deleteCalendar(DC.getUserName(), DC.getCalendarName());
 			break;
 
 		case "saveImportedCalendar":

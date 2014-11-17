@@ -28,7 +28,11 @@ public class Configurations {
 	// Opret DB name
 	// Opret update time på QOTD
 
-
+	
+	public Configurations() {
+		ReadFile();
+	}
+	
 	public String getHost() {
 		return host;
 	}

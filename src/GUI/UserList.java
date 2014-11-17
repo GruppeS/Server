@@ -47,10 +47,8 @@ public class UserList extends JPanel {
 		"Password"};
 
 
-
-		Object[][] data = {
-
-		};
+		// Skal udvides med størrelsen af tabellen
+		Object[][] data = new Object[200][200];
 
 
 
