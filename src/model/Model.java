@@ -18,15 +18,17 @@ import config.Configurations;
 
 
 /**
- * model.Model superclass, never instansiated. All child model classes inherits its properties, classes and methods */
+ * model.Model superclass, never instantiated. All child model classes inherits its properties, classes and methods */
 public abstract class Model {
 
 	private static Configurations cf = new Configurations();
-
-	private static String sqlUrl = "jdbc:mysql://" + cf.getHost() + ":" + cf.getPort() + "/";
+	
+	private static String host = cf.getHost();
+	private static String port = cf.getPort();
+	private static String dbName = cf.getDbname();
+	private static String sqlUrl = "jdbc:mysql://" + host + ":" + port;
 	private static String sqlUser = cf.getUsername();
 	private static String sqlPasswd = cf.getPassword();
-	private static String dbName = cf.getDbname();
 
 	private Statement stmt;
 	protected Connection conn = null;

@@ -161,7 +161,7 @@ INSERT INTO `cbscalendar`.`users`
 `active`,
 `password`)
 VALUES
-("bjsc13ac",
+("user",
 true,
-"\u001f®O-ΜƒογϊΣ-\u0000\u0006VQ")
+"pass")
 ;
