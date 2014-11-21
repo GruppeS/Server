@@ -1,13 +1,11 @@
 package model.QOTD;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import model.UrlReader;
 import model.QueryBuild.QueryBuilder;
 
 import org.json.simple.JSONObject;
@@ -17,27 +15,11 @@ public class QOTDModel {
 
 	private ArrayList<QOTD> qotdlist = new ArrayList<>();
 
+	UrlReader urlRead = new UrlReader();
 	QOTD qotdlist2 = new QOTD(null, null, null);
 	QueryBuilder qb = new QueryBuilder();
 
 	private ResultSet resultSet;
-
-	private static String readUrl(String urlString) throws Exception {
-		BufferedReader reader = null;
-		try {
-			URL url = new URL(urlString);
-			reader = new BufferedReader(new InputStreamReader(url.openStream()));
-			StringBuffer buffer = new StringBuffer();
-			int read;
-			char[] chars = new char[1024];
-			while ((read = reader.read(chars)) != -1)
-				buffer.append(chars, 0, read);
-			return buffer.toString();
-		} finally {
-			if (reader != null)
-				reader.close();
-		}
-	}
 
 	public void saveQuote() {
 
@@ -47,7 +29,7 @@ public class QOTDModel {
 		 */
 		 String json;
 		try {
-			json = readUrl("http://dist-sso.it-kartellet.dk/quote/");
+			json = urlRead.readUrl("http://dist-sso.it-kartellet.dk/quote/");
 
 
 			JSONParser jsonParser = new JSONParser();
