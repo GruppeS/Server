@@ -11,6 +11,7 @@ public class ClientThread implements Runnable {
 	private GiantSwitch GS = new GiantSwitch();
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
+	private boolean active = true;
 
 	public ClientThread(Socket clientSocket) {
 		this.clientSocket = clientSocket;
@@ -27,7 +28,7 @@ public class ClientThread implements Runnable {
 
 	public void run() {
 
-		while(true)
+		while(active)
 		{
 			try {
 				String message = (String) input.readObject();
@@ -38,16 +39,22 @@ public class ClientThread implements Runnable {
 				output.flush();
 
 			} catch (IOException e) {
-				e.printStackTrace();
+				terminate();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	public void terminate() throws IOException {
-		output.close();
-		input.close();
-		clientSocket.close();
+	public void terminate() {
+		try {
+			output.close();
+			input.close();
+			clientSocket.close();
+			active = false;
+			System.out.println("Client disconnected");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

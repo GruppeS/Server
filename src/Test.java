@@ -14,8 +14,7 @@ public class Test {
 
 	public static void main(String args[]) throws SQLException, IOException {
 
-		DatabaseInit dbInit = new DatabaseInit();
-		dbInit.go();
+		new DatabaseInit().go();
 		
 //		new Thread( new AdminThread() ).start();
 
