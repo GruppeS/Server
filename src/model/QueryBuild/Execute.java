@@ -57,6 +57,8 @@ public class Execute extends Model {
 	 * @return ResultSet
 	 * @throws SQLException
 	 */
+	
+	// cashed row set impl
 	public ResultSet ExecuteQuery() throws SQLException {
 		String sql = "";
 		if (isGetAll()) {

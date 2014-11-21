@@ -4,10 +4,6 @@ import java.security.MessageDigest;
 
 public class EncryptUserID {
 
-	/**
-	 * Constant cipher seed - DO NOT CHANGE.
-	 * http://www.miraclesalad.com/webtools/md5.php - Du kan her saette userid foerst og derefter hashkey for at teste
-	 */
 	private final String HASHKEY = "v.eRyzeKretW0r_t";
 	private static MessageDigest digester;
 
@@ -19,7 +15,6 @@ public class EncryptUserID {
 		}
 	}
 
-	// Enkryptere en tekst streng som bliver parset til funktionen
 	public String crypt(String str) {
 		if (str == null || str.length() == 0) {
 			throw new IllegalArgumentException("Error");
@@ -38,5 +33,4 @@ public class EncryptUserID {
 		}
 		return hexString.toString();
 	}
-
 }

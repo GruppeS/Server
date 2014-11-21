@@ -16,6 +16,5 @@ public class GetCalendarData {
 
 		String json = urlRead.readUrl("http://calendar.cbs.dk/events.php/"+userID+"/"+e.crypt(userID)+".json");		
 		return json;
-
 	}
 }

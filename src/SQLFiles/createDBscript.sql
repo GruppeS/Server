@@ -10,8 +10,6 @@ CREATE TABLE IF NOT EXISTS Calendar
 	Name varchar(255) NOT NULL,
 	Active tinyint,
 	CreatedBy varchar(255) NOT NULL,
-	-- 1 = public
-	-- 2 = private
 	PrivatePublic tinyint NOT NULL COMMENT '1 = public
 	2 = private',
 	PRIMARY KEY (CalendarID)

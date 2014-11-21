@@ -1,18 +1,20 @@
 package JsonClasses;
-public class CalendarInfo implements java.io.Serializable {
-	private  final long serialVersionUID = 1L;
+
+import java.io.Serializable;
+
+public class CalendarInfo implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private String overallID = "createCourse";
 	private String activityID;
-	private  String eventID;
-	private  String type;
-	private  String title;
-	private  String description;
-	private  String start;
-	private  String end;
-	private  String location;
+	private String eventID;
+	private String type;
+	private String title;
+	private String description;
+	private String start;
+	private String end;
+	private String location;
 
-
-	//Getters and setters
 	public String getActivityID() {
 		return activityID;
 	}
@@ -64,8 +66,4 @@ public class CalendarInfo implements java.io.Serializable {
 	public String getOverallID() {
 		return overallID;
 	}
-	public void setOverallID(String overallID) {
-		this.overallID = overallID;
-	}
 }
-

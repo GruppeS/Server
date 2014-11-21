@@ -78,7 +78,6 @@ public class QOTDModel {
 
 		long timeSinceUpdate = date1 - date2; 
 
-
 		// if more than 1 hour ago, do update
 		if(timeSinceUpdate > 864000){
 			// return fresh weather data

@@ -9,8 +9,6 @@ import JsonClasses.UserInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import databaseMethods.SwitchMethods;
-
 public class GiantSwitch {
 	private String userID;
 
@@ -20,7 +18,7 @@ public class GiantSwitch {
 
 		Note noteKlasse = new Note();
 		//ForecastModel forecastKlasse = new ForecastModel();
-		QOTDModel QOTDKlasse = new QOTDModel();
+		QOTDModel quote = new QOTDModel();
 		SwitchMethods SW = new SwitchMethods();
 		GetCalendarData getCalendarData = new GetCalendarData();
 
@@ -116,7 +114,7 @@ public class GiantSwitch {
 			 ** QUOTE **
 			 **********/
 		case "getQuote":
-			answer = QOTDKlasse.getQuote();
+			answer = quote.getQuote();
 			System.out.println(answer);
 			break;
 
