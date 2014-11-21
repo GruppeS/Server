@@ -1,13 +1,12 @@
+package controller;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 
 import model.database.DatabaseInit;
-import controller.AdminThread;
-import controller.ClientThread;
 
-public class Test {
+public class ServerMain {
 
 	private static ServerSocket serverSocket = null;
 	private static Socket clientSocket = null;
@@ -15,8 +14,8 @@ public class Test {
 	public static void main(String args[]) throws SQLException, IOException {
 
 		new DatabaseInit().go();
-		
-//		new Thread( new AdminThread() ).start();
+
+		new Thread( new AdminThread() ).start();
 
 		try {
 			serverSocket = new ServerSocket(8888);

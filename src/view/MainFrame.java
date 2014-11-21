@@ -1,4 +1,4 @@
-package GUI;
+package view;
 
 import java.awt.CardLayout;
 
@@ -6,16 +6,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class MainScreen extends JFrame {
+public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	public static final String MAIN = "1";
 	private JPanel contentPane;
-	private Main main;
+	private MainPanel main;
 	
 	CardLayout c;
 
-	public MainScreen() {
+	public MainFrame() {
 		setTitle("Calendar");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 217, 118);
@@ -24,12 +24,12 @@ public class MainScreen extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));
 
-		main = new Main();
+		main = new MainPanel();
 		contentPane.add(main, MAIN);
 
 		c = (CardLayout) getContentPane().getLayout();
 	}
-	public Main getMain() {
+	public MainPanel getMain() {
 		return main;
 	}
 

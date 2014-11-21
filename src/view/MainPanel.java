@@ -1,17 +1,17 @@
-package GUI;
+package view;
 
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
-public class Main extends JPanel {
+public class MainPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JButton btnAdmin;
 	private JButton btnTerminate;
 
-	public Main() {
+	public MainPanel() {
 		setLayout(null);
 
 		btnAdmin = new JButton("Admin");
