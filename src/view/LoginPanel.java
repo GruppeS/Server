@@ -4,10 +4,10 @@ import javax.swing.JPanel;
 
 public class LoginPanel extends JPanel {
 
-	/**
-	 * Create the panel.
-	 */
+	private static final long serialVersionUID = 1L;
+
 	public LoginPanel() {
+		setLayout(null);
 
 	}
 

@@ -9,7 +9,9 @@ import javax.swing.border.EmptyBorder;
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	
 	public static final String MAIN = "1";
+	
 	private JPanel contentPane;
 	private MainPanel main;
 	
@@ -21,14 +23,15 @@ public class MainFrame extends JFrame {
 		setBounds(0, 0, 217, 118);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));
+		setContentPane(contentPane);
 
 		main = new MainPanel();
 		contentPane.add(main, MAIN);
 
 		c = (CardLayout) getContentPane().getLayout();
 	}
+	
 	public MainPanel getMain() {
 		return main;
 	}

@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS roles
 (
 	roleid int NOT NULL AUTO_INCREMENT,
 	userid int NOT NULL,
-	type varchar(200) NOT NULL,
+	isAdmin boolean NOT NULL,
 	PRIMARY KEY (roleid)
 );
 
@@ -162,4 +162,13 @@ VALUES
 ("bjsc13ac",
 true,
 "pass")
+;
+
+INSERT INTO `cbscalendar`.`roles`
+(`userid`,
+`isAdmin`)
+VALUES
+(1,
+false
+)
 ;

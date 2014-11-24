@@ -4,11 +4,10 @@ import javax.swing.JPanel;
 
 public class MenuPanel extends JPanel {
 
-	/**
-	 * Create the panel.
-	 */
+	private static final long serialVersionUID = 1L;
+
 	public MenuPanel() {
+		setLayout(null);
 
 	}
-
 }

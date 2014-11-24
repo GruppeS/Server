@@ -4,10 +4,10 @@ import javax.swing.JPanel;
 
 public class CalendarListPanel extends JPanel {
 
-	/**
-	 * Create the panel.
-	 */
+	private static final long serialVersionUID = 1L;
+
 	public CalendarListPanel() {
+		setLayout(null);
 
 	}
 
