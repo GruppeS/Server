@@ -15,7 +15,6 @@ public class AdminThread implements Runnable {
 
 		mainScreen = new MainFrame();
 		mainScreen.getMain().addActionListener(new MainActionListener());
-		
 		screen = new Screen();
 	}
 
@@ -30,7 +29,7 @@ public class AdminThread implements Runnable {
 			String cmd = e.getActionCommand();
 
 			if(cmd.equals("AdminBtn")) {
-//				screen.show(Screen.LOGIN);
+				screen.show(Screen.LOGIN);
 				screen.setVisible(true);
 			}
 			if(cmd.equals("TerminateBtn")) {

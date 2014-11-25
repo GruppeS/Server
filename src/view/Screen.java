@@ -10,12 +10,12 @@ public class Screen extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final String CALENDARLIST = "1";
-	private static final String EVENTLIST = "2";
-	private static final String LOGIN = "3";
-	private static final String MENU = "4";
-	private static final String NOTELIST = "5";
-	private static final String USERLIST = "6";
+	public static final String CALENDARLIST = "1";
+	public static final String EVENTLIST = "2";
+	public static final String LOGIN = "3";
+	public static final String MENU = "4";
+	public static final String NOTELIST = "5";
+	public static final String USERLIST = "6";
 	
 	private JPanel contentPane;
 	private CalendarListPanel calendarList;
