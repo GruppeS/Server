@@ -1,4 +1,4 @@
-package model.Forecast;
+package model.forecast;
 
 import java.io.BufferedReader;
 import java.io.IOException;

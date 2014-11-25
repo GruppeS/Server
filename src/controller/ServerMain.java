@@ -4,6 +4,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 
+import model.QOTD.QOTDModel;
 import model.database.DatabaseInit;
 
 public class ServerMain {
@@ -14,6 +15,8 @@ public class ServerMain {
 	public static void main(String args[]) throws SQLException, IOException {
 
 		new DatabaseInit().go();
+		
+		new QOTDModel().saveQuote();
 
 		new Thread( new AdminThread() ).start();
 

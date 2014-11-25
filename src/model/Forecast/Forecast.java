@@ -1,4 +1,4 @@
-package model.Forecast;
+package model.forecast;
 
 /**
  * Constructor til ForecastModel Arraylist

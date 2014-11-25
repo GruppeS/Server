@@ -39,7 +39,6 @@ public class QOTDModel {
 			String author = (String) jsonObject.get("author");
 			String topic = (String) jsonObject.get("topic");
 
-
 			String[] keys = {"qotd"};
 			String[] keys2 = {quote};
 

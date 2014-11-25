@@ -15,11 +15,11 @@ public class MainPanel extends JPanel {
 		setLayout(null);
 
 		btnAdmin = new JButton("Admin");
-		btnAdmin.setBounds(0, 24, 90, 25);
+		btnAdmin.setBounds(0, 24, 100, 25);
 		add(btnAdmin);
 
 		btnTerminate = new JButton("Terminate");
-		btnTerminate.setBounds(110, 24, 90, 25);
+		btnTerminate.setBounds(110, 24, 100, 25);
 		add(btnTerminate);
 	}
 

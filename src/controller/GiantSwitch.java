@@ -76,7 +76,6 @@ public class GiantSwitch {
 
 		case "saveImportedCalendar":
 			System.out.println("Recieved saveImportedCalendar");
-
 			break;
 
 		case "getCalendar":
@@ -115,7 +114,6 @@ public class GiantSwitch {
 			 **********/
 		case "getQuote":
 			answer = quote.getQuote();
-			System.out.println(answer);
 			break;
 
 			/************
