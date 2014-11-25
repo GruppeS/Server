@@ -31,6 +31,7 @@ public class AdminThread implements Runnable {
 			if(cmd.equals("AdminBtn")) {
 				screen.show(Screen.LOGIN);
 				screen.setVisible(true);
+				
 			}
 			if(cmd.equals("TerminateBtn")) {
 				System.exit(0);
