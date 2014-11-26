@@ -13,7 +13,6 @@ import org.json.simple.parser.JSONParser;
 public class QOTDModel {
 
 	UrlReader urlRead = new UrlReader();
-	QOTD qotdlist = new QOTD();
 	QueryBuilder qb = new QueryBuilder();
 
 	private ResultSet resultSet;
@@ -67,7 +66,7 @@ public class QOTDModel {
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		if(dateNow-dateLastQuote > maxTimeNoUpdate){
 			saveQuote();
 		} 

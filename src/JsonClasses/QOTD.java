@@ -1,4 +1,4 @@
-package model.QOTD;
+package JsonClasses;
 
 import java.io.Serializable;
 

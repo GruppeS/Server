@@ -3,6 +3,7 @@ import model.QOTD.QOTDModel;
 import model.calendar.GetCalendarData;
 import JsonClasses.CreateCalendar;
 import JsonClasses.DeleteCalendar;
+import JsonClasses.QOTD;
 import JsonClasses.UserInfo;
 
 import com.google.gson.Gson;
@@ -14,7 +15,7 @@ public class GiantSwitch {
 
 	public String GiantSwitchMethod(String jsonString) throws Exception {
 
-		QOTDModel quote = new QOTDModel();
+		QOTDModel quoteModel = new QOTDModel();
 		SwitchMethods SW = new SwitchMethods();
 		GetCalendarData getCalendarData = new GetCalendarData();
 
@@ -106,7 +107,10 @@ public class GiantSwitch {
 			 ** QUOTE **
 			 **********/
 		case "getQuote":
-			answer = quote.getQuote();
+			String quote = quoteModel.getQuote();
+			QOTD qotd = new QOTD();
+			qotd.setQuote(quote);
+			answer = gson.toJson(qotd);
 			break;
 
 			/************
