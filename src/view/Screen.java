@@ -30,7 +30,7 @@ public class Screen extends JFrame {
 	public Screen() {
 		setTitle("Server Control");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(0, 0, 800, 600);
+		setBounds(0, 0, 400, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new CardLayout(0, 0));

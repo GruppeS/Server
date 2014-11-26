@@ -25,33 +25,33 @@ public class LoginPanel extends JPanel
 		setLayout(null);
 
 		lblWelcome = new JLabel("Welcome ADMIN");
-		lblWelcome.setBounds(60, 98, 194, 24);
+		lblWelcome.setBounds(163, 110, 101, 24);
 		add(lblWelcome);
 
 		lblPleaseLoginBelow = new JLabel("Please login below:");
-		lblPleaseLoginBelow.setBounds(99, 145, 108, 16);
+		lblPleaseLoginBelow.setBounds(156, 145, 108, 16);
 		add(lblPleaseLoginBelow);
 
 		lblUsername = new JLabel("Username:");
-		lblUsername.setBounds(83, 197, 52, 14);
+		lblUsername.setBounds(150, 172, 52, 14);
 		add(lblUsername);
 
 		lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(86, 252, 49, 14);
+		lblPassword.setBounds(150, 248, 74, 14);
 		add(lblPassword);
 		
 		userName_Login = new JTextField();
-		userName_Login.setBounds(86, 222, 143, 20);
+		userName_Login.setBounds(145, 194, 143, 20);
 		userName_Login.setColumns(10);
 		add(userName_Login);
 		
 		password_Login = new JPasswordField();
-		password_Login.setBounds(86, 276, 143, 20);
+		password_Login.setBounds(145, 273, 143, 20);
 		password_Login.setColumns(10);
 		add(password_Login);
 
 		btnLogin = new JButton("Login");
-		btnLogin.setBounds(118, 446, 89, 23);
+		btnLogin.setBounds(175, 304, 89, 23);
 		add(btnLogin);
 	}
 
