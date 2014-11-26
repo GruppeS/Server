@@ -1,7 +1,6 @@
 package controller;
 import model.QOTD.QOTDModel;
 import model.calendar.GetCalendarData;
-import model.note.Note;
 import JsonClasses.CreateCalendar;
 import JsonClasses.DeleteCalendar;
 import JsonClasses.UserInfo;
@@ -11,21 +10,15 @@ import com.google.gson.GsonBuilder;
 
 public class GiantSwitch {
 	private String userID;
+	private String answer;
 
 	public String GiantSwitchMethod(String jsonString) throws Exception {
 
-		//Events eventsKlasse = new Events(0, 0, 0, jsonString, jsonString, jsonString, jsonString, jsonString);
-
-		Note noteKlasse = new Note();
-		//ForecastModel forecastKlasse = new ForecastModel();
 		QOTDModel quote = new QOTDModel();
 		SwitchMethods SW = new SwitchMethods();
 		GetCalendarData getCalendarData = new GetCalendarData();
 
 		Gson gson = new GsonBuilder().create();
-		String answer = null;
-
-		// Creates a switch which determines which method should be used.
 
 		switch (Determine(jsonString)) {
 
@@ -125,8 +118,6 @@ public class GiantSwitch {
 		}
 		return answer;
 	}
-
-	// Checks the json id
 
 	public String Determine(String ID) {
 

@@ -2,7 +2,6 @@ package model.QOTD;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 
 import model.UrlReader;
@@ -13,10 +12,8 @@ import org.json.simple.parser.JSONParser;
 
 public class QOTDModel {
 
-	private ArrayList<QOTD> qotdlist = new ArrayList<>();
-
 	UrlReader urlRead = new UrlReader();
-	QOTD qotdlist2 = new QOTD(null, null, null);
+	QOTD qotdlist = new QOTD();
 	QueryBuilder qb = new QueryBuilder();
 
 	private ResultSet resultSet;
@@ -31,16 +28,11 @@ public class QOTDModel {
 		try {
 			json = urlRead.readUrl("http://dist-sso.it-kartellet.dk/quote/");
 
-
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
 
 			String quote = (String) jsonObject.get("quote");
-			String author = (String) jsonObject.get("author");
-			String topic = (String) jsonObject.get("topic");
-			
-			System.out.println(quote);
-			
+
 			String[] keys = {"qotd"};
 			String[] keys2 = {quote};
 
@@ -56,8 +48,7 @@ public class QOTDModel {
 	 * Afterwards we will make it into a json object so it can be printed out to the client.
 	 */
 	public String getQuote(){
-		String q = "";
-		String[] key = {"qotd"};
+		String q = null;
 		try {
 			resultSet = qb.selectFrom("dailyupdate").all().ExecuteQuery();
 			while(resultSet.next()) {

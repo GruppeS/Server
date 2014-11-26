@@ -48,11 +48,13 @@ public abstract class Model {
 
 
 	public boolean doesDatabaseExist() throws SQLException {
+		
 		getConnection(true);
 		ResultSet resultSet = getConn().getMetaData().getCatalogs();
+		
 		while (resultSet.next()) {
 			String databaseName = resultSet.getString(1);
-			System.out.println(databaseName);
+			
 			if(databaseName.equals(dbName)){
 				return true;
 			}
