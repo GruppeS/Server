@@ -64,6 +64,9 @@ public class AdminThread implements Runnable {
 				if (authenticated.equals("0")){
 				screen.show(Screen.MENU);
 				}
+				else if(!authenticated.equals("0")){
+				screen.getLogin().incorrect();
+				}
 			}
 		}
 	}

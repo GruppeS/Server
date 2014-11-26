@@ -1,5 +1,7 @@
 package view; 
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
@@ -40,6 +42,13 @@ public class LoginPanel extends JPanel
 		lblPassword = new JLabel("Password:");
 		lblPassword.setBounds(150, 248, 74, 14);
 		add(lblPassword);
+		
+		lblIncorrect = new JLabel("Username or password is incorrect");
+		lblIncorrect.setBounds(145, 338, 165, 14);
+		lblIncorrect.setFont(new Font("Calibri", Font.ITALIC, 11));
+		lblIncorrect.setForeground(Color.red);
+		lblIncorrect.setVisible(false);
+		add(lblIncorrect);
 		
 		userName_Login = new JTextField();
 		userName_Login.setBounds(145, 194, 143, 20);
