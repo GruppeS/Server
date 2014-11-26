@@ -25,6 +25,7 @@ public class QOTDModel {
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
 
 			String quote = (String) jsonObject.get("quote");
+			quote = quote.replace("'", "''");
 
 			String[] keys = {"qotd", "msg_type"};
 			String[] key = {quote, "qotd"};
