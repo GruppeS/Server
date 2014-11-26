@@ -22,7 +22,6 @@ CREATE TABLE IF NOT EXISTS dailyupdate
 	apparentTemperature double,
 	summary text,
 	qotd varchar(300) NOT NULL,
-	msg_type varchar (100) NOT NULL,
 	update_timestamp TIMESTAMP DEFAULT NOW() ON UPDATE NOW(),
 	PRIMARY KEY (date)
 );

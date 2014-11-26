@@ -16,7 +16,7 @@ public class ServerMain {
 
 		new DatabaseInit().go();
 		
-		new QOTDModel().saveQuote();
+		new QOTDModel().getQuote();
 
 		new Thread( new AdminThread() ).start();
 

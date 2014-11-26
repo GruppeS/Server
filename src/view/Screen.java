@@ -30,7 +30,7 @@ public class Screen extends JFrame {
 	public Screen() {
 		setTitle("Server Control");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(0, 0, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new CardLayout(0, 0));
@@ -48,6 +48,8 @@ public class Screen extends JFrame {
 		contentPane.add(noteList, NOTELIST);
 		userList = new UserListPanel();
 		contentPane.add(userList, USERLIST);
+		
+		c = (CardLayout) getContentPane().getLayout();
 	}
 	
 	public CalendarListPanel getCalendarList() {

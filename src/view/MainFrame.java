@@ -20,7 +20,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		setTitle("Calendar");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 230, 114);
+		setBounds(0, 0, 216, 110);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new CardLayout(0, 0));

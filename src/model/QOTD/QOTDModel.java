@@ -24,7 +24,7 @@ public class QOTDModel {
 	public void saveQuote() {
 
 		/**
-		 * getting text from website and putiing into string
+		 * getting text from website and putting into string
 		 * Making a new object of JSON, and prints out quote
 		 */
 		 String json;
@@ -38,12 +38,13 @@ public class QOTDModel {
 			String quote = (String) jsonObject.get("quote");
 			String author = (String) jsonObject.get("author");
 			String topic = (String) jsonObject.get("topic");
-
+			
+			System.out.println(quote);
+			
 			String[] keys = {"qotd"};
 			String[] keys2 = {quote};
 
-
-			qb.update("dailyupdate", keys, keys2).where("msg_type", "=", "1").Execute();
+			qb.update("dailyupdate", keys, keys2).where("datetime", "=", "1").Execute();
 
 		} catch (Exception e) {
 			e.printStackTrace();
