@@ -10,9 +10,15 @@ public class AdminThread implements Runnable {
 
 	private MainFrame mainScreen;
 	private Screen screen;
+	private String email;
+	private String password;
+	private String authenticated;
+
+	private SwitchMethods switchMethods;
 
 	public AdminThread(){
 
+		switchMethods = new SwitchMethods();
 		mainScreen = new MainFrame();
 		mainScreen.getMain().addActionListener(new MainActionListener());
 		screen = new Screen();
@@ -48,7 +54,16 @@ public class AdminThread implements Runnable {
 			String cmd  = e.getActionCommand();
 			
 			if(cmd.equals("LoginBtn")) {
+				email = screen.getLogin().getUserName_Login(); 
+				password = screen.getLogin().getPassword_Login();
+				try {
+					authenticated = switchMethods.authenticate(email, password, true);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				if (authenticated.equals("0")){
 				screen.show(Screen.MENU);
+				}
 			}
 		}
 	}

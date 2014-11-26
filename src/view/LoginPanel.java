@@ -16,6 +16,7 @@ public class LoginPanel extends JPanel
 	private JLabel lblPleaseLoginBelow;
 	private JLabel lblUsername;
 	private JLabel lblPassword;
+	private JLabel lblIncorrect;
 	private JTextField userName_Login;
 	private JPasswordField password_Login;
 	private JButton btnLogin;
@@ -53,6 +54,38 @@ public class LoginPanel extends JPanel
 		btnLogin = new JButton("Login");
 		btnLogin.setBounds(175, 304, 89, 23);
 		add(btnLogin);
+	}
+	// metode til at vise label
+	public void incorrect()
+	{
+		lblIncorrect.setVisible(true);
+	}
+	/**
+	 * @return UserName_Login.getText()
+	 */
+	// getters
+	public String getUserName_Login()
+	{
+		return userName_Login.getText();
+	}
+
+	/**
+	 * @return Password_Login.getText()
+	 */
+	@SuppressWarnings("deprecation")
+	public String getPassword_Login()
+	{
+		return password_Login.getText();
+	}
+	/**
+	 * Resets textfields
+	 */
+	public void reset() // metode der nulstiller panelet
+	{
+		// skjuler labels
+		lblIncorrect.setVisible(false);
+		// fjerner tekst i textfields
+		password_Login.setText("");
 	}
 
 	public void addActionListener(ActionListener l)
