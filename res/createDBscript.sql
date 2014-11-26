@@ -15,17 +15,22 @@ CREATE TABLE IF NOT EXISTS Calendar
 	PRIMARY KEY (CalendarID)
 );
 
-
-CREATE TABLE IF NOT EXISTS dailyupdate
+CREATE TABLE IF NOT EXISTS qotd
 (
-	date datetime NOT NULL UNIQUE,
-	apparentTemperature double,
-	summary text,
+	date datetime NOT NULL DEFAULT NOW() ON UPDATE NOW(),
 	qotd varchar(300) NOT NULL,
-	update_timestamp TIMESTAMP DEFAULT NOW() ON UPDATE NOW(),
-	PRIMARY KEY (date)
+	msg_type varchar(10) NOT NULL,
+	primary KEY (date)
 );
 
+CREATE TABLE IF NOT EXISTS forecast
+(
+	date datetime NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+	apparentTemperature double,
+	summary text,
+	msg_type varchar(10) NOT NULL,
+	primary KEY (date)
+);
 
 CREATE TABLE IF NOT EXISTS events
 (
@@ -169,5 +174,24 @@ INSERT INTO `cbscalendar`.`roles`
 VALUES
 (1,
 false
+)
+;
+
+INSERT INTO `cbscalendar`.`users`
+(`email`,
+`active`,
+`password`)
+VALUES
+("admin",
+true,
+"pass")
+;
+
+INSERT INTO `cbscalendar`.`roles`
+(`userid`,
+`isAdmin`)
+VALUES
+(2,
+true
 )
 ;

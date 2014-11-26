@@ -19,39 +19,32 @@ public class QOTDModel {
 	private ResultSet resultSet;
 
 	public void saveQuote() {
-
-		/**
-		 * getting text from website and putting into string
-		 * Making a new object of JSON, and prints out quote
-		 */
-		 String json;
 		try {
-			json = urlRead.readUrl("http://dist-sso.it-kartellet.dk/quote/");
+			String json = urlRead.readUrl("http://dist-sso.it-kartellet.dk/quote/");
 
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
 
 			String quote = (String) jsonObject.get("quote");
 
-			String[] keys = {"qotd"};
-			String[] keys2 = {quote};
+			String[] keys = {"qotd", "msg_type"};
+			String[] key = {quote, "qotd"};
 
-			qb.update("dailyupdate", keys, keys2).where("datetime", "=", "1").Execute();
-
+			if(qb.selectFrom("qotd").all().ExecuteQuery().next()){
+				qb.update("qotd", keys, key).where("msg_type", "=", "qotd").Execute();
+			} else {
+				qb.insertInto("qotd", keys).values(key).Execute();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * Retrieve Quote from a website and put it into a String, 
-	 * Afterwards we will make it into a json object so it can be printed out to the client.
-	 */
 	public String getQuote(){
 		String q = null;
 		try {
-			resultSet = qb.selectFrom("dailyupdate").all().ExecuteQuery();
-			while(resultSet.next()) {
+			resultSet = qb.selectFrom("qotd").all().ExecuteQuery();
+			if(resultSet.next()) {
 				q = resultSet.getString("qotd");
 			}
 		} catch (SQLException e) {
@@ -61,18 +54,22 @@ public class QOTDModel {
 	}
 
 	public void updateQuote(){
-		Date date = new Date(); // Current date & time
-		long maxTimeNoUpdate = 86400; // Maximum one day with no update
+		Date date = new Date();
+		long maxTimeNoUpdate = 86400;
 
-		long date1 = date.getTime();
-		long date2 = date.getTime() - maxTimeNoUpdate; // minus 1 hour -- should be fetched from database
-
-		long timeSinceUpdate = date1 - date2; 
-
-		// if more than 1 hour ago, do update
-		if(timeSinceUpdate > 864000){
-			// return fresh weather data
-			saveQuote();	
+		long dateNow = date.getTime();
+		long dateLastQuote = 0;
+		try {
+			resultSet = qb.selectFrom("qotd").all().ExecuteQuery();
+			if(resultSet.next()){
+				dateLastQuote = Long.parseLong(resultSet.getString("date"));
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(dateNow-dateLastQuote > maxTimeNoUpdate){
+			saveQuote();
 		} 
 	}
 }
