@@ -14,7 +14,7 @@ public class CalendarListPanel extends JPanel {
 		setLayout(null);
 		
 		btnBackToMain = new JButton("Back to Main Menu");
-		btnBackToMain.setBounds(136, 233, 151, 23);
+		btnBackToMain.setBounds(123, 348, 150, 23);
 		add(btnBackToMain);
 
 	}

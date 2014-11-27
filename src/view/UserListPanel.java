@@ -13,6 +13,7 @@ public class UserListPanel extends JPanel {
 	private JTable table;
 	private JButton btnAdd;
 	private JButton btnDelete;
+	private JButton btnBackToMain;
 
 	public UserListPanel() {
 		setLayout(null);
@@ -32,6 +33,10 @@ public class UserListPanel extends JPanel {
 		btnDelete = new JButton("Delete");
 		btnDelete.setBounds(151, 246, 63, 23);
 		add(btnDelete);
+		
+		btnBackToMain = new JButton("Back to Main Menu");
+		btnBackToMain.setBounds(123, 348, 150, 23);
+		add(btnBackToMain);
 
 	}
 	public void addActionListener(ActionListener l)
@@ -40,5 +45,7 @@ public class UserListPanel extends JPanel {
 		btnAdd.setActionCommand("AddBtn");
 		btnDelete.addActionListener(l);
 		btnDelete.setActionCommand("DeleteBtn");
+		btnBackToMain.addActionListener(l);
+		btnBackToMain.setActionCommand("btnBackToMain");
 	}
 }

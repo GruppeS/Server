@@ -25,6 +25,9 @@ public class AdminThread implements Runnable {
 		screen.getLogin().addActionListener(new LoginActionListener());
 		screen.getMenu().addActionListener(new MenuActionListener());
 		screen.getCalendarList().addActionListener(new CalendarListActionListener());
+		screen.getNoteList().addActionListener(new NoteListActionListener());
+		screen.getUserList().addActionListener(new UserListActionListener());
+		screen.getEventList().addActionListener(new EventListActionListener());
 	}
 
 	public void run() {
@@ -91,6 +94,36 @@ public class AdminThread implements Runnable {
 		}	
 	}	
 	private class CalendarListActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+			String cmd  = e.getActionCommand();
+			
+			if(cmd.equals("btnBackToMain")) {
+				screen.show(Screen.MENU);
+			}
+		}
+	}
+	private class NoteListActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+			String cmd  = e.getActionCommand();
+			
+			if(cmd.equals("btnBackToMain")) {
+				screen.show(Screen.MENU);
+			}
+		}
+	}
+	private class UserListActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+			String cmd  = e.getActionCommand();
+			
+			if(cmd.equals("btnBackToMain")) {
+				screen.show(Screen.MENU);
+			}
+		}
+	}
+	private class EventListActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
 			String cmd  = e.getActionCommand();
