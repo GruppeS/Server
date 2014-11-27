@@ -1,10 +1,11 @@
 package view;
 
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 
 public class MenuPanel extends JPanel {
 
@@ -20,24 +21,29 @@ public class MenuPanel extends JPanel {
 	public MenuPanel() {
 		setLayout(null);
 			
-			lblMainMenu = new JLabel("Main menu");
-			lblMainMenu.setBounds(143, 11, 127, 35);
+			lblMainMenu = new JLabel("Admin - Main Menu");
+			lblMainMenu.setFont(new Font("Calibri", Font.PLAIN, 19));
+			lblMainMenu.setBounds(112, 46, 170, 35);
 			add(lblMainMenu);
 			
 			btnCalendarList = new JButton("Calendar list");
-			btnCalendarList.setBounds(240, 57, 150, 100);
+			btnCalendarList.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				}
+			});
+			btnCalendarList.setBounds(112, 183, 150, 50);
 			add(btnCalendarList);
 			
 			btnEventList = new JButton("Event List");
-			btnEventList.setBounds(10, 57, 150, 100);
+			btnEventList.setBounds(112, 244, 150, 50);
 			add(btnEventList);
 			
 			btnNoteList = new JButton("Note list");
-			btnNoteList.setBounds(10, 289, 150, 100);
+			btnNoteList.setBounds(112, 305, 150, 50);
 			add(btnNoteList);
 			
 			btnUserList = new JButton("User list");
-			btnUserList.setBounds(240, 289, 150, 100);
+			btnUserList.setBounds(112, 122, 150, 50);
 			add(btnUserList);
 		}
 		public void addActionListener(ActionListener l) // metode til at tilføje actionlisteners og actioncommands til knapper
