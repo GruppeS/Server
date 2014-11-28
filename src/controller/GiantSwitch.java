@@ -1,6 +1,7 @@
 package controller;
 import model.QOTD.QOTDModel;
 import model.calendar.GetCalendarData;
+import model.forecast.ForecastModel;
 import JsonClasses.CreateCalendar;
 import JsonClasses.DeleteCalendar;
 import JsonClasses.QOTD;
@@ -15,7 +16,9 @@ public class GiantSwitch {
 
 	public String GiantSwitchMethod(String jsonString) throws Exception {
 
+		ForecastModel forecastModel = new ForecastModel();
 		QOTDModel quoteModel = new QOTDModel();
+		QOTD qotd = new QOTD();
 		SwitchMethods SW = new SwitchMethods();
 		GetCalendarData getCalendarData = new GetCalendarData();
 
@@ -45,7 +48,7 @@ public class GiantSwitch {
 
 			if(answer.equals("0"))
 			{
-				userID = AU.getAuthUserEmail(); 
+				userID = AU.getAuthUserEmail();
 			}
 			break;
 			
@@ -90,6 +93,7 @@ public class GiantSwitch {
 
 		case "deleteEvent":
 			System.out.println("Recieved deleteEvent");
+			break;
 
 		case "saveNote":
 			System.out.println("Recieved saveNote");
@@ -107,8 +111,8 @@ public class GiantSwitch {
 			 ** QUOTE **
 			 **********/
 		case "getQuote":
+			quoteModel.updateQuote();
 			String quote = quoteModel.getQuote();
-			QOTD qotd = new QOTD();
 			qotd.setQuote(quote);
 			answer = gson.toJson(qotd);
 			break;
@@ -117,7 +121,8 @@ public class GiantSwitch {
 			 ** WEATHER **
 			 ************/
 		case "getClientForecast":
-			System.out.println("Recieved getClientForecast");
+//			forecastModel.updateForecast();
+//			String answer = forecastModel.getForecast();
 			break;
 		}
 		return answer;

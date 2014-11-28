@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import model.QOTD.QOTDModel;
 import model.database.DatabaseInit;
+import model.forecast.ForecastModel;
 
 public class ServerMain {
 
@@ -17,6 +18,7 @@ public class ServerMain {
 		new DatabaseInit().go();
 		
 		new QOTDModel().saveQuote();
+		new ForecastModel().saveForecast();
 
 		new Thread( new AdminThread() ).start();
 

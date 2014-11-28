@@ -6,11 +6,11 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 CREATE TABLE IF NOT EXISTS Calendar
 (
-	CalendarID int NOT NULL AUTO_INCREMENT,
-	Name varchar(255) NOT NULL,
-	Active tinyint,
-	CreatedBy varchar(255) NOT NULL,
-	PrivatePublic tinyint NOT NULL COMMENT '1 = public
+	calendarID int NOT NULL AUTO_INCREMENT,
+	name varchar(255) NOT NULL,
+	active tinyint,
+	createdBy varchar(255) NOT NULL,
+	privatePublic tinyint NOT NULL COMMENT '1 = public
 	2 = private',
 	PRIMARY KEY (CalendarID)
 );
@@ -18,18 +18,20 @@ CREATE TABLE IF NOT EXISTS Calendar
 CREATE TABLE IF NOT EXISTS qotd
 (
 	date datetime NOT NULL DEFAULT NOW() ON UPDATE NOW(),
-	qotd varchar(300) NOT NULL,
-	msg_type varchar(10) NOT NULL,
+	qotd varchar(500) NOT NULL,
+	msg_type varchar(10) NOT NULL DEFAULT "qotd",
 	primary KEY (date)
 );
 
 CREATE TABLE IF NOT EXISTS forecast
 (
+	forecastID int NOT NULL,
 	date datetime NOT NULL DEFAULT NOW() ON UPDATE NOW(),
-	apparentTemperature double,
-	summary text,
-	msg_type varchar(10) NOT NULL,
-	primary KEY (date)
+	day varchar (50) NOT NULL,
+	apparentTemperature varchar(10) NOT NULL,
+	summary varchar(50) NOT NULL,
+	msg_type varchar(10) NOT NULL DEFAULT "forecast",
+	primary KEY (forecastID)
 );
 
 CREATE TABLE IF NOT EXISTS events
@@ -164,6 +166,44 @@ INSERT INTO `cbscalendar`.`users`
 `password`)
 VALUES
 ("bjsc13ac",
+true,
+"pass")
+;
+
+INSERT INTO `cbscalendar`.`roles`
+(`userid`,
+`isAdmin`)
+VALUES
+(1,
+false
+)
+;
+
+INSERT INTO `cbscalendar`.`users`
+(`email`,
+`active`,
+`password`)
+VALUES
+("sual13ab",
+true,
+"pass")
+;
+
+INSERT INTO `cbscalendar`.`roles`
+(`userid`,
+`isAdmin`)
+VALUES
+(1,
+false
+)
+;
+
+INSERT INTO `cbscalendar`.`users`
+(`email`,
+`active`,
+`password`)
+VALUES
+("hefr13ae",
 true,
 "pass")
 ;

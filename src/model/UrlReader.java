@@ -1,12 +1,13 @@
 package model;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
 public class UrlReader {
 	
-	public String readUrl(String urlString) throws Exception {
+	public String readUrl(String urlString) throws IOException {
 		BufferedReader reader = null;
 		try {
 			URL url = new URL(urlString);

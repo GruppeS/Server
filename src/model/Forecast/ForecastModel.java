@@ -1,16 +1,13 @@
 package model.forecast;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import model.UrlReader;
 import model.QueryBuild.QueryBuilder;
 
 import org.json.simple.JSONArray;
@@ -20,38 +17,25 @@ import org.json.simple.parser.ParseException;
 
 public class ForecastModel {
 
-	// Json parser to retrieve and map data from openweathermap.org
+	UrlReader urlReader = new UrlReader();
+	QueryBuilder qb = new QueryBuilder();	
+
 	private ArrayList<Forecast> forecastList = new ArrayList();
-	private String weatherDescription = "";
-	QueryBuilder qb = new QueryBuilder();
+	private ResultSet resultSet;
 
-	// 
 	public ArrayList<Forecast> requestForecast() {
-		URL url;
-		HttpURLConnection conn;
-		BufferedReader rd;
-		String line;
+//		forecastList.add(new Forecast(string_date, temperatur, weatherDescription));
+		return forecastList;
+	}
 
-		String result = "";
+	public void saveForecast() {
 
-		try {
-			url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?lat=55.681589&lon=12.529092&cnt=14&mode=json&units=metric");
-			conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
+		String result = null;
+		String weatherDescription = null;		
+		
+		try {			
+			result = urlReader.readUrl("http://api.openweathermap.org/data/2.5/forecast/daily?lat=55.681589&lon=12.529092&cnt=14&mode=json&units=metric");
 
-			//henter indholder fra hjemmesiden efter vi har aabnet en forbindelse
-			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			while ((line = rd.readLine()) != null) {
-
-				//vi skal ligge alle linjerne oven i hinanden
-				result += line;
-			}
-			rd.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-
-		try {
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
 
@@ -60,7 +44,15 @@ public class ForecastModel {
 
 			Iterator i = list.iterator();
 
-			// take each value from the json array separately
+			boolean dataIsPresent;
+			if(qb.selectFrom("forecast").all().ExecuteQuery().next()){
+				dataIsPresent = true;
+			} else {
+				dataIsPresent = false;
+			}
+			
+			int count = 1;
+			
 			while (i.hasNext()) {
 
 				JSONObject innerObj = (JSONObject) i.next();
@@ -70,28 +62,38 @@ public class ForecastModel {
 
 				JSONObject temp = (JSONObject) innerObj.get("temp");
 				double celsius = (Double) temp.get("day");
+				String temperature = String.valueOf(celsius);
 
-				String temperatur = String.valueOf(celsius);
 				JSONArray subList = (JSONArray) innerObj.get("weather");
 
 				Iterator y = subList.iterator();
 
 				while (y.hasNext()) {
 					JSONObject childObj = (JSONObject) y.next();
-
 					weatherDescription = (String) childObj.get("description");
-
 				}
 
-				forecastList.add(new Forecast(string_date, temperatur, weatherDescription));
+				String count_String = Integer.toString(count);
+				
+				String[] keys = {"forecastID", "day", "apparentTemperature", "summary"};
+				String[] key = {count_String, string_date, temperature, weatherDescription};
 
-			}
+				if(!dataIsPresent){
+					qb.insertInto("forecast", keys).values(key).Execute();
+				} else {
+					qb.update("forecast", keys, key).where("forecastID", "=", count_String).Execute();
+				}
+				count++;
+			} 
+		} catch (IOException e) {
+			e.printStackTrace();
 		} catch (ParseException ex) {
 			ex.printStackTrace();
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		return forecastList;
 	}
 
 	// Henter vejrudsigten og gemmer de hentede data i en ArrayList
@@ -114,7 +116,7 @@ public class ForecastModel {
 			// Query database and fetch existing weather data from db
 			ResultSet forecast = null;
 			try {
-				forecast = qb.selectFrom("dailyupdate").where("msg_type", "=", "forecast").ExecuteQuery();
+				forecast = qb.selectFrom("forecast").where("msg_type", "=", "forecast").ExecuteQuery();
 				// Method to add these ResultSet values to ArrayList needs to be created
 				return (ArrayList<Forecast>) forecastFromDB;
 			} catch (SQLException e) {

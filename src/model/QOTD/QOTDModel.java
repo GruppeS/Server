@@ -27,8 +27,8 @@ public class QOTDModel {
 			String quote = (String) jsonObject.get("quote");
 			quote = quote.replace("'", "''");
 
-			String[] keys = {"qotd", "msg_type"};
-			String[] key = {quote, "qotd"};
+			String[] keys = {"qotd"};
+			String[] key = {quote};
 
 			if(qb.selectFrom("qotd").all().ExecuteQuery().next()){
 				qb.update("qotd", keys, key).where("msg_type", "=", "qotd").Execute();
