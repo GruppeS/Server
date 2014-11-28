@@ -193,7 +193,7 @@ INSERT INTO `cbscalendar`.`roles`
 (`userid`,
 `isAdmin`)
 VALUES
-(1,
+(2,
 false
 )
 ;
@@ -212,7 +212,7 @@ INSERT INTO `cbscalendar`.`roles`
 (`userid`,
 `isAdmin`)
 VALUES
-(1,
+(3,
 false
 )
 ;
@@ -231,7 +231,7 @@ INSERT INTO `cbscalendar`.`roles`
 (`userid`,
 `isAdmin`)
 VALUES
-(2,
+(4,
 true
 )
 ;
