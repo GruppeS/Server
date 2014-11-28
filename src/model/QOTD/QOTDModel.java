@@ -57,12 +57,14 @@ public class QOTDModel {
 		Date date = new Date();
 		long maxTimeNoUpdate = 86400;
 
-		long dateNow = date.getTime();
+		long dateNow = date.getTime()/1000L;
+		System.out.println(dateNow);
 		long dateLastQuote = 0;
 		try {
 			resultSet = qb.selectFrom("qotd").all().ExecuteQuery();
 			if(resultSet.next()){
-				dateLastQuote = Long.parseLong(resultSet.getString("date"));
+				dateLastQuote = resultSet.getDate("date").getTime()/1000L;
+				System.out.println(dateLastQuote);
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
