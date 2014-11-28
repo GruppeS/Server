@@ -13,6 +13,7 @@ import com.google.gson.GsonBuilder;
 public class GiantSwitch {
 	private String userID;
 	private String answer;
+	private boolean authenticated;
 
 	public String GiantSwitchMethod(String jsonString) throws Exception {
 
@@ -20,8 +21,9 @@ public class GiantSwitch {
 		QOTDModel quoteModel = new QOTDModel();
 		SwitchMethods SW = new SwitchMethods();
 		GetCalendarData getCalendarData = new GetCalendarData();
-
 		Gson gson = new GsonBuilder().create();
+
+		authenticated = false;
 
 		switch (Determine(jsonString)) {
 
@@ -42,17 +44,14 @@ public class GiantSwitch {
 			 **********/
 		case "logIn":
 			UserInfo AU = (UserInfo)gson.fromJson(jsonString, UserInfo.class);
-			
+
 			answer = SW.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword(), false);
 
 			if(answer.equals("0"))
 			{
+				authenticated = true;
 				userID = AU.getAuthUserEmail();
 			}
-			break;
-			
-		case "logOut":
-			System.out.println("Recieved logOut");
 			break;
 
 			/*************
@@ -130,40 +129,46 @@ public class GiantSwitch {
 
 	public String Determine(String ID) {
 
-		if (ID.contains("getEvents")) {
-			return "getEvents";
-		} else if (ID.contains("getEventInfo")) {
-			return "getEventInfo";
-		} else if (ID.contains("saveNote")) {
-			return "saveNote";
-		} else if (ID.contains("getNote")) {
-			return "getNote";
-		} else if (ID.contains("deleteNote")){
-			return "deleteNote";
-		}else if  (ID.contains("deleteCalendar")){
-			return "deleteCalendar";
-		} else if (ID.contains("getClientForecast")) {
-			return "getClientForecast";
-		} else if (ID.contains("saveImportedCalendar")) {
-			return "saveImportedCalendar";
-		}else if (ID.contains("importCourse")) {
-			return "importCourse";
-		} else if (ID.contains("exportCourse")) {
-			return "exportCourse";
-		} else if (ID.contains("getQuote")) {
-			return "getQuote";
-		} else if (ID.contains("logIn")) {
-			return "logIn";
-		} else if (ID.contains("logOut")) {
-			return "logOut";
-		} else if (ID.contains("getCalendar")) {
-			return "getCalendar";
-		} else if (ID.contains("createEvent")) {
-			return "createEvent";
-		} else if (ID.contains("deleteEvent")) {
-			return "deleteEvent"; 
-		} else if (ID.contains("createCalendar")) {
-			return "createCalendar";
+		if (!authenticated) {
+			if (ID.contains("logIn")) {
+				return "logIn";
+			} else {
+				return null;
+			}
+		} else if (authenticated) {
+			if (ID.contains("getEvents")) {
+				return "getEvents";
+			} else if (ID.contains("getEventInfo")) {
+				return "getEventInfo";
+			} else if (ID.contains("saveNote")) {
+				return "saveNote";
+			} else if (ID.contains("getNote")) {
+				return "getNote";
+			} else if (ID.contains("deleteNote")){
+				return "deleteNote";
+			}else if  (ID.contains("deleteCalendar")){
+				return "deleteCalendar";
+			} else if (ID.contains("getClientForecast")) {
+				return "getClientForecast";
+			} else if (ID.contains("saveImportedCalendar")) {
+				return "saveImportedCalendar";
+			}else if (ID.contains("importCourse")) {
+				return "importCourse";
+			} else if (ID.contains("exportCourse")) {
+				return "exportCourse";
+			} else if (ID.contains("getQuote")) {
+				return "getQuote";
+			} else if (ID.contains("getCalendar")) {
+				return "getCalendar";
+			} else if (ID.contains("createEvent")) {
+				return "createEvent";
+			} else if (ID.contains("deleteEvent")) {
+				return "deleteEvent"; 
+			} else if (ID.contains("createCalendar")) {
+				return "createCalendar";
+			} else {
+				return null;
+			}
 		} else {
 			return null;
 		}
