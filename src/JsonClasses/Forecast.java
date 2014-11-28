@@ -1,4 +1,4 @@
-package model.forecast;
+package JsonClasses;
 
 /**
  * Constructor til ForecastModel Arraylist

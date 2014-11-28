@@ -15,6 +15,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import JsonClasses.Forecast;
+
 public class ForecastModel {
 
 	UrlReader urlReader = new UrlReader();
@@ -22,11 +24,6 @@ public class ForecastModel {
 
 	private ArrayList<Forecast> forecastList = new ArrayList();
 	private ResultSet resultSet;
-
-	public ArrayList<Forecast> requestForecast() {
-//		forecastList.add(new Forecast(string_date, temperatur, weatherDescription));
-		return forecastList;
-	}
 
 	public void saveForecast() {
 
@@ -39,7 +36,6 @@ public class ForecastModel {
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
 
-			// get an array from the JSON object
 			JSONArray list = (JSONArray) jsonObject.get("list");
 
 			Iterator i = list.iterator();
@@ -75,7 +71,7 @@ public class ForecastModel {
 
 				String count_String = Integer.toString(count);
 				
-				String[] keys = {"forecastID", "day", "apparentTemperature", "summary"};
+				String[] keys = {"forecastID", "day", "temperature", "summary"};
 				String[] key = {count_String, string_date, temperature, weatherDescription};
 
 				if(!dataIsPresent){
@@ -95,45 +91,42 @@ public class ForecastModel {
 			e.printStackTrace();
 		}
 	}
-
-	// Henter vejrudsigten og gemmer de hentede data i en ArrayList
-	public ArrayList<Forecast> getForecast() throws SQLException{
-		QueryBuilder qb = new QueryBuilder();
-		Date date = new Date(); // Current date & time
-		long maxTimeNoUpdate = 3600; // Maximum one hour with no update
-		ArrayList<Forecast> forecastFromDB = new ArrayList();
-
-		long date1 = date.getTime();
-		long date2 = date.getTime() - maxTimeNoUpdate; // minus 1 hour -- should be fetched from database
-
-		long timeSinceUpdate = 3601; 
-
-		// if more than 1 hour ago, do update
-		if(timeSinceUpdate > 3600){
-			// return fresh weather data
-			return this.requestForecast();
-		} else {
-			// Query database and fetch existing weather data from db
-			ResultSet forecast = null;
-			try {
-				forecast = qb.selectFrom("forecast").where("msg_type", "=", "forecast").ExecuteQuery();
-				// Method to add these ResultSet values to ArrayList needs to be created
-				return (ArrayList<Forecast>) forecastFromDB;
-			} catch (SQLException e) {
-				e.printStackTrace();
+	
+	public ArrayList<Forecast> getForecast() {
+		try {
+			resultSet = qb.selectFrom("forecast").where("msg_type", "=", "forecast").ExecuteQuery();
+			
+			while(resultSet.next()){
+				String date = resultSet.getString("day");
+				String temperature = resultSet.getString("temperature");
+				String weatherDescription = resultSet.getString("summary");
+				forecastList.add(new Forecast(date, temperature, weatherDescription));
 			}
-
-			//Do something nice with ResultSet in order to make it into an ArrayList
-			try {
-				while(forecast.next()){
-					//forecastFromDB.add("xx");
-					return forecastFromDB;
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		
+		return (ArrayList<Forecast>) forecastList;
 	}
 
+	public void updateForecast() throws SQLException{
+		Date date = new Date();
+		long maxTimeNoUpdate = 3600;
+
+		long timeNow = date.getTime()/1000L;
+		long timeLastForecast = 0;
+		
+		try {
+			resultSet = qb.selectFrom("forecast").all().ExecuteQuery();
+			if(resultSet.next()){
+				timeLastForecast = resultSet.getDate("date").getTime()/1000L;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(timeNow-timeLastForecast > maxTimeNoUpdate){
+			saveForecast();
+		}
+	}
 }

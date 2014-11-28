@@ -41,16 +41,17 @@ public class QOTDModel {
 	}
 
 	public String getQuote(){
-		String q = null;
+		String quote = null;
 		try {
 			resultSet = qb.selectFrom("qotd").all().ExecuteQuery();
+			
 			if(resultSet.next()) {
-				q = resultSet.getString("qotd");
+				quote = resultSet.getString("qotd");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return q;
+		return quote;
 	}
 
 	public void updateQuote(){
@@ -58,13 +59,12 @@ public class QOTDModel {
 		long maxTimeNoUpdate = 86400;
 
 		long dateNow = date.getTime()/1000L;
-		System.out.println(dateNow);
 		long dateLastQuote = 0;
+		
 		try {
 			resultSet = qb.selectFrom("qotd").all().ExecuteQuery();
 			if(resultSet.next()){
 				dateLastQuote = resultSet.getDate("date").getTime()/1000L;
-				System.out.println(dateLastQuote);
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();

@@ -18,7 +18,6 @@ public class GiantSwitch {
 
 		ForecastModel forecastModel = new ForecastModel();
 		QOTDModel quoteModel = new QOTDModel();
-		QOTD qotd = new QOTD();
 		SwitchMethods SW = new SwitchMethods();
 		GetCalendarData getCalendarData = new GetCalendarData();
 
@@ -111,6 +110,7 @@ public class GiantSwitch {
 			 ** QUOTE **
 			 **********/
 		case "getQuote":
+			QOTD qotd = new QOTD();
 			quoteModel.updateQuote();
 			String quote = quoteModel.getQuote();
 			qotd.setQuote(quote);
@@ -121,8 +121,8 @@ public class GiantSwitch {
 			 ** WEATHER **
 			 ************/
 		case "getClientForecast":
-//			forecastModel.updateForecast();
-//			String answer = forecastModel.getForecast();
+			forecastModel.updateForecast();
+			answer = gson.toJson(forecastModel.getForecast());
 			break;
 		}
 		return answer;

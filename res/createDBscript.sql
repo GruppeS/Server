@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS forecast
 	forecastID int NOT NULL,
 	date datetime NOT NULL DEFAULT NOW() ON UPDATE NOW(),
 	day varchar (50) NOT NULL,
-	apparentTemperature varchar(10) NOT NULL,
+	temperature varchar(10) NOT NULL,
 	summary varchar(50) NOT NULL,
 	msg_type varchar(10) NOT NULL DEFAULT "forecast",
 	primary KEY (forecastID)
