@@ -60,7 +60,5 @@ public class Where {
 		 where.setWhereValue(value);
 
 		 return new Execute(getQueryBuilder(), where);
-		 //System.out.print("SELECT " + getSelectParameters() + " FROM " + getTableName() + " WHERE " + getWherekey() + " = " + getWherePlaceholders());
-
 	 }
 }

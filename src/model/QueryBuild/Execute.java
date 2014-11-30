@@ -5,8 +5,6 @@ import java.sql.SQLException;
 
 import model.Model;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 public class Execute extends Model {
 
 	private final String SELECT = "SELECT ";
@@ -66,8 +64,7 @@ public class Execute extends Model {
 			try {
 				getConnection(false);
 				getConn();
-				String cleanSql = StringEscapeUtils.escapeSql(sql);
-				sqlStatement = getConn().prepareStatement(cleanSql);
+				sqlStatement = getConn().prepareStatement(sql);
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -79,8 +76,7 @@ public class Execute extends Model {
 			try {
 				getConnection(false);
 				getConn();
-				String cleanSql = StringEscapeUtils.escapeSql(sql);
-				sqlStatement = getConn().prepareStatement(cleanSql);
+				sqlStatement = getConn().prepareStatement(sql);
 				sqlStatement.setString(1, getWhere().getWhereValue());
 
 			} catch (SQLException e) {
@@ -105,8 +101,6 @@ public class Execute extends Model {
 			try {
 				getConnection(false);
 				getConn();
-//				String cleanSql = StringEscapeUtils.escapeSql(sql);
-//				sqlStatement = getConn().prepareStatement(cleanSql);
 				sqlStatement = getConn().prepareStatement(sql);
 
 			} catch (SQLException e) {
@@ -118,8 +112,6 @@ public class Execute extends Model {
 			try {
 				getConnection(false);
 				getConn();
-//				String cleanSql = StringEscapeUtils.escapeSql(sql);
-//				sqlStatement = getConn().prepareStatement(cleanSql);
 				sqlStatement = getConn().prepareStatement(sql);
 				sqlStatement.setString(1, getWhere().getWhereValue());
 
@@ -127,8 +119,6 @@ public class Execute extends Model {
 				e.printStackTrace();
 			}
 		} else {
-			System.out.println(sql);
-
 			sql = INSERTINTO + getQueryBuilder().getTableName() + " (" + getQueryBuilder().getFields() + ")" + VALUES + "(";
 			StringBuilder sb = new StringBuilder();
 			for (String n : getValues().getValues()) {
@@ -140,8 +130,7 @@ public class Execute extends Model {
 			try {
 				getConnection(false);
 				getConn();
-				String cleanSql = StringEscapeUtils.escapeSql(sql);
-				sqlStatement = getConn().prepareStatement(cleanSql);
+				sqlStatement = getConn().prepareStatement(sql);
 				int x = 0;
 				for (int i = 0; i < getValues().getValues().length; i++) {
 					x = i;

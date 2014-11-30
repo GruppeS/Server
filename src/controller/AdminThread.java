@@ -125,10 +125,10 @@ public class AdminThread implements Runnable {
 			String cmd  = e.getActionCommand();
 
 			if(cmd.equals("btnAdd")) {
-				frame.getUserList().reset();
-				
 				String username = frame.getUserList().getUsername();
 				String password = frame.getUserList().getPassword();
+				
+				frame.getUserList().reset();
 				
 				if(!username.equals("") && !password.equals("")) {
 					if(adminMethods.AddUser(username, password)){
