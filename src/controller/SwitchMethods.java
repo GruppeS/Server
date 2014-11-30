@@ -8,15 +8,6 @@ public class SwitchMethods extends Model
 {
 	QueryBuilder qb = new QueryBuilder();
 
-	/**
-	 * Allows the client to create a new calendar
-	 * @param userName
-	 * @param calendarName
-	 * @param privatePublic
-	 * @return
-	 * @throws SQLException
-	 */
-
 	public String createNewCalendar (String userName, String calendarName, int privatePublic) throws SQLException
 	{
 		String stringToBeReturned ="";
@@ -30,7 +21,6 @@ public class SwitchMethods extends Model
 		{
 			stringToBeReturned = "The new calendar has not been created!";
 		}
-
 
 		return stringToBeReturned;
 	}

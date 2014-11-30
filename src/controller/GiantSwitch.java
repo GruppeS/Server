@@ -1,7 +1,7 @@
 package controller;
 import model.Forecast.ForecastModel;
 import model.QOTD.QOTDModel;
-import model.calendar.GetCalendarData;
+import model.calendar.CalendarModel;
 import JsonClasses.CreateCalendar;
 import JsonClasses.DeleteCalendar;
 import JsonClasses.QOTD;
@@ -20,7 +20,7 @@ public class GiantSwitch {
 		ForecastModel forecastModel = new ForecastModel();
 		QOTDModel quoteModel = new QOTDModel();
 		SwitchMethods SW = new SwitchMethods();
-		GetCalendarData getCalendarData = new GetCalendarData();
+		CalendarModel getCalendarData = new CalendarModel();
 		Gson gson = new GsonBuilder().create();
 
 		switch (Determine(jsonString)) {

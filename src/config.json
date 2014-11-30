@@ -3,6 +3,7 @@
 	"port": "3306",
 	"username": "root",
 	"password": "1234",
+	"serverport": "8888",
 	"ffcryptkey": "3.1470",
 	"weather_expiration_time": "3600",
 	"weather_lat": "55.681589",

@@ -15,28 +15,20 @@ public class Configurations {
 	private String username;
 	private String dbname;
 	private String password;
-
-	// FFkey is used in Encryption.java
+	private String serverport;
 	private String ffcryptkey;
-
-	// Weather variables
 	private String weather_expiration_time;
 	private String weather_lat;
 	private String weather_lon;
 	private String weather_future_in_days;
 
-	// Opret DB name
-	// Opret update time på QOTD
-
-	
 	public Configurations() {
 		ReadFile();
 	}
-	
+
 	public String getHost() {
 		return host;
 	}
-
 	public void setHost(String host) {
 		this.host = host;
 	}
@@ -44,7 +36,6 @@ public class Configurations {
 	public String getPort() {
 		return port;
 	}
-
 	public void setPort(String port) {
 		this.port = port;
 	}
@@ -52,7 +43,6 @@ public class Configurations {
 	public String getUsername() {
 		return username;
 	}
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -60,15 +50,20 @@ public class Configurations {
 	public String getPassword() {
 		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public int getServerport() {
+		return Integer.parseInt(serverport);
+	}
+	public void setServerport(String serverport) {
+		this.serverport = serverport;
 	}
 
 	public String getDbname() {
 		return dbname;
 	}
-
 	public void setDbname(String dbname) {
 		this.dbname = dbname;
 	}
@@ -76,18 +71,13 @@ public class Configurations {
 	public String getFfcryptkey() {
 		return ffcryptkey;
 	}
-
 	public void setFfcryptkey(String ffcryptkey) {
 		this.ffcryptkey = ffcryptkey;
 	}
 
-
-	// Weather setters and getters.
-
 	public String getWeather_expiration_time() {
 		return weather_expiration_time;
 	}
-
 	public void setWeather_expiration_time(String weather_expiration_time) {
 		this.weather_expiration_time = weather_expiration_time;
 	}
@@ -95,7 +85,6 @@ public class Configurations {
 	public String getWeather_lat() {
 		return weather_lat;
 	}
-
 	public void setWeather_lat(String weather_lat) {
 		this.weather_lat = weather_lat;
 	}
@@ -103,7 +92,6 @@ public class Configurations {
 	public String getWeather_lon() {
 		return weather_lon;
 	}
-
 	public void setWeather_lon(String weather_lon) {
 		this.weather_lon = weather_lon;
 	}
@@ -111,13 +99,9 @@ public class Configurations {
 	public String getWeather_future_in_days() {
 		return weather_future_in_days;
 	}
-
 	public void setWeather_future_in_days(String weather_future_in_days) {
 		this.weather_future_in_days = weather_future_in_days;
 	}
-
-
-	// Method to read files from jSON file
 
 	public void ReadFile() {
 		JSONParser jsonParser = new JSONParser();
@@ -128,17 +112,13 @@ public class Configurations {
 			Object obj = jsonParser.parse(json);
 			JSONObject jsonObject = (JSONObject) obj;
 
-			// Getting json values for SQL variables and DB
 			setHost((String) jsonObject.get("host"));
 			setPort((String) jsonObject.get("port"));
 			setUsername((String) jsonObject.get("username"));
 			setDbname((String) jsonObject.get("dbname"));
 			setPassword((String) jsonObject.get("password"));
-
-			// Getting json values for KEY variables
+			setServerport((String) jsonObject.get("serverport"));
 			setFfcryptkey((String) jsonObject.get("ffcryptkey"));
-
-			// Getting json values for weather variables
 			setWeather_expiration_time((String) jsonObject.get("weather_expiration_date"));
 			setWeather_lat((String) jsonObject.get("weather_lat"));
 			setWeather_lon((String) jsonObject.get("weather_lon"));

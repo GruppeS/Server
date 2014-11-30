@@ -7,11 +7,14 @@ import java.sql.SQLException;
 import model.Forecast.ForecastModel;
 import model.QOTD.QOTDModel;
 import model.database.DatabaseInit;
+import config.Configurations;
 
 public class ServerMain {
 
 	private static ServerSocket serverSocket = null;
 	private static Socket clientSocket = null;
+	private static Configurations cf = new Configurations();
+	private static int port = cf.getServerport();
 
 	public static void main(String args[]) throws SQLException, IOException {
 
@@ -23,7 +26,7 @@ public class ServerMain {
 		new Thread( new AdminThread() ).start();
 
 		try {
-			serverSocket = new ServerSocket(8888);
+			serverSocket = new ServerSocket(port);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

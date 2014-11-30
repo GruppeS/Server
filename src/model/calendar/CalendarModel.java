@@ -2,12 +2,12 @@ package model.calendar;
 
 import model.UrlReader;
 
-public class GetCalendarData {
+public class CalendarModel {
 
 	private EncryptUserID e;
 	private UrlReader urlRead;
 
-	public GetCalendarData() {
+	public CalendarModel() {
 		e = new EncryptUserID();
 		urlRead = new UrlReader();
 	}

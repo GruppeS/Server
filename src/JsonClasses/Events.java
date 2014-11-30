@@ -1,4 +1,4 @@
-package model.calendar;
+package JsonClasses;
 
 import java.util.ArrayList;
 
