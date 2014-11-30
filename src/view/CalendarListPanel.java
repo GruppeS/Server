@@ -18,9 +18,9 @@ public class CalendarListPanel extends JPanel {
 		add(btnBackToMain);
 
 	}
-	public void addActionListener(ActionListener l) // metode til at tilføje actionlisteners og actioncommands til knapper
+	public void addActionListener(ActionListener l)
 	{
-		btnBackToMain.addActionListener(l); // tilføjer actionlistener
-		btnBackToMain.setActionCommand("btnBackToMain"); // tilføjer actioncommand
+		btnBackToMain.addActionListener(l);
+		btnBackToMain.setActionCommand("btnBackToMain");
 	}
 }

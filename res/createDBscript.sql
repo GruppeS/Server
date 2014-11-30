@@ -63,14 +63,6 @@ CREATE TABLE IF NOT EXISTS notes
 	PRIMARY KEY (noteid)
 );
 
-CREATE TABLE IF NOT EXISTS roles
-(
-	roleid int NOT NULL AUTO_INCREMENT,
-	userid int NOT NULL,
-	isAdmin boolean NOT NULL,
-	PRIMARY KEY (roleid)
-);
-
 CREATE TABLE IF NOT EXISTS userevents
 (
 	userid int NOT NULL,
@@ -80,10 +72,11 @@ CREATE TABLE IF NOT EXISTS userevents
 CREATE TABLE IF NOT EXISTS users
 (
 	userid int NOT NULL AUTO_INCREMENT,
-	email varchar(40) NOT NULL,
-	active boolean NOT NULL,
+	username varchar(40) NOT NULL,
+	active boolean NOT NULL DEFAULT true,
 	created datetime NOT NULL DEFAULT NOW(),
 	password varchar(200) NOT NULL,
+	isAdmin boolean NOT NULL DEFAULT false,
 	PRIMARY KEY (userid)
 );
 
@@ -124,13 +117,6 @@ ALTER TABLE events
 ;
 
 
-ALTER TABLE roles
-	ADD FOREIGN KEY (userid)
-	REFERENCES users (userid)
-	ON UPDATE RESTRICT
-;
-
-
 ALTER TABLE userevents
 	ADD FOREIGN KEY (userid)
 	REFERENCES users (userid)
@@ -145,80 +131,38 @@ ALTER TABLE notes
 ;
 
 
-/* Create Dummy Account */
+/* Create Test Accounts */
 
 INSERT INTO `cbscalendar`.`users`
-(`email`,
-`active`,
+(`username`,
+`password`,
+`isAdmin`)
+VALUES
+("admin",
+"pass",
+true)
+;
+
+INSERT INTO `cbscalendar`.`users`
+(`username`,
 `password`)
 VALUES
 ("bjsc13ac",
-true,
 "pass")
 ;
 
-INSERT INTO `cbscalendar`.`roles`
-(`userid`,
-`isAdmin`)
-VALUES
-(1,
-false
-)
-;
-
 INSERT INTO `cbscalendar`.`users`
-(`email`,
-`active`,
+(`username`,
 `password`)
 VALUES
 ("sual13ab",
-true,
 "pass")
 ;
 
-INSERT INTO `cbscalendar`.`roles`
-(`userid`,
-`isAdmin`)
-VALUES
-(2,
-false
-)
-;
-
 INSERT INTO `cbscalendar`.`users`
-(`email`,
-`active`,
+(`username`,
 `password`)
 VALUES
 ("hefr13ae",
-true,
 "pass")
-;
-
-INSERT INTO `cbscalendar`.`roles`
-(`userid`,
-`isAdmin`)
-VALUES
-(3,
-false
-)
-;
-
-INSERT INTO `cbscalendar`.`users`
-(`email`,
-`active`,
-`password`)
-VALUES
-("admin",
-true,
-"pass")
-;
-
-INSERT INTO `cbscalendar`.`roles`
-(`userid`,
-`isAdmin`)
-VALUES
-(4,
-true
-)
 ;

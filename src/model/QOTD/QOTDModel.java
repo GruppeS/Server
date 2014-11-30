@@ -27,13 +27,13 @@ public class QOTDModel {
 			String quote = (String) jsonObject.get("quote");
 			quote = quote.replace("'", "''");
 
-			String[] keys = {"qotd"};
-			String[] key = {quote};
+			String[] fields = {"qotd"};
+			String[] values = {quote};
 
 			if(qb.selectFrom("qotd").all().ExecuteQuery().next()){
-				qb.update("qotd", keys, key).where("msg_type", "=", "qotd").Execute();
+				qb.update("qotd", fields, values).where("msg_type", "=", "qotd").Execute();
 			} else {
-				qb.insertInto("qotd", keys).values(key).Execute();
+				qb.insertInto("qotd", fields).values(values).Execute();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class Screen extends JFrame {
+public class Frame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -27,10 +27,10 @@ public class Screen extends JFrame {
 
 	CardLayout c;
 	
-	public Screen() {
+	public Frame() {
 		setTitle("Server Control");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(0, 0, 400, 400);
+		setBounds(0, 0, 406, 429);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new CardLayout(0, 0));

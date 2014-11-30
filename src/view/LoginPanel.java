@@ -28,72 +28,62 @@ public class LoginPanel extends JPanel
 		setLayout(null);
 
 		lblWelcome = new JLabel("Welcome ADMIN");
-		lblWelcome.setBounds(163, 110, 101, 24);
+		lblWelcome.setBounds(135, 73, 135, 24);
 		add(lblWelcome);
 
 		lblPleaseLoginBelow = new JLabel("Please login below:");
-		lblPleaseLoginBelow.setBounds(156, 145, 108, 16);
+		lblPleaseLoginBelow.setBounds(128, 108, 132, 16);
 		add(lblPleaseLoginBelow);
 
 		lblUsername = new JLabel("Username:");
-		lblUsername.setBounds(150, 172, 52, 14);
+		lblUsername.setBounds(122, 148, 74, 14);
 		add(lblUsername);
 
 		lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(150, 248, 74, 14);
+		lblPassword.setBounds(122, 211, 89, 14);
 		add(lblPassword);
 		
 		lblIncorrect = new JLabel("Username or password is incorrect");
-		lblIncorrect.setBounds(145, 338, 165, 14);
 		lblIncorrect.setFont(new Font("Calibri", Font.ITALIC, 11));
+		lblIncorrect.setBounds(117, 320, 181, 14);
 		lblIncorrect.setForeground(Color.red);
 		lblIncorrect.setVisible(false);
 		add(lblIncorrect);
 		
 		userName_Login = new JTextField();
-		userName_Login.setBounds(145, 194, 143, 20);
+		userName_Login.setBounds(117, 170, 143, 20);
 		userName_Login.setColumns(10);
 		add(userName_Login);
 		
 		password_Login = new JPasswordField();
-		password_Login.setBounds(145, 273, 143, 20);
+		password_Login.setBounds(117, 236, 143, 20);
 		password_Login.setColumns(10);
 		add(password_Login);
 
 		btnLogin = new JButton("Login");
-		btnLogin.setBounds(175, 304, 89, 23);
+		btnLogin.setBounds(147, 286, 89, 23);
 		add(btnLogin);
 	}
-	// metode til at vise label
+	
 	public void incorrect()
 	{
 		lblIncorrect.setVisible(true);
 	}
-	/**
-	 * @return UserName_Login.getText()
-	 */
-	// getters
+
 	public String getUserName_Login()
 	{
 		return userName_Login.getText();
 	}
 
-	/**
-	 * @return Password_Login.getText()
-	 */
 	@SuppressWarnings("deprecation")
 	public String getPassword_Login()
 	{
 		return password_Login.getText();
 	}
-	/**
-	 * Resets textfields
-	 */
-	public void reset() // metode der nulstiller panelet
+
+	public void reset()
 	{
-		// skjuler labels
 		lblIncorrect.setVisible(false);
-		// fjerner tekst i textfields
 		password_Login.setText("");
 	}
 

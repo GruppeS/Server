@@ -71,13 +71,13 @@ public class ForecastModel {
 
 				String count_String = Integer.toString(count);
 				
-				String[] keys = {"forecastID", "day", "temperature", "summary"};
-				String[] key = {count_String, string_date, temperature, weatherDescription};
+				String[] fields = {"forecastID", "day", "temperature", "summary"};
+				String[] values = {count_String, string_date, temperature, weatherDescription};
 
 				if(!dataIsPresent){
-					qb.insertInto("forecast", keys).values(key).Execute();
+					qb.insertInto("forecast", fields).values(values).Execute();
 				} else {
-					qb.update("forecast", keys, key).where("forecastID", "=", count_String).Execute();
+					qb.update("forecast", fields, values).where("forecastID", "=", count_String).Execute();
 				}
 				count++;
 			} 

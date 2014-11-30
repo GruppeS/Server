@@ -15,11 +15,11 @@ public class AdminMethods {
 
 	public Vector<Vector<Object>> userTable() {
 		try {
-			String[] keys = {"email", "active"};
+			String[] keys = {"username", "active"};
 			rs = qb.selectFrom(keys, "users").all().ExecuteQuery();
-			
+
 			data.clear();
-			
+
 			while(rs.next()) {
 				Vector<Object> row = new Vector<Object>();
 
@@ -35,5 +35,22 @@ public class AdminMethods {
 			e.printStackTrace();
 		}
 		return data;
+	}
+
+	public boolean AddUser(String username, String password) {
+		boolean succes = false;
+		try {
+			if(qb.selectFrom("users").where("username", "=", username).ExecuteQuery().next()) {
+				succes = false;
+			} else {
+				String[] fields = {"username", "password"};
+				String[] values = {username, password};
+				qb.insertInto("users", fields).values(values).Execute();
+				succes = true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return succes;
 	}
 }

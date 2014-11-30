@@ -4,12 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import view.MainFrame;
-import view.Screen;
+import view.Frame;
 
 public class AdminThread implements Runnable {
 
 	private MainFrame mainScreen;
-	private Screen screen;
+	private Frame frame;
 
 	private SwitchMethods switchMethods;
 	private AdminMethods adminMethods;
@@ -26,13 +26,13 @@ public class AdminThread implements Runnable {
 		mainScreen = new MainFrame();
 		mainScreen.getMain().addActionListener(new MainActionListener());
 		
-		screen = new Screen();
-		screen.getLogin().addActionListener(new LoginActionListener());
-		screen.getMenu().addActionListener(new MenuActionListener());
-		screen.getCalendarList().addActionListener(new CalendarListActionListener());
-		screen.getNoteList().addActionListener(new NoteListActionListener());
-		screen.getUserList().addActionListener(new UserListActionListener());
-		screen.getEventList().addActionListener(new EventListActionListener());
+		frame = new Frame();
+		frame.getLogin().addActionListener(new LoginActionListener());
+		frame.getMenu().addActionListener(new MenuActionListener());
+		frame.getCalendarList().addActionListener(new CalendarListActionListener());
+		frame.getNoteList().addActionListener(new NoteListActionListener());
+		frame.getUserList().addActionListener(new UserListActionListener());
+		frame.getEventList().addActionListener(new EventListActionListener());
 	}
 
 	public void run() {
@@ -47,9 +47,9 @@ public class AdminThread implements Runnable {
 			String cmd = e.getActionCommand();
 
 			if(cmd.equals("AdminBtn")) {
-				screen.show(Screen.LOGIN);
-				screen.setResizable(false);
-				screen.setVisible(true);
+				frame.show(Frame.LOGIN);
+				frame.setResizable(false);
+				frame.setVisible(true);
 			}
 			if(cmd.equals("TerminateBtn")) {
 				System.exit(0);
@@ -63,18 +63,18 @@ public class AdminThread implements Runnable {
 			String cmd  = e.getActionCommand();
 
 			if(cmd.equals("LoginBtn")) {
-				email = screen.getLogin().getUserName_Login(); 
-				password = screen.getLogin().getPassword_Login();
+				email = frame.getLogin().getUserName_Login(); 
+				password = frame.getLogin().getPassword_Login();
 				try {
 					authenticated = switchMethods.authenticate(email, password, true);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 				if (authenticated.equals("0")){
-					screen.show(Screen.MENU);
+					frame.show(Frame.MENU);
 				}
 				else if(!authenticated.equals("0")){
-					screen.getLogin().incorrect();
+					frame.getLogin().incorrect();
 				}
 			}
 		}
@@ -85,17 +85,17 @@ public class AdminThread implements Runnable {
 			String cmd  = e.getActionCommand();
 
 			if(cmd.equals("btnCalendarList")) {
-				screen.show(Screen.CALENDARLIST);
+				frame.show(Frame.CALENDARLIST);
 			}
 			if(cmd.equals("btnEventList")) {
-				screen.show(Screen.EVENTLIST);
+				frame.show(Frame.EVENTLIST);
 			}
 			if(cmd.equals("btnNoteList")) {
-				screen.show(Screen.NOTELIST);
+				frame.show(Frame.NOTELIST);
 			}
 			if(cmd.equals("btnUserList")) {
-				screen.getUserList().createTable(adminMethods.userTable());
-				screen.show(Screen.USERLIST);
+				frame.getUserList().createTable(adminMethods.userTable());
+				frame.show(Frame.USERLIST);
 			}
 		}	
 	}	
@@ -105,7 +105,7 @@ public class AdminThread implements Runnable {
 			String cmd  = e.getActionCommand();
 
 			if(cmd.equals("btnBackToMain")) {
-				screen.show(Screen.MENU);
+				frame.show(Frame.MENU);
 			}
 		}
 	}
@@ -115,7 +115,7 @@ public class AdminThread implements Runnable {
 			String cmd  = e.getActionCommand();
 
 			if(cmd.equals("btnBackToMain")) {
-				screen.show(Screen.MENU);
+				frame.show(Frame.MENU);
 			}
 		}
 	}
@@ -124,8 +124,24 @@ public class AdminThread implements Runnable {
 
 			String cmd  = e.getActionCommand();
 
+			if(cmd.equals("btnAdd")) {
+				frame.getUserList().reset();
+				
+				String username = frame.getUserList().getUsername();
+				String password = frame.getUserList().getPassword();
+				
+				if(!username.equals("") && !password.equals("")) {
+					if(adminMethods.AddUser(username, password)){
+					} else {
+						frame.getUserList().userExists();
+					}
+				}
+				frame.getUserList().createTable(adminMethods.userTable());
+			}
+			
 			if(cmd.equals("btnBackToMain")) {
-				screen.show(Screen.MENU);
+				frame.getUserList().reset();
+				frame.show(Frame.MENU);
 			}
 		}
 	}
@@ -135,7 +151,7 @@ public class AdminThread implements Runnable {
 			String cmd  = e.getActionCommand();
 
 			if(cmd.equals("btnBackToMain")) {
-				screen.show(Screen.MENU);
+				frame.show(Frame.MENU);
 			}
 		}
 	}

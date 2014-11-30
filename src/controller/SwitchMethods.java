@@ -115,10 +115,10 @@ public class SwitchMethods extends Model
 	 * @return
 	 * @throws Exception
 	 */
-	public String authenticate(String email, String password, boolean isAdmin) throws Exception {
+	public String authenticate(String username, String password, boolean isAdmin) throws Exception {
 
 		// Henter info om bruger fra database via querybuilder
-		resultSet = qb.selectFrom("users").where("email", "=", email).ExecuteQuery();
+		resultSet = qb.selectFrom("users").where("username", "=", username).ExecuteQuery();
 
 		// Hvis en bruger med forespurgt email findes
 		if (resultSet.next()){
@@ -129,22 +129,11 @@ public class SwitchMethods extends Model
 				// Hvis passwords matcher
 				if(resultSet.getString("password").equals(password))
 				{
-					int userID = resultSet.getInt("userid");
-
-					String[] key = {"isAdmin"};
-
-					resultSet = qb.selectFrom(key, "roles").where("userid", "=", new Integer(userID).toString()).ExecuteQuery();
-
-					if(resultSet.next()) {
-						// Hvis brugeren baade logger ind og er registreret som admin, eller hvis brugeren baade logger ind og er registreret som bruger
-						if((resultSet.getString("isAdmin").equals("1") && isAdmin) || (resultSet.getString("isAdmin").equals("0") && !isAdmin))
-						{
-							return "0"; // returnerer "0" hvis bruger/admin er godkendt
-						} else {
-							return "4"; // returnerer fejlkoden "4" hvis brugertype ikke stemmer overens med loginplatform
-						}
+					if((resultSet.getString("isAdmin").equals("1") && isAdmin) || (resultSet.getString("isAdmin").equals("0") && !isAdmin))
+					{
+						return "0"; // returnerer "0" hvis bruger/admin er godkendt
 					} else {
-						return "4"; // returnerer også fejlkoden "4" hvis brugeren ikke findes i tabellen 'roles'
+						return "4"; // returnerer fejlkoden "4" hvis brugertype ikke stemmer overens med loginplatform
 					}
 				} else {
 					return "3"; // returnerer fejlkoden "3" hvis password ikke matcher

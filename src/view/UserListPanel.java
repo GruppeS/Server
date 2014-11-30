@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
@@ -8,30 +9,33 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import java.awt.Font;
 
 public class UserListPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JLabel lblListOfUsers;
 	private JButton btnAdd;
 	private JButton btnDelete;
 	private JButton btnBackToMain;
 	private JScrollPane scrollPane;
 	private JTable table;
+	private JLabel lblAddNewUser;
+	private JLabel lblUser;
+	private JLabel lblPassword;
+	private JTextField username;
+	private JTextField password;
+	private JLabel lblUserExists;
 
 	public UserListPanel() {
 		setLayout(null);
 		
-		lblListOfUsers = new JLabel("List of users");
-		lblListOfUsers.setBounds(45, 11, 82, 14);
-		add(lblListOfUsers);
-		
 		btnAdd = new JButton("Add");
-		btnAdd.setBounds(45, 246, 69, 23);
+		btnAdd.setBounds(228, 240, 69, 23);
 		add(btnAdd);
 		
-		btnDelete = new JButton("Delete");
-		btnDelete.setBounds(151, 246, 63, 23);
+		btnDelete = new JButton("Set active/inactive");
+		btnDelete.setBounds(35, 297, 150, 23);
 		add(btnDelete);
 		
 		btnBackToMain = new JButton("Back to Main Menu");
@@ -39,12 +43,40 @@ public class UserListPanel extends JPanel {
 		add(btnBackToMain);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(41, 53, 173, 162);
+		scrollPane.setBounds(25, 56, 173, 222);
 		add(scrollPane);
+		
+		lblAddNewUser = new JLabel("Add new user:");
+		lblAddNewUser.setBounds(228, 65, 80, 14);
+		add(lblAddNewUser);
+		
+		lblUser = new JLabel("Username:");
+		lblUser.setBounds(228, 106, 100, 14);
+		add(lblUser);
+		
+		lblPassword = new JLabel("Password:");
+		lblPassword.setBounds(228, 172, 127, 14);
+		add(lblPassword);
+		
+		username = new JTextField();
+		username.setBounds(228, 131, 127, 20);
+		add(username);
+		username.setColumns(10);
+		
+		password = new JTextField();
+		password.setBounds(228, 197, 127, 20);
+		add(password);
+		password.setColumns(10);
+		
+		lblUserExists = new JLabel("User already exists");
+		lblUserExists.setFont(new Font("Calibri", Font.ITALIC, 11));
+		lblUserExists.setBounds(228, 286, 162, 14);
+		lblUserExists.setForeground(Color.red);
+		lblUserExists.setVisible(false);
+		add(lblUserExists);
 	}
 	
-	public void createTable(Vector<?> data)
-	{
+	public void createTable(Vector<?> data) {
 		Vector<Object> columnNames = new Vector<Object>();
 		columnNames.add("User");
 		columnNames.add("Active");
@@ -52,13 +84,29 @@ public class UserListPanel extends JPanel {
 		scrollPane.setViewportView(table);
 	}
 	
-	public void addActionListener(ActionListener l)
-	{
+	public void userExists() {
+		lblUserExists.setVisible(true);
+	}
+	
+	public void reset() {
+		lblUserExists.setVisible(false);
+		username.setText("");
+		password.setText("");
+	}
+	
+	public void addActionListener(ActionListener l) {
 		btnAdd.addActionListener(l);
-		btnAdd.setActionCommand("AddBtn");
+		btnAdd.setActionCommand("btnAdd");
 		btnDelete.addActionListener(l);
-		btnDelete.setActionCommand("DeleteBtn");
+		btnDelete.setActionCommand("btnDelete");
 		btnBackToMain.addActionListener(l);
 		btnBackToMain.setActionCommand("btnBackToMain");
+	}
+	
+	public String getUsername() {
+		return username.getText();
+	}
+	public String getPassword() {
+		return password.getText();
 	}
 }
