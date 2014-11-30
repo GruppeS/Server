@@ -2,6 +2,7 @@ package JsonClasses;
 
 public class Forecast {
 
+	private String overallID = "getForecast";
 	private String date;
 	private String celsius;
 	private String desc;
@@ -11,7 +12,9 @@ public class Forecast {
 		this.celsius = celsius;
 		this.desc = desc;
 	}
-
+	public String getOverallID() {
+		return overallID;
+	}
 	public String getDate() {
 		return date;
 	}

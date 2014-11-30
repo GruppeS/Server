@@ -10,17 +10,22 @@ public class AdminThread implements Runnable {
 
 	private MainFrame mainScreen;
 	private Screen screen;
+
+	private SwitchMethods switchMethods;
+	private AdminMethods adminMethods;
+
 	private String email;
 	private String password;
 	private String authenticated;
-
-	private SwitchMethods switchMethods;
-
+	
 	public AdminThread(){
 
 		switchMethods = new SwitchMethods();
+		adminMethods = new AdminMethods();
+		
 		mainScreen = new MainFrame();
 		mainScreen.getMain().addActionListener(new MainActionListener());
+		
 		screen = new Screen();
 		screen.getLogin().addActionListener(new LoginActionListener());
 		screen.getMenu().addActionListener(new MenuActionListener());
@@ -38,7 +43,7 @@ public class AdminThread implements Runnable {
 
 	private class MainActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
+
 			String cmd = e.getActionCommand();
 
 			if(cmd.equals("AdminBtn")) {
@@ -51,12 +56,12 @@ public class AdminThread implements Runnable {
 			}
 		}
 	}
-	
+
 	private class LoginActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
+
 			String cmd  = e.getActionCommand();
-			
+
 			if(cmd.equals("LoginBtn")) {
 				email = screen.getLogin().getUserName_Login(); 
 				password = screen.getLogin().getPassword_Login();
@@ -66,19 +71,19 @@ public class AdminThread implements Runnable {
 					e1.printStackTrace();
 				}
 				if (authenticated.equals("0")){
-				screen.show(Screen.MENU);
+					screen.show(Screen.MENU);
 				}
 				else if(!authenticated.equals("0")){
-				screen.getLogin().incorrect();
+					screen.getLogin().incorrect();
 				}
 			}
 		}
 	}
 	private class MenuActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
+
 			String cmd  = e.getActionCommand();
-			
+
 			if(cmd.equals("btnCalendarList")) {
 				screen.show(Screen.CALENDARLIST);
 			}
@@ -89,15 +94,16 @@ public class AdminThread implements Runnable {
 				screen.show(Screen.NOTELIST);
 			}
 			if(cmd.equals("btnUserList")) {
+				screen.getUserList().createTable(adminMethods.userTable());
 				screen.show(Screen.USERLIST);
 			}
 		}	
 	}	
 	private class CalendarListActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
+
 			String cmd  = e.getActionCommand();
-			
+
 			if(cmd.equals("btnBackToMain")) {
 				screen.show(Screen.MENU);
 			}
@@ -105,9 +111,9 @@ public class AdminThread implements Runnable {
 	}
 	private class NoteListActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
+
 			String cmd  = e.getActionCommand();
-			
+
 			if(cmd.equals("btnBackToMain")) {
 				screen.show(Screen.MENU);
 			}
@@ -115,9 +121,9 @@ public class AdminThread implements Runnable {
 	}
 	private class UserListActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
+
 			String cmd  = e.getActionCommand();
-			
+
 			if(cmd.equals("btnBackToMain")) {
 				screen.show(Screen.MENU);
 			}
@@ -125,9 +131,9 @@ public class AdminThread implements Runnable {
 	}
 	private class EventListActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
+
 			String cmd  = e.getActionCommand();
-			
+
 			if(cmd.equals("btnBackToMain")) {
 				screen.show(Screen.MENU);
 			}

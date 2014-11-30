@@ -1,19 +1,23 @@
 package view;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 public class UserListPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel lblListOfUsers;
-	private JTable table;
 	private JButton btnAdd;
 	private JButton btnDelete;
 	private JButton btnBackToMain;
+	private JScrollPane scrollPane;
+	private JTable table;
 
 	public UserListPanel() {
 		setLayout(null);
@@ -21,10 +25,6 @@ public class UserListPanel extends JPanel {
 		lblListOfUsers = new JLabel("List of users");
 		lblListOfUsers.setBounds(45, 11, 82, 14);
 		add(lblListOfUsers);
-		
-		table = new JTable();
-		table.setBounds(45, 36, 169, 180);
-		add(table);
 		
 		btnAdd = new JButton("Add");
 		btnAdd.setBounds(45, 246, 69, 23);
@@ -37,8 +37,21 @@ public class UserListPanel extends JPanel {
 		btnBackToMain = new JButton("Back to Main Menu");
 		btnBackToMain.setBounds(123, 348, 150, 23);
 		add(btnBackToMain);
-
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(41, 53, 173, 162);
+		add(scrollPane);
 	}
+	
+	public void createTable(Vector<?> data)
+	{
+		Vector<Object> columnNames = new Vector<Object>();
+		columnNames.add("User");
+		columnNames.add("Active");
+		table = new JTable(data, columnNames);
+		scrollPane.setViewportView(table);
+	}
+	
 	public void addActionListener(ActionListener l)
 	{
 		btnAdd.addActionListener(l);

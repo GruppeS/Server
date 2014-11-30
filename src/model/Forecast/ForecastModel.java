@@ -1,4 +1,4 @@
-package model.forecast;
+package model.Forecast;
 
 import java.io.IOException;
 import java.sql.ResultSet;

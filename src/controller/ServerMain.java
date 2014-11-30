@@ -4,9 +4,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 
+import model.Forecast.ForecastModel;
 import model.QOTD.QOTDModel;
 import model.database.DatabaseInit;
-import model.forecast.ForecastModel;
 
 public class ServerMain {
 

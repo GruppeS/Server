@@ -1,7 +1,7 @@
 package controller;
+import model.Forecast.ForecastModel;
 import model.QOTD.QOTDModel;
 import model.calendar.GetCalendarData;
-import model.forecast.ForecastModel;
 import JsonClasses.CreateCalendar;
 import JsonClasses.DeleteCalendar;
 import JsonClasses.QOTD;
@@ -13,7 +13,7 @@ import com.google.gson.GsonBuilder;
 public class GiantSwitch {
 	private String userID;
 	private String answer;
-	private boolean authenticated;
+	private boolean authenticated = false;
 
 	public String GiantSwitchMethod(String jsonString) throws Exception {
 
@@ -23,12 +23,11 @@ public class GiantSwitch {
 		GetCalendarData getCalendarData = new GetCalendarData();
 		Gson gson = new GsonBuilder().create();
 
-		authenticated = false;
-
 		switch (Determine(jsonString)) {
 
 		default:
 			System.out.println("Error in switch");
+			answer = null;
 			break;
 
 			/************
@@ -119,7 +118,7 @@ public class GiantSwitch {
 			/************
 			 ** WEATHER **
 			 ************/
-		case "getClientForecast":
+		case "getForecast":
 			forecastModel.updateForecast();
 			answer = gson.toJson(forecastModel.getForecast());
 			break;
@@ -148,8 +147,8 @@ public class GiantSwitch {
 				return "deleteNote";
 			}else if  (ID.contains("deleteCalendar")){
 				return "deleteCalendar";
-			} else if (ID.contains("getClientForecast")) {
-				return "getClientForecast";
+			} else if (ID.contains("getForecast")) {
+				return "getForecast";
 			} else if (ID.contains("saveImportedCalendar")) {
 				return "saveImportedCalendar";
 			}else if (ID.contains("importCourse")) {

@@ -52,16 +52,6 @@ CREATE TABLE IF NOT EXISTS events
 	PRIMARY KEY (eventid)
 );
 
-
-CREATE TABLE IF NOT EXISTS locationdata
-(
-	locationdataid int NOT NULL AUTO_INCREMENT,
-	longitude int NOT NULL,
-	latitude int UNIQUE,
-	PRIMARY KEY (locationdataid)
-);
-
-
 CREATE TABLE IF NOT EXISTS notes
 (
 	noteId int NOT NULL AUTO_INCREMENT,
@@ -73,7 +63,6 @@ CREATE TABLE IF NOT EXISTS notes
 	PRIMARY KEY (noteid)
 );
 
-
 CREATE TABLE IF NOT EXISTS roles
 (
 	roleid int NOT NULL AUTO_INCREMENT,
@@ -82,19 +71,17 @@ CREATE TABLE IF NOT EXISTS roles
 	PRIMARY KEY (roleid)
 );
 
-
 CREATE TABLE IF NOT EXISTS userevents
 (
 	userid int NOT NULL,
 	CalendarID int NOT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS users
 (
 	userid int NOT NULL AUTO_INCREMENT,
 	email varchar(40) NOT NULL,
-	active boolean,
+	active boolean NOT NULL,
 	created datetime NOT NULL DEFAULT NOW(),
 	password varchar(200) NOT NULL,
 	PRIMARY KEY (userid)
