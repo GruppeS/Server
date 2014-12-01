@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
@@ -10,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import java.awt.Font;
+import javax.swing.ListSelectionModel;
 
 public class UserListPanel extends JPanel {
 
@@ -26,6 +27,8 @@ public class UserListPanel extends JPanel {
 	private JTextField username;
 	private JTextField password;
 	private JLabel lblUserExists;
+	
+	Vector<Object> columnNames = new Vector<Object>();
 
 	public UserListPanel() {
 		setLayout(null);
@@ -77,15 +80,25 @@ public class UserListPanel extends JPanel {
 	}
 	
 	public void createTable(Vector<?> data) {
-		Vector<Object> columnNames = new Vector<Object>();
+		columnNames = new Vector<Object>();
 		columnNames.add("User");
 		columnNames.add("Active");
 		table = new JTable(data, columnNames);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(table);
 	}
 	
 	public void userExists() {
 		lblUserExists.setVisible(true);
+	}
+	
+	public String getSelectedUser() {
+		String selectedUser;
+		
+		int row = table.getSelectedRow();
+		selectedUser = (table.getValueAt(row, 0)).toString();
+		
+		return selectedUser;
 	}
 	
 	public void reset() {

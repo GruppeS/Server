@@ -50,12 +50,6 @@ public class Execute extends Model {
 		this.values = values;
 	}
 
-	/**
-	 * Execute SQL and returns ResultSet.
-	 * @return ResultSet
-	 * @throws SQLException
-	 */
-	
 	// cashed row set implement
 	public ResultSet ExecuteQuery() throws SQLException {
 		String sql = "";
@@ -86,12 +80,7 @@ public class Execute extends Model {
 		return sqlStatement.executeQuery();
 	}
 
-
-	/**
-	 * Execute SQL Query. <strong>OBS nothing returns.</strong>
-	 * @return
-	 * @throws SQLException
-	 */
+	@SuppressWarnings("unused")
 	public boolean Execute() throws SQLException {
 		String sql = "";
 

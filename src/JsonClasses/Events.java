@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Events {
 	
-	static ArrayList<Event> events = new ArrayList<Event>();
+	ArrayList<Event> events = new ArrayList<Event>();
  
     public ArrayList<Event> getEvents() {
         return events;

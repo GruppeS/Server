@@ -16,7 +16,6 @@ public class Event {
 	public Event(String activityid, String eventid, String type, String title,
 			String description, String location, String createdby, ArrayList<String> start,
 			ArrayList<String> end) {
-		super();
 		this.activityid = activityid;
 		this.eventid = eventid;
 		this.type = type;

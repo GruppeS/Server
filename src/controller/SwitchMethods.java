@@ -8,10 +8,8 @@ public class SwitchMethods extends Model
 {
 	QueryBuilder qb = new QueryBuilder();
 
-	public String createNewCalendar (String userName, String calendarName, int privatePublic) throws SQLException
-	{
+	public String createNewCalendar (String userName, String calendarName, int privatePublic) throws SQLException {
 		String stringToBeReturned ="";
-		testConnection();
 		if(authenticateNewCalendar(calendarName) == false)
 		{
 			addNewCalendar(calendarName, userName, privatePublic);
@@ -25,8 +23,7 @@ public class SwitchMethods extends Model
 		return stringToBeReturned;
 	}
 
-	public boolean authenticateNewCalendar(String newCalendarName) throws SQLException
-	{
+	public boolean authenticateNewCalendar(String newCalendarName) throws SQLException {
 		getConn();
 		boolean authenticate = false;
 
@@ -40,8 +37,7 @@ public class SwitchMethods extends Model
 		return authenticate;
 	}
 
-	public void addNewCalendar (String newCalendarName, String userName, int publicOrPrivate) throws SQLException
-	{
+	public void addNewCalendar (String newCalendarName, String userName, int publicOrPrivate) throws SQLException {
 		String [] keys = {"Name","active","CreatedBy","PrivatePublic"};
 		String [] values = {newCalendarName,"1",userName, Integer.toString(publicOrPrivate)};
 		qb.insertInto("calendar", keys).values(values).Execute();
@@ -54,42 +50,34 @@ public class SwitchMethods extends Model
 	 * @param calendarName
 	 * @return
 	 */
-	public String deleteCalendar (String userName, String calendarName) throws SQLException
-	{
+	public String deleteCalendar (String userName, String calendarName) throws SQLException {
 		String stringToBeReturned ="";
-		testConnection();
 		stringToBeReturned = removeCalendar(userName, calendarName);
 
 		return stringToBeReturned;
 	}
 
-	public String removeCalendar (String userName, String calendarName) throws SQLException
-	{
+	public String removeCalendar (String userName, String calendarName) throws SQLException {
 		String stringToBeReturend = "";
 		String usernameOfCreator ="";
 		String calendarExists = "";
 		resultSet = qb.selectFrom("Calendar").where("Name", "=", calendarName).ExecuteQuery();
 
 		//				("select * from calendar where Name = '"+calendarName+"';");
-		while(resultSet.next())
-		{
+		while(resultSet.next()) {
 			calendarExists = resultSet.toString();
 		}
-		if(!calendarExists.equals(""))
-		{
+		if(!calendarExists.equals("")) {
 			String [] value = {"CreatedBy"};
 			resultSet = qb.selectFrom(value, "Calendar").where("Name", "=", calendarName).ExecuteQuery();
-			while(resultSet.next())
-			{
+			while(resultSet.next()) {
 				usernameOfCreator = resultSet.toString();
 				System.out.println(usernameOfCreator);
 			}
-			if(!usernameOfCreator.equals(userName))
-			{
+			if(!usernameOfCreator.equals(userName)) {
 				stringToBeReturend = "Only the creator of the calendar is able to delete it.";
 			}
-			else
-			{
+			else {
 				String [] keys = {"Active"};
 				String [] values = {"2"};
 				qb.update("Calendar", keys, values).where("Name", "=", calendarName).Execute();
@@ -97,16 +85,13 @@ public class SwitchMethods extends Model
 			}
 			stringToBeReturend = resultSet.toString();
 		}
-		else
-		{
+		else {
 			stringToBeReturend = "The calendar you are trying to delete, does not exists.";
 		}
 
 		return stringToBeReturend;
 	}
 
-
-	// Metoden faar email og password fra switchen (udtrukket fra en json) samt en boolean der skal saettes til true hvis det er serveren der logger paa, og false hvis det er en klient
 	/**
 	 * Allows the client to log in
 	 * @param email
@@ -117,20 +102,12 @@ public class SwitchMethods extends Model
 	 */
 	public String authenticate(String username, String password, boolean isAdmin) throws Exception {
 
-		// Henter info om bruger fra database via querybuilder
 		resultSet = qb.selectFrom("users").where("username", "=", username).ExecuteQuery();
 
-		// Hvis en bruger med forespurgt email findes
 		if (resultSet.next()){
-
-			// Hvis brugeren er aktiv
-			if(resultSet.getInt("active")==1)
-			{
-				// Hvis passwords matcher
-				if(resultSet.getString("password").equals(password))
-				{
-					if((resultSet.getString("isAdmin").equals("1") && isAdmin) || (resultSet.getString("isAdmin").equals("0") && !isAdmin))
-					{
+			if(resultSet.getInt("active")==1) {
+				if(resultSet.getString("password").equals(password)) {
+					if((resultSet.getString("isAdmin").equals("1") && isAdmin) || (resultSet.getString("isAdmin").equals("0") && !isAdmin)) {
 						return "0"; // returnerer "0" hvis bruger/admin er godkendt
 					} else {
 						return "4"; // returnerer fejlkoden "4" hvis brugertype ikke stemmer overens med loginplatform

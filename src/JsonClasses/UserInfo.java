@@ -2,6 +2,7 @@ package JsonClasses;
 
 public class UserInfo {
 
+	@SuppressWarnings("unused")
 	private String overallID = "logIn";
 	private String email;
 	private String password;

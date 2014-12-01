@@ -22,9 +22,11 @@ public class ForecastModel {
 	UrlReader urlReader = new UrlReader();
 	QueryBuilder qb = new QueryBuilder();	
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private ArrayList<Forecast> forecastList = new ArrayList();
 	private ResultSet resultSet;
 
+	@SuppressWarnings("rawtypes")
 	public void saveForecast() {
 
 		String result = null;

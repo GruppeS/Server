@@ -53,4 +53,34 @@ public class AdminMethods {
 		}
 		return succes;
 	}
+
+	public void DeleteUser(String username) {
+
+		int active = 2;
+		
+		try {
+			String[] values1 = {"active"};
+
+			rs = qb.selectFrom(values1, "users").where("username", "=", username).ExecuteQuery();
+			
+			if(rs.next()) {
+				active = rs.getInt("active");
+				
+				if(active == 1) {
+					active = 0;
+				} else if (active == 0){
+					active = 1;
+				}
+			}
+			if(active!=2) {
+				String[] fields = {"active"};
+				String[] values2 = {String.valueOf(active)};
+
+				qb.update("users", fields, values2).where("username", "=", username).Execute();
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

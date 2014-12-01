@@ -65,6 +65,7 @@ public class Note extends Model{
 		String createdBy = note.getCreatedBy();
 		int isActive = note.isActive();
 
+		@SuppressWarnings("unused")
 		int eventID = note.getEventID();
 		int noteID = note.getNoteID();
 
