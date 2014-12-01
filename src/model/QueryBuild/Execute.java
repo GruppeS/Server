@@ -1,9 +1,10 @@
 package model.QueryBuild;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import model.Model;
+
+import com.sun.rowset.CachedRowSetImpl;
 
 public class Execute extends Model {
 
@@ -50,15 +51,16 @@ public class Execute extends Model {
 		this.values = values;
 	}
 
-	// cashed row set implement
-	public ResultSet ExecuteQuery() throws SQLException {
+	public CachedRowSetImpl executeQuery() throws SQLException {
 		String sql = "";
+		CachedRowSetImpl crs = new CachedRowSetImpl();
+
 		if (isGetAll()) {
 			sql = SELECT + getQueryBuilder().getSelectValue() + FROM + getQueryBuilder().getTableName() + ";";
 			try {
 				getConnection(false);
-				getConn();
 				sqlStatement = getConn().prepareStatement(sql);
+				crs.populate(sqlStatement.executeQuery());
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -69,43 +71,55 @@ public class Execute extends Model {
 					WHERE + getWhere().getWhereKey() + " " + getWhere().getWhereOperator() + " ?;";
 			try {
 				getConnection(false);
-				getConn();
 				sqlStatement = getConn().prepareStatement(sql);
 				sqlStatement.setString(1, getWhere().getWhereValue());
+				crs.populate(sqlStatement.executeQuery());
 
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally {
+				try {
+					sqlStatement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		return sqlStatement.executeQuery();
+		return crs;
 	}
 
 	@SuppressWarnings("unused")
-	public boolean Execute() throws SQLException {
-		String sql = "";
+	public void execute() throws SQLException {
+		String sql = null;
 
 		if (getQueryBuilder().isSoftDelete()) {
 			sql = UPDATE + getQueryBuilder().getTableName() + " SET active = 0" +
 					WHERE + getWhere().getWhereKey() + " " + getWhere().getWhereOperator() + " " + getWhere().getWhereValue() + ";  ";
 			try {
 				getConnection(false);
-				getConn();
 				sqlStatement = getConn().prepareStatement(sql);
 
+				sqlStatement.execute();
+				
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally {
+				sqlStatement.close();
 			}
 
 		} else if(getQueryBuilder().isUpdate()) {
 			sql = UPDATE + getQueryBuilder().getTableName() + " SET " + getQueryBuilder().getFields() + "" + WHERE + getWhere().getWhereKey() + " " + getWhere().getWhereOperator() + " ?;";
 			try {
 				getConnection(false);
-				getConn();
 				sqlStatement = getConn().prepareStatement(sql);
 				sqlStatement.setString(1, getWhere().getWhereValue());
 
+				sqlStatement.execute();
+				
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally {
+				sqlStatement.close();
 			}
 		} else {
 			sql = INSERTINTO + getQueryBuilder().getTableName() + " (" + getQueryBuilder().getFields() + ")" + VALUES + "(";
@@ -126,10 +140,13 @@ public class Execute extends Model {
 					sqlStatement.setString(x+1, getValues().getValues()[i]);
 				}
 
+				sqlStatement.execute();
+
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally {
+				sqlStatement.close();
 			}
 		}
-		return sqlStatement.execute();
 	}
 }

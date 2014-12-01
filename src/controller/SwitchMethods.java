@@ -1,12 +1,15 @@
 package controller;
 import java.sql.SQLException;
 
-import model.Model;
 import model.QueryBuild.QueryBuilder;
 
-public class SwitchMethods extends Model
+import com.sun.rowset.CachedRowSetImpl;
+
+public class SwitchMethods
 {
 	QueryBuilder qb = new QueryBuilder();
+	
+	private CachedRowSetImpl resultSet;
 
 	public String createNewCalendar (String userName, String calendarName, int privatePublic) throws SQLException {
 		String stringToBeReturned ="";
@@ -24,10 +27,10 @@ public class SwitchMethods extends Model
 	}
 
 	public boolean authenticateNewCalendar(String newCalendarName) throws SQLException {
-		getConn();
+		
 		boolean authenticate = false;
 
-		resultSet= qb.selectFrom("calendar").where("name", "=", newCalendarName).ExecuteQuery();
+		resultSet= qb.selectFrom("calendar").where("name", "=", newCalendarName).executeQuery();
 
 		//("select * from test.calendar where Name = '"+newCalendarName+"';");
 		while(resultSet.next())
@@ -40,7 +43,7 @@ public class SwitchMethods extends Model
 	public void addNewCalendar (String newCalendarName, String userName, int publicOrPrivate) throws SQLException {
 		String [] keys = {"Name","active","CreatedBy","PrivatePublic"};
 		String [] values = {newCalendarName,"1",userName, Integer.toString(publicOrPrivate)};
-		qb.insertInto("calendar", keys).values(values).Execute();
+		qb.insertInto("calendar", keys).values(values).execute();
 
 		//		doUpdate("insert into test.calendar (Name, Active, CreatedBy, PrivatePublic) VALUES ('"+newCalendarName+"', '1', '"+userName+"', '"+publicOrPrivate+"');");
 	}
@@ -61,7 +64,7 @@ public class SwitchMethods extends Model
 		String stringToBeReturend = "";
 		String usernameOfCreator ="";
 		String calendarExists = "";
-		resultSet = qb.selectFrom("Calendar").where("Name", "=", calendarName).ExecuteQuery();
+		resultSet = qb.selectFrom("Calendar").where("Name", "=", calendarName).executeQuery();
 
 		//				("select * from calendar where Name = '"+calendarName+"';");
 		while(resultSet.next()) {
@@ -69,7 +72,7 @@ public class SwitchMethods extends Model
 		}
 		if(!calendarExists.equals("")) {
 			String [] value = {"CreatedBy"};
-			resultSet = qb.selectFrom(value, "Calendar").where("Name", "=", calendarName).ExecuteQuery();
+			resultSet = qb.selectFrom(value, "Calendar").where("Name", "=", calendarName).executeQuery();
 			while(resultSet.next()) {
 				usernameOfCreator = resultSet.toString();
 				System.out.println(usernameOfCreator);
@@ -80,7 +83,7 @@ public class SwitchMethods extends Model
 			else {
 				String [] keys = {"Active"};
 				String [] values = {"2"};
-				qb.update("Calendar", keys, values).where("Name", "=", calendarName).Execute();
+				qb.update("Calendar", keys, values).where("Name", "=", calendarName).execute();
 				stringToBeReturend = "Calendar has been set inactive";
 			}
 			stringToBeReturend = resultSet.toString();
@@ -92,22 +95,14 @@ public class SwitchMethods extends Model
 		return stringToBeReturend;
 	}
 
-	/**
-	 * Allows the client to log in
-	 * @param email
-	 * @param password
-	 * @param isAdmin
-	 * @return
-	 * @throws Exception
-	 */
 	public String authenticate(String username, String password, boolean isAdmin) throws Exception {
 
-		resultSet = qb.selectFrom("users").where("username", "=", username).ExecuteQuery();
+		resultSet = qb.selectFrom("users").where("username", "=", username).executeQuery();
 
 		if (resultSet.next()){
-			if(resultSet.getInt("active")==1) {
+			if(resultSet.getBoolean("active")==true) {
 				if(resultSet.getString("password").equals(password)) {
-					if((resultSet.getString("isAdmin").equals("1") && isAdmin) || (resultSet.getString("isAdmin").equals("0") && !isAdmin)) {
+					if((resultSet.getBoolean("isAdmin") == true && isAdmin) || (resultSet.getBoolean("isAdmin") == false && !isAdmin)) {
 						return "0"; // returnerer "0" hvis bruger/admin er godkendt
 					} else {
 						return "4"; // returnerer fejlkoden "4" hvis brugertype ikke stemmer overens med loginplatform

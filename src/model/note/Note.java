@@ -24,7 +24,7 @@ public class Note extends Model{
 		String[] fields = {"noteId", "eventId", "createdBy", "text", "dateTime", "active"};
 		String[] values = {nId, eId, createdBy, text, dateTime, String.valueOf(isActive)};
 		try {
-			qb.insertInto("notes", fields).values(values).Execute();
+			qb.insertInto("notes", fields).values(values).execute();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -42,7 +42,7 @@ public class Note extends Model{
 	public NoteModel GetNote (int noteID) throws SQLException{
 
 		try {
-			resultSet = qb.selectFrom("notes").where("noteID", "= ", String.valueOf(noteID)).ExecuteQuery();
+			resultSet = qb.selectFrom("notes").where("noteID", "= ", String.valueOf(noteID)).executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

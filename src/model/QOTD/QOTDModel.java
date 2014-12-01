@@ -1,6 +1,5 @@
 package model.QOTD;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -10,12 +9,14 @@ import model.QueryBuild.QueryBuilder;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.sun.rowset.CachedRowSetImpl;
+
 public class QOTDModel {
 
 	UrlReader urlRead = new UrlReader();
 	QueryBuilder qb = new QueryBuilder();
 
-	private ResultSet resultSet;
+	private CachedRowSetImpl resultSet;
 
 	public void saveQuote() {
 		try {
@@ -30,10 +31,10 @@ public class QOTDModel {
 			String[] fields = {"qotd"};
 			String[] values = {quote};
 
-			if(qb.selectFrom("qotd").all().ExecuteQuery().next()){
-				qb.update("qotd", fields, values).where("msg_type", "=", "qotd").Execute();
+			if(qb.selectFrom("qotd").all().executeQuery().next()){
+				qb.update("qotd", fields, values).where("msg_type", "=", "qotd").execute();
 			} else {
-				qb.insertInto("qotd", fields).values(values).Execute();
+				qb.insertInto("qotd", fields).values(values).execute();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -43,7 +44,7 @@ public class QOTDModel {
 	public String getQuote(){
 		String quote = null;
 		try {
-			resultSet = qb.selectFrom("qotd").all().ExecuteQuery();
+			resultSet = qb.selectFrom("qotd").all().executeQuery();
 			
 			if(resultSet.next()) {
 				quote = resultSet.getString("qotd");
@@ -62,7 +63,7 @@ public class QOTDModel {
 		long dateLastQuote = 0;
 		
 		try {
-			resultSet = qb.selectFrom("qotd").all().ExecuteQuery();
+			resultSet = qb.selectFrom("qotd").all().executeQuery();
 			if(resultSet.next()){
 				dateLastQuote = resultSet.getDate("date").getTime()/1000L;
 			}

@@ -1,7 +1,6 @@
 package model.Forecast;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Iterator;
@@ -17,13 +16,15 @@ import org.json.simple.parser.ParseException;
 import JsonClasses.Forecast;
 import JsonClasses.Forecasts;
 
+import com.sun.rowset.CachedRowSetImpl;
+
 public class ForecastModel {
 
 	UrlReader urlReader = new UrlReader();
 	QueryBuilder qb = new QueryBuilder();	
 	Forecasts forecasts = new Forecasts();
 	
-	private ResultSet resultSet;
+	private CachedRowSetImpl resultSet;
 
 	@SuppressWarnings("rawtypes")
 	public void saveForecast() {
@@ -42,7 +43,7 @@ public class ForecastModel {
 			Iterator i = list.iterator();
 
 			boolean dataIsPresent;
-			if(qb.selectFrom("forecast").all().ExecuteQuery().next()){
+			if(qb.selectFrom("forecast").all().executeQuery().next()){
 				dataIsPresent = true;
 			} else {
 				dataIsPresent = false;
@@ -76,9 +77,9 @@ public class ForecastModel {
 				String[] values = {count_String, string_date, temperature, weatherDescription};
 
 				if(!dataIsPresent){
-					qb.insertInto("forecast", fields).values(values).Execute();
+					qb.insertInto("forecast", fields).values(values).execute();
 				} else {
-					qb.update("forecast", fields, values).where("forecastID", "=", count_String).Execute();
+					qb.update("forecast", fields, values).where("forecastID", "=", count_String).execute();
 				}
 				count++;
 			} 
@@ -95,7 +96,7 @@ public class ForecastModel {
 	
 	public Forecasts getForecast() {
 		try {
-			resultSet = qb.selectFrom("forecast").where("msg_type", "=", "forecast").ExecuteQuery();
+			resultSet = qb.selectFrom("forecast").where("msg_type", "=", "forecast").executeQuery();
 			
 			while(resultSet.next()){
 				String date = resultSet.getString("day");
@@ -118,7 +119,7 @@ public class ForecastModel {
 		long timeLastForecast = 0;
 		
 		try {
-			resultSet = qb.selectFrom("forecast").all().ExecuteQuery();
+			resultSet = qb.selectFrom("forecast").all().executeQuery();
 			if(resultSet.next()){
 				timeLastForecast = resultSet.getDate("date").getTime()/1000L;
 			}

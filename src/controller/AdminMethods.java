@@ -16,7 +16,7 @@ public class AdminMethods {
 	public Vector<Vector<Object>> userTable() {
 		try {
 			String[] keys = {"username", "active"};
-			rs = qb.selectFrom(keys, "users").all().ExecuteQuery();
+			rs = qb.selectFrom(keys, "users").all().executeQuery();
 
 			data.clear();
 
@@ -40,12 +40,12 @@ public class AdminMethods {
 	public boolean AddUser(String username, String password) {
 		boolean succes = false;
 		try {
-			if(qb.selectFrom("users").where("username", "=", username).ExecuteQuery().next()) {
+			if(qb.selectFrom("users").where("username", "=", username).executeQuery().next()) {
 				succes = false;
 			} else {
 				String[] fields = {"username", "password"};
 				String[] values = {username, password};
-				qb.insertInto("users", fields).values(values).Execute();
+				qb.insertInto("users", fields).values(values).execute();
 				succes = true;
 			}
 		} catch (SQLException e) {
@@ -56,29 +56,30 @@ public class AdminMethods {
 
 	public void DeleteUser(String username) {
 
-		int active = 2;
-		
-		try {
-			String[] values1 = {"active"};
+		boolean active;
+		String activeBoolean = null;
 
-			rs = qb.selectFrom(values1, "users").where("username", "=", username).ExecuteQuery();
-			
+		try {
+			String table = "users";
+			String[] fields = {"active"};
+
+			rs = qb.selectFrom(fields, table).where("username", "=", username).executeQuery();
+
 			if(rs.next()) {
-				active = rs.getInt("active");
-				
-				if(active == 1) {
-					active = 0;
-				} else if (active == 0){
-					active = 1;
+				active = rs.getBoolean("active");
+
+				if(active == true) {
+					activeBoolean = "0";
+				} else if (active == false){
+					activeBoolean = "1";
 				}
 			}
-			if(active!=2) {
-				String[] fields = {"active"};
-				String[] values2 = {String.valueOf(active)};
+			if(!activeBoolean.equals(null)) {
+				String[] values = {activeBoolean};
 
-				qb.update("users", fields, values2).where("username", "=", username).Execute();
+				qb.update(table, fields, values).where("username", "=", username).execute();
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
