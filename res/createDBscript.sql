@@ -4,15 +4,56 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 /* Create Tables */
 
-CREATE TABLE IF NOT EXISTS Calendar
+CREATE TABLE IF NOT EXISTS calendar
 (
-	calendarID int NOT NULL AUTO_INCREMENT,
+	calendarid int NOT NULL AUTO_INCREMENT,
 	name varchar(255) NOT NULL,
-	active tinyint,
-	createdBy varchar(255) NOT NULL,
-	privatePublic tinyint NOT NULL COMMENT '1 = public
-	2 = private',
+	active boolean NOT NULL DEFAULT true,
+	createdBy int NOT NULL,
+	public boolean NOT NULL DEFAULT true,
 	PRIMARY KEY (CalendarID)
+);
+
+CREATE TABLE IF NOT EXISTS usercalendars
+(
+	userid int NOT NULL,
+	CalendarID int NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS events
+(
+	eventid int NOT NULL AUTO_INCREMENT,
+	activityid varchar(100) NOT NULL,
+	eventType varchar(50) NOT NULL,
+	title varchar(50) NOT NULL,
+	describtion varchar(50) NOT NULL,
+	start datetime NOT NULL,
+	end datetime NOT NULL,
+	location varchar(50) NOT NULL,
+	createdBy int NOT NULL DEFAULT 1,
+	CalendarID int NOT NULL,
+	PRIMARY KEY (eventid)
+);
+
+CREATE TABLE IF NOT EXISTS notes
+(
+	noteid int NOT NULL AUTO_INCREMENT,
+	eventid int NOT NULL,
+	createdBy int NOT NULL,
+	text text,
+	active boolean NOT NULL DEFAULT true,
+	PRIMARY KEY (noteid)
+);
+
+CREATE TABLE IF NOT EXISTS users
+(
+	userid int NOT NULL AUTO_INCREMENT,
+	username varchar(40) NOT NULL,
+	active boolean NOT NULL DEFAULT true,
+	created datetime NOT NULL DEFAULT NOW(),
+	password varchar(200) NOT NULL,
+	isAdmin boolean NOT NULL DEFAULT false,
+	PRIMARY KEY (userid)
 );
 
 CREATE TABLE IF NOT EXISTS qotd
@@ -34,67 +75,31 @@ CREATE TABLE IF NOT EXISTS forecast
 	primary KEY (forecastID)
 );
 
-CREATE TABLE IF NOT EXISTS events
-(
-	eventid int NOT NULL AUTO_INCREMENT,
-	type int NOT NULL,
-	location int,
-	createdby int NOT NULL,
-	start datetime NOT NULL,
-	end datetime NOT NULL,
-	name varchar(0) NOT NULL,
-	text text NOT NULL,
-	-- Decides wether the event is an import-event or user created
-	-- 
-	customevent boolean COMMENT 'Decides wether the event is an import-event or user created
-',
-	CalendarID int NOT NULL,
-	PRIMARY KEY (eventid)
-);
-
-CREATE TABLE IF NOT EXISTS notes
-(
-	noteId int NOT NULL AUTO_INCREMENT,
-	eventId int NOT NULL,
-	createdBy int NOT NULL,
-	text text,
-	dateTime datetime NOT NULL,
-	active bit,
-	PRIMARY KEY (noteid)
-);
-
-CREATE TABLE IF NOT EXISTS userevents
-(
-	userid int NOT NULL,
-	CalendarID int NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS users
-(
-	userid int NOT NULL AUTO_INCREMENT,
-	username varchar(40) NOT NULL,
-	active boolean NOT NULL DEFAULT true,
-	created datetime NOT NULL DEFAULT NOW(),
-	password varchar(200) NOT NULL,
-	isAdmin boolean NOT NULL DEFAULT false,
-	PRIMARY KEY (userid)
-);
-
 /* Create Foreign Keys */
 
 ALTER TABLE events
-	ADD FOREIGN KEY (CalendarID)
-	REFERENCES Calendar (CalendarID)
+	ADD FOREIGN KEY (calendarid)
+	REFERENCES calendar (calendarid)
 	ON UPDATE RESTRICT
 ;
 
-
-ALTER TABLE userevents
-	ADD FOREIGN KEY (CalendarID)
-	REFERENCES Calendar (CalendarID)
+ALTER TABLE events
+	ADD FOREIGN KEY (createdBy)
+	REFERENCES users (userid)
 	ON UPDATE RESTRICT
 ;
 
+ALTER TABLE usercalendars
+	ADD FOREIGN KEY (calendarid)
+	REFERENCES calendar (calendarid)
+	ON UPDATE RESTRICT
+;
+
+ALTER TABLE usercalendars
+	ADD FOREIGN KEY (userid)
+	REFERENCES users (userid)
+	ON UPDATE RESTRICT
+;
 
 ALTER TABLE notes
 	ADD FOREIGN KEY (eventid)
@@ -102,34 +107,11 @@ ALTER TABLE notes
 	ON UPDATE RESTRICT
 ;
 
-
-ALTER TABLE events
-	ADD FOREIGN KEY (location)
-	REFERENCES locationdata (locationdataid)
-	ON UPDATE RESTRICT
-;
-
-
-ALTER TABLE events
-	ADD FOREIGN KEY (createdby)
-	REFERENCES users (userid)
-	ON UPDATE RESTRICT
-;
-
-
-ALTER TABLE userevents
-	ADD FOREIGN KEY (userid)
-	REFERENCES users (userid)
-	ON UPDATE RESTRICT
-;
-
-
 ALTER TABLE notes
-	ADD FOREIGN KEY (createdby)
+	ADD FOREIGN KEY (createdBy)
 	REFERENCES users (userid)
 	ON UPDATE RESTRICT
 ;
-
 
 /* Create Test Accounts */
 

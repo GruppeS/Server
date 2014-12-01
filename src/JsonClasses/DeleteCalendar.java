@@ -1,17 +1,12 @@
 package JsonClasses;
 
-import java.io.Serializable;
-
-public class DeleteCalendar implements Serializable 
+public class DeleteCalendar
 {
-	private static final long serialVersionUID = 1L;
+	@SuppressWarnings("unused")
 	private String overallID = "deleteCalendar";
 	private String calendarName;
 	private String userName;
 
-	public String getOverallID() {
-		return overallID;
-	}
 	public String getCalendarName() {
 		return calendarName;
 	}

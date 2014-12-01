@@ -20,7 +20,7 @@ public class GiantSwitch {
 		ForecastModel forecastModel = new ForecastModel();
 		QOTDModel quoteModel = new QOTDModel();
 		SwitchMethods SW = new SwitchMethods();
-		CalendarModel getCalendarData = new CalendarModel();
+		CalendarModel calendarModel = new CalendarModel();
 		Gson gson = new GsonBuilder().create();
 
 		switch (Determine(jsonString)) {
@@ -73,7 +73,7 @@ public class GiantSwitch {
 			break;
 
 		case "getCalendar":
-			answer = getCalendarData.getDataFromCalendar(userID);
+			answer = calendarModel.saveCalendar(userID);
 			break;
 
 		case "getEvents":
