@@ -27,65 +27,38 @@ public class Event {
 		this.end = end;
 	}
 
-	public void setActivityid(String activityid){
-		this.activityid = activityid;
-	}
 	public String getActivityid(){
 		return activityid;
 	}
 
-	public void setEventid(String eventid){
-		this.eventid = eventid;
-	}
 	public String getEventid(){
 		return eventid;
 	}
 
-	public void setType(String type){
-		this.type = type;
-	}
 	public String getType(){
 		return type;
 	}
 
-	public void setTitle(String title){
-		this.title = title;
-	}
 	public String getTitle(){
 		return title;
 	}
 
-	public void setDescription(String description){
-		this.description = description;
-	}
 	public String getDescription(){
 		return description;
 	}
 
-	public void setLocation(String location){
-		this.location = location;
-	}
 	public String getLocation(){
 		return location;
 	}
 
-	public void setCreatedby(String createdby){
-		this.createdby = createdby;
-	}
 	public String getCreatedby(){
 		return createdby;
 	}
 
-	public void setStart(ArrayList<String> start){
-		this.start = start;
-	}
 	public ArrayList<String> getStart(){
 		return start;
 	}
 
-	public void setEnd(ArrayList<String> end){
-		this.end = end;
-	}
 	public ArrayList<String> getEnd(){
 		return end;
 	}

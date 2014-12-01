@@ -16,14 +16,14 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import JsonClasses.Forecast;
+import JsonClasses.Forecasts;
 
 public class ForecastModel {
 
 	UrlReader urlReader = new UrlReader();
 	QueryBuilder qb = new QueryBuilder();	
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private ArrayList<Forecast> forecastList = new ArrayList();
+	Forecasts forecasts = new Forecasts();
+	
 	private ResultSet resultSet;
 
 	@SuppressWarnings("rawtypes")
@@ -94,7 +94,7 @@ public class ForecastModel {
 		}
 	}
 	
-	public ArrayList<Forecast> getForecast() {
+	public Forecasts getForecast() {
 		try {
 			resultSet = qb.selectFrom("forecast").where("msg_type", "=", "forecast").ExecuteQuery();
 			
@@ -102,13 +102,13 @@ public class ForecastModel {
 				String date = resultSet.getString("day");
 				String temperature = resultSet.getString("temperature");
 				String weatherDescription = resultSet.getString("summary");
-				forecastList.add(new Forecast(date, temperature, weatherDescription));
+				forecasts.forecastlist.add(new Forecast(date, temperature, weatherDescription));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return (ArrayList<Forecast>) forecastList;
+		return forecasts;
 	}
 
 	public void updateForecast() throws SQLException{
