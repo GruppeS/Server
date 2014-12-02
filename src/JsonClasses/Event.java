@@ -7,25 +7,21 @@ public class Event {
 	private String activityid;
 	private String eventid;
 	private String type;
-	private String title;
 	private String description;
 	private String location;
-	private String createdby;
 	private ArrayList<String> start;
 	private ArrayList<String> end;
 	private Date startDate;
 	private Date endDate;
 
-	public Event(String activityid, String eventid, String type, String title,
-			String description, String location, String createdby, ArrayList<String> start,
+	public Event(String activityid, String eventid, String type,
+			String description, String location, ArrayList<String> start,
 			ArrayList<String> end) {
 		this.activityid = activityid;
 		this.eventid = eventid;
 		this.type = type;
-		this.title = title;
 		this.description = description;
 		this.location = location;
-		this.createdby = createdby;
 		this.start = start;
 		this.end = end;
 	}
@@ -42,20 +38,12 @@ public class Event {
 		return type;
 	}
 
-	public String getTitle(){
-		return title;
-	}
-
 	public String getDescription(){
 		return description;
 	}
 
 	public String getLocation(){
 		return location;
-	}
-
-	public String getCreatedby(){
-		return createdby;
 	}
 
 	@SuppressWarnings("rawtypes")

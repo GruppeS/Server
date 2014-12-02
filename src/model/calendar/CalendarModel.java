@@ -17,7 +17,6 @@ import JsonClasses.Events;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sun.rowset.CachedRowSetImpl;
 
 public class CalendarModel extends Model {
 
@@ -26,7 +25,6 @@ public class CalendarModel extends Model {
 	private Events events;
 	private Gson gson;
 	private PreparedStatement pstmt;
-	private CachedRowSetImpl crs;
 	private ResultSet rs;
 	private QueryBuilder qb;
 
@@ -43,35 +41,31 @@ public class CalendarModel extends Model {
 
 		try {
 			String result = urlRead.readUrl("http://calendar.cbs.dk/events.php/"+username+"/"+e.crypt(username)+".json");
-			
+
 			events = gson.fromJson(result, Events.class);
-			
+
 			for(int i = 0; i<events.getEvents().size(); i++) {
-				
+
 				try {
 					ArrayList start = events.getEvents().get(i).getStart();
 					ArrayList end = events.getEvents().get(i).getEnd();
 
-					String tempStringStart = start.get(0)+"-"+start.get(2)+"-"+start.get(1)+" "+start.get(3)+":"+start.get(4);
-					Date tempDateStart;
+					String tempStringStart = start.get(0)+"-"+start.get(2)+"-"+Integer.toString(Integer.parseInt((String) start.get(1))+1)+" "+start.get(3)+":"+start.get(4);
 
-
-					tempDateStart = new SimpleDateFormat("yyyy-dd-MM HH:mm").parse(tempStringStart);
-
+					Date tempDateStart = new SimpleDateFormat("yyyy-dd-MM HH:mm").parse(tempStringStart);
 					events.getEvents().get(i).setStartdate(tempDateStart);
 
-					String tempStringEnd = end.get(0)+"-"+end.get(2)+"-"+end.get(1)+" "+end.get(3)+":"+end.get(4);
-					Date tempDateEnd;
+					String tempStringEnd = end.get(0)+"-"+end.get(2)+"-"+Integer.toString(Integer.parseInt((String) end.get(1))+1)+" "+end.get(3)+":"+end.get(4);
 
-					tempDateEnd = new SimpleDateFormat("yyyy-dd-MM HH:mm").parse(tempStringEnd);
+					Date tempDateEnd = new SimpleDateFormat("yyyy-dd-MM HH:mm").parse(tempStringEnd);
 					events.getEvents().get(i).setEnddate(tempDateEnd);
-					
+
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
 			}
 
-//			getCustomEvents(username);
+			getCustomEvents(username);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -83,27 +77,41 @@ public class CalendarModel extends Model {
 	public void getCustomEvents(String username) {		
 		try {
 			String[] fields = {"userid"};
-			crs = qb.selectFrom(fields, "users").where("username", "=", username).executeQuery();
+			rs = qb.selectFrom(fields, "users").where("username", "=", username).executeQuery();
 
-			int userid = crs.getInt("userid");
+			int userid = -1;
+
+			if(rs.next()) {
+				userid = rs.getInt("userid");
+			}
 
 			pstmt = doQuery("SELECT * FROM events WHERE calendarid IN (SELECT calendarid FROM calendar WHERE active = true AND (public = true OR calendarid IN (SELECT calendarid FROM usercalendars WHERE userid = ?)))");
 			pstmt.setInt(1, userid);
 			rs = pstmt.executeQuery();
 
 			while(rs.next()) {
+				try {
+					String activityid = rs.getString("activityid");
+					String eventid = rs.getString("eventid");
+					String type = rs.getString("eventType");
+					String description = rs.getString("description");
+					String location = rs.getString("location");
+					String start = rs.getString("start");
+					String end = rs.getString("end");
 
-				String activityid = rs.getString("activityid");
-				String eventid = rs.getString("eventid");
-				String type = rs.getString("eventType");
-				String title = rs.getString("title");
-				String description = rs.getString("description");
-				String location = rs.getString("location");
-				String createdby = rs.getString("createdBy");
-				Date start = rs.getDate("start");
-				Date end = rs.getDate("end");
+					events.events.add(new Event(activityid, eventid, type, description, location, null, null));
 
-				events.events.add(new Event(activityid, eventid, type, title, description, location, createdby, null, null));
+					int size = (events.getEvents().size())-1;
+
+					Date dateStart = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(start);
+
+					Date dateEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(end);
+					events.getEvents().get(size).setStartdate(dateStart);
+					events.getEvents().get(size).setEnddate(dateEnd);
+					
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
 			}
 
 		} catch (SQLException e) {
