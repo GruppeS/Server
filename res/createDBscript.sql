@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS calendar
 CREATE TABLE IF NOT EXISTS usercalendars
 (
 	userid int NOT NULL,
-	CalendarID int NOT NULL
+	calendarid int NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS events
@@ -26,12 +26,12 @@ CREATE TABLE IF NOT EXISTS events
 	activityid varchar(100) NOT NULL,
 	eventType varchar(50) NOT NULL,
 	title varchar(50) NOT NULL,
-	describtion varchar(50) NOT NULL,
+	description varchar(50) NOT NULL,
 	start datetime NOT NULL,
 	end datetime NOT NULL,
 	location varchar(50) NOT NULL,
 	createdBy int NOT NULL DEFAULT 1,
-	CalendarID int NOT NULL,
+	calendarid int NOT NULL,
 	PRIMARY KEY (eventid)
 );
 
@@ -147,4 +147,50 @@ INSERT INTO `cbscalendar`.`users`
 VALUES
 ("hefr13ae",
 "pass")
+;
+
+INSERT INTO `cbscalendar`.`usercalendars`
+(`userid`,
+`calendarid`)
+VALUES
+(2,
+1)
+;
+
+INSERT INTO `cbscalendar`.`calendar`
+(`calendarid`,
+`name`,
+`active`,
+`createdBy`,
+`public`)
+VALUES
+(1,
+"test",
+true,
+2,
+false)
+;
+
+INSERT INTO `cbscalendar`.`events`
+(`eventid`,
+`activityid`,
+`eventType`,
+`title`,
+`description`,
+`start`,
+`end`,
+`location`,
+`createdBy`,
+`calendarid`)
+VALUES
+(1,
+"test",
+"test",
+"test",
+"test",
+now(),
+now(),
+"test",
+2,
+1)
 ;

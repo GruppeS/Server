@@ -74,7 +74,7 @@ public class AdminMethods {
 					activeBoolean = "1";
 				}
 			}
-			if(!activeBoolean.equals(null)) {
+			if(!activeBoolean.equals(null) && !username.equals("admin")) {
 				String[] values = {activeBoolean};
 
 				qb.update(table, fields, values).where("username", "=", username).execute();

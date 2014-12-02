@@ -73,7 +73,7 @@ public class GiantSwitch {
 			break;
 
 		case "getCalendar":
-			answer = calendarModel.saveCalendar(userID);
+			answer = calendarModel.getCalendar(userID);
 			break;
 
 		case "getEvents":

@@ -32,12 +32,6 @@ public abstract class Model {
 	protected PreparedStatement sqlStatement;
 	protected ResultSet resultSet;
 
-	public static void setSelectedDatabase(String db) {
-		if (db != null && db.length() > 0) {
-			sqlUrl += db;
-		}
-	}
-
 	public boolean doesDatabaseExist() throws SQLException {
 
 		getConnection(true);
@@ -66,9 +60,7 @@ public abstract class Model {
 	public PreparedStatement doQuery(String sql) {
 		try {
 			getConnection(false);
-			getConn();
 			sqlStatement = getConn().prepareStatement(sql);
-
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -76,7 +68,7 @@ public abstract class Model {
 
 		return sqlStatement;
 	}
-
+	
 	public int doUpdate(String update) throws SQLException {
 		getConnection(false);
 		int temp = 0;
@@ -100,7 +92,6 @@ public abstract class Model {
 
 		return temp;
 	}
-
 
 	public String readFromFile(String path) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(path));

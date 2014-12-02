@@ -16,7 +16,7 @@ public class QOTDModel {
 	UrlReader urlRead = new UrlReader();
 	QueryBuilder qb = new QueryBuilder();
 
-	private CachedRowSetImpl resultSet;
+	private CachedRowSetImpl rs;
 
 	public void saveQuote() {
 		try {
@@ -44,10 +44,10 @@ public class QOTDModel {
 	public String getQuote(){
 		String quote = null;
 		try {
-			resultSet = qb.selectFrom("qotd").all().executeQuery();
+			rs = qb.selectFrom("qotd").all().executeQuery();
 			
-			if(resultSet.next()) {
-				quote = resultSet.getString("qotd");
+			if(rs.next()) {
+				quote = rs.getString("qotd");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -63,9 +63,9 @@ public class QOTDModel {
 		long dateLastQuote = 0;
 		
 		try {
-			resultSet = qb.selectFrom("qotd").all().executeQuery();
-			if(resultSet.next()){
-				dateLastQuote = resultSet.getDate("date").getTime()/1000L;
+			rs = qb.selectFrom("qotd").all().executeQuery();
+			if(rs.next()){
+				dateLastQuote = rs.getDate("date").getTime()/1000L;
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();

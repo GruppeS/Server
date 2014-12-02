@@ -96,7 +96,13 @@ public class UserListPanel extends JPanel {
 		String selectedUser;
 		
 		int row = table.getSelectedRow();
-		selectedUser = (table.getValueAt(row, 0)).toString();
+		
+		if(row!=-1)
+		{
+			selectedUser = (table.getValueAt(row, 0)).toString();
+		} else {
+			selectedUser = null;
+		}
 		
 		return selectedUser;
 	}

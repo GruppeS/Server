@@ -24,7 +24,7 @@ public class ForecastModel {
 	QueryBuilder qb = new QueryBuilder();	
 	Forecasts forecasts = new Forecasts();
 	
-	private CachedRowSetImpl resultSet;
+	private CachedRowSetImpl rs;
 
 	@SuppressWarnings("rawtypes")
 	public void saveForecast() {
@@ -96,12 +96,12 @@ public class ForecastModel {
 	
 	public Forecasts getForecast() {
 		try {
-			resultSet = qb.selectFrom("forecast").where("msg_type", "=", "forecast").executeQuery();
+			rs = qb.selectFrom("forecast").where("msg_type", "=", "forecast").executeQuery();
 			
-			while(resultSet.next()){
-				String date = resultSet.getString("day");
-				String temperature = resultSet.getString("temperature");
-				String weatherDescription = resultSet.getString("summary");
+			while(rs.next()){
+				String date = rs.getString("day");
+				String temperature = rs.getString("temperature");
+				String weatherDescription = rs.getString("summary");
 				forecasts.forecastlist.add(new Forecast(date, temperature, weatherDescription));
 			}
 		} catch (SQLException e) {
@@ -119,9 +119,9 @@ public class ForecastModel {
 		long timeLastForecast = 0;
 		
 		try {
-			resultSet = qb.selectFrom("forecast").all().executeQuery();
-			if(resultSet.next()){
-				timeLastForecast = resultSet.getDate("date").getTime()/1000L;
+			rs = qb.selectFrom("forecast").all().executeQuery();
+			if(rs.next()){
+				timeLastForecast = rs.getDate("date").getTime()/1000L;
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();

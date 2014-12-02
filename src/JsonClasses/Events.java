@@ -6,7 +6,7 @@ public class Events {
 	
 	@SuppressWarnings("unused")
 	private String overallID = "getCalendar";
-	ArrayList<Event> events = new ArrayList<Event>();
+	public ArrayList<Event> events = new ArrayList<Event>();
  
     public ArrayList<Event> getEvents() {
         return events;

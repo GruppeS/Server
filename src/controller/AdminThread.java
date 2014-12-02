@@ -141,8 +141,11 @@ public class AdminThread implements Runnable {
 			
 			if(cmd.equals("btnDelete")) {
 				String username = frame.getUserList().getSelectedUser();
-				adminMethods.DeleteUser(username);
-				frame.getUserList().createTable(adminMethods.userTable());
+				
+				if(username!=null){
+					adminMethods.DeleteUser(username);
+					frame.getUserList().createTable(adminMethods.userTable());
+				}
 			}
 			
 			if(cmd.equals("btnBackToMain")) {
