@@ -1,7 +1,5 @@
 package JsonClasses;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -13,12 +11,14 @@ public class Event {
 	private String description;
 	private String location;
 	private String createdby;
-	private Date start;
-	private Date end;
+	private ArrayList<String> start;
+	private ArrayList<String> end;
+	private Date startDate;
+	private Date endDate;
 
 	public Event(String activityid, String eventid, String type, String title,
 			String description, String location, String createdby, ArrayList<String> start,
-			ArrayList<String> end, Date startdate, Date enddate) {
+			ArrayList<String> end) {
 		this.activityid = activityid;
 		this.eventid = eventid;
 		this.type = type;
@@ -26,31 +26,8 @@ public class Event {
 		this.description = description;
 		this.location = location;
 		this.createdby = createdby;
-
-		if(start != null && end != null)
-		{
-			try {
-				String tempStringStart = start.get(0)+"-"+start.get(2)+"-"+start.get(1)+" "+start.get(3)+":"+start.get(4);
-				Date tempDateStart;
-
-				tempDateStart = new SimpleDateFormat("yyyy-dd-MM HH:mm").parse(tempStringStart);
-				this.start = tempDateStart;
-
-				String tempStringEnd = end.get(0)+"-"+end.get(2)+"-"+end.get(1)+" "+end.get(3)+":"+end.get(4);
-				Date tempDateEnd;
-
-				tempDateEnd = new SimpleDateFormat("yyyy-dd-MM HH:mm").parse(tempStringEnd);
-				this.end = tempDateEnd;
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-
-		if(startdate != null && enddate != null)
-		{
-			this.start = startdate;
-			this.end = enddate;
-		}
+		this.start = start;
+		this.end = end;
 	}
 
 	public String getActivityid(){
@@ -81,11 +58,27 @@ public class Event {
 		return createdby;
 	}
 
-	public Date getStartdate(){
+	@SuppressWarnings("rawtypes")
+	public ArrayList getStart() {
 		return start;
 	}
 
-	public Date getEnddate(){
+	@SuppressWarnings("rawtypes")
+	public ArrayList getEnd() {
 		return end;
+	}
+
+	public void setStartdate(Date start) {
+		this.startDate = start;
+	}
+	public Date getStartdate(){
+		return startDate;
+	}
+
+	public void setEnddate(Date end) {
+		this.endDate = end;
+	}
+	public Date getEnddate(){
+		return endDate;
 	}
 }
