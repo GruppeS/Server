@@ -56,7 +56,6 @@ public class AdminThread implements Runnable {
 			}
 		}
 	}
-
 	private class LoginActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
@@ -93,6 +92,7 @@ public class AdminThread implements Runnable {
 				frame.show(Frame.EVENTLIST);
 			}
 			if(cmd.equals("btnNoteList")) {
+				frame.getNoteList().createTable(adminMethods.notesTable());
 				frame.show(Frame.NOTELIST);
 			}
 			if(cmd.equals("btnUserList")) {
@@ -114,7 +114,6 @@ public class AdminThread implements Runnable {
 					adminMethods.deleteCalendar(calendarid);
 					frame.getCalendarList().createTable(adminMethods.calendarTable());
 				}
-
 			}
 
 			if(cmd.equals("btnBackToMain")) {
@@ -127,6 +126,15 @@ public class AdminThread implements Runnable {
 
 			String cmd  = e.getActionCommand();
 
+			if(cmd.equals("btnDelete")) {
+				String noteid = frame.getNoteList().getSelectedNote();
+				
+				if(noteid!=null) {
+					adminMethods.deleteNote(noteid);
+					frame.getNoteList().createTable(adminMethods.notesTable());
+				}
+			}
+			
 			if(cmd.equals("btnBackToMain")) {
 				frame.show(Frame.MENU);
 			}

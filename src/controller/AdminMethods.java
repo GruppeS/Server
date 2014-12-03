@@ -100,7 +100,7 @@ public class AdminMethods {
 	public Vector<Vector<Object>> calendarTable() {
 		try {
 			String[] keys = {"calendarid", "name", "active"};
-			rs = qb.selectFrom(keys, "calendar").all().executeQuery();
+			rs = qb.selectFrom(keys, "calendars").all().executeQuery();
 
 			data.clear();
 
@@ -133,7 +133,7 @@ public class AdminMethods {
 		String activeBoolean = null;
 
 		try {
-			String table = "calendar";
+			String table = "calendars";
 			String[] fields = {"active"};
 
 			rs = qb.selectFrom(fields, table).where("calendarid", "=", calendarid).executeQuery();
@@ -203,7 +203,7 @@ public class AdminMethods {
 			String table = "events";
 			String[] fields = {"active"};
 
-			rs = qb.selectFrom(fields, "events").where("eventid", "=", eventid).executeQuery();
+			rs = qb.selectFrom(fields, table).where("eventid", "=", eventid).executeQuery();
 
 			if(rs.next()) {
 				active = rs.getBoolean("active");
@@ -218,6 +218,73 @@ public class AdminMethods {
 				String[] values = {activeBoolean};
 
 				qb.update(table, fields, values).where("eventid", "=", eventid).execute();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public Vector<Vector<Object>> notesTable() {
+		try {
+			String[] keys = {"eventid", "noteid", "text", "active"};
+			rs = qb.selectFrom(keys, "notes").all().executeQuery();
+
+			data.clear();
+
+			while(rs.next()) {
+				Vector<Object> row = new Vector<Object>();
+
+				ResultSetMetaData metadata = rs.getMetaData();
+				int numberOfColumns = metadata.getColumnCount();
+
+				for(int i = 1; i <= numberOfColumns; i++) {
+					row.addElement(rs.getObject(i));
+				}
+				data.addElement(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return data;
+	}
+	
+	public void deleteNote(String noteid) {
+
+		boolean active;
+		String activeBoolean = null;
+
+		try {
+			String table = "notes";
+			String[] fields = {"active"};
+
+			rs = qb.selectFrom(fields, table).where("noteid", "=", noteid).executeQuery();
+
+			if(rs.next()) {
+				active = rs.getBoolean("active");
+
+				if(active == true) {
+					activeBoolean = "0";
+				} else if (active == false){
+					activeBoolean = "1";
+				}
+			}
+			if(!activeBoolean.equals(null)) {
+				String[] values = {activeBoolean};
+
+				qb.update(table, fields, values).where("noteid", "=", noteid).execute();
 			}
 
 		} catch (SQLException e) {

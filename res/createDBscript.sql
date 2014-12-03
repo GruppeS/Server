@@ -4,7 +4,7 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 /* Create Tables */
 
-CREATE TABLE IF NOT EXISTS calendar
+CREATE TABLE IF NOT EXISTS calendars
 (
 	calendarid int NOT NULL AUTO_INCREMENT,
 	name varchar(255) NOT NULL,
@@ -77,6 +77,12 @@ CREATE TABLE IF NOT EXISTS forecast
 );
 
 /* Create Foreign Keys */
+
+ALTER TABLE calendars
+	ADD FOREIGN KEY (createdBy)
+	REFERENCES users (userid)
+	ON UPDATE RESTRICT
+;
 
 ALTER TABLE events
 	ADD FOREIGN KEY (calendarid)
@@ -158,23 +164,20 @@ VALUES
 1)
 ;
 
-INSERT INTO `cbscalendar`.`calendar`
-(`calendarid`,
-`name`,
+INSERT INTO `cbscalendar`.`calendars`
+(`name`,
 `active`,
 `createdBy`,
 `public`)
 VALUES
-(1,
-"test",
+("test",
 true,
 2,
 false)
 ;
 
 INSERT INTO `cbscalendar`.`events`
-(`eventid`,
-`activityid`,
+(`activityid`,
 `eventType`,
 `title`,
 `description`,
@@ -184,8 +187,7 @@ INSERT INTO `cbscalendar`.`events`
 `createdBy`,
 `calendarid`)
 VALUES
-(1,
-"test",
+("test",
 "test",
 "test",
 "test",
@@ -194,4 +196,14 @@ now(),
 "test",
 2,
 1)
+;
+
+INSERT INTO `cbscalendar`.`notes`
+(`eventid`,
+`createdBy`,
+`text`)
+VALUES
+(1,
+2,
+"Test note description")
 ;
