@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS events
 	activityid varchar(100) NOT NULL,
 	eventType varchar(50) NOT NULL,
 	title varchar(50) NOT NULL,
+	active boolean NOT NULL DEFAULT true,
 	description varchar(50) NOT NULL,
 	start datetime NOT NULL,
 	end datetime NOT NULL,

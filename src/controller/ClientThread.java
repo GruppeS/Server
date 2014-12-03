@@ -8,7 +8,7 @@ import java.net.Socket;
 public class ClientThread implements Runnable {
 
 	private Socket clientSocket;
-	private GiantSwitch GS = new GiantSwitch();
+	private ServerSwitch serverSwitch = new ServerSwitch();
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	private boolean active = true;
@@ -33,7 +33,7 @@ public class ClientThread implements Runnable {
 			try {
 				String message = (String) input.readObject();
 				System.out.println("Incomming: " + message);
-				String reply = GS.GiantSwitchMethod(message);
+				String reply = serverSwitch.GiantSwitchMethod(message);
 				System.out.println("Reply: " + reply);
 				output.writeObject(reply);
 				output.flush();
@@ -45,7 +45,7 @@ public class ClientThread implements Runnable {
 			}
 		}
 	}
-	
+
 	public void terminate() {
 		try {
 			output.close();

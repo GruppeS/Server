@@ -33,6 +33,12 @@ public class AdminMethods {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return data;
 	}
@@ -82,12 +88,18 @@ public class AdminMethods {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
 	public Vector<Vector<Object>> calendarTable() {
 		try {
-			String[] keys = {"name", "active"};
+			String[] keys = {"calendarid", "name", "active"};
 			rs = qb.selectFrom(keys, "calendar").all().executeQuery();
 
 			data.clear();
@@ -105,11 +117,17 @@ public class AdminMethods {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return data;
 	}
 	
-	public void deleteCalendar(String calendar) {
+	public void deleteCalendar(String calendarid) {
 
 		boolean active;
 		String activeBoolean = null;
@@ -118,7 +136,7 @@ public class AdminMethods {
 			String table = "calendar";
 			String[] fields = {"active"};
 
-			rs = qb.selectFrom(fields, table).where("name", "=", calendar).executeQuery();
+			rs = qb.selectFrom(fields, table).where("calendarid", "=", calendarid).executeQuery();
 
 			if(rs.next()) {
 				active = rs.getBoolean("active");
@@ -132,11 +150,84 @@ public class AdminMethods {
 			if(!activeBoolean.equals(null)) {
 				String[] values = {activeBoolean};
 
-				qb.update(table, fields, values).where("name", "=", calendar).execute();
+				qb.update(table, fields, values).where("calendarid", "=", calendarid).execute();
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public Vector<Vector<Object>> eventsTable() {
+		try {
+			String[] keys = {"calendarid", "eventid", "title", "active"};
+			rs = qb.selectFrom(keys, "events").all().executeQuery();
+
+			data.clear();
+
+			while(rs.next()) {
+				Vector<Object> row = new Vector<Object>();
+
+				ResultSetMetaData metadata = rs.getMetaData();
+				int numberOfColumns = metadata.getColumnCount();
+
+				for(int i = 1; i <= numberOfColumns; i++) {
+					row.addElement(rs.getObject(i));
+				}
+				data.addElement(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return data;
+	}
+	
+	public void deleteEvent(String eventid) {
+
+		boolean active;
+		String activeBoolean = null;
+
+		try {
+			String table = "events";
+			String[] fields = {"active"};
+
+			rs = qb.selectFrom(fields, "events").where("eventid", "=", eventid).executeQuery();
+
+			if(rs.next()) {
+				active = rs.getBoolean("active");
+
+				if(active == true) {
+					activeBoolean = "0";
+				} else if (active == false){
+					activeBoolean = "1";
+				}
+			}
+			if(!activeBoolean.equals(null)) {
+				String[] values = {activeBoolean};
+
+				qb.update(table, fields, values).where("eventid", "=", eventid).execute();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

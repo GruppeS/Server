@@ -85,7 +85,7 @@ public class CalendarModel extends Model {
 				userid = rs.getInt("userid");
 			}
 
-			pstmt = doQuery("SELECT * FROM events WHERE calendarid IN (SELECT calendarid FROM calendar WHERE active = true AND (public = true OR calendarid IN (SELECT calendarid FROM usercalendars WHERE userid = ?)))");
+			pstmt = doQuery("SELECT * FROM events WHERE active = true AND calendarid IN (SELECT calendarid FROM calendar WHERE active = true AND (public = true OR calendarid IN (SELECT calendarid FROM usercalendars WHERE userid = ?)))");
 			pstmt.setInt(1, userid);
 			rs = pstmt.executeQuery();
 

@@ -89,6 +89,7 @@ public class AdminThread implements Runnable {
 				frame.show(Frame.CALENDARLIST);
 			}
 			if(cmd.equals("btnEventList")) {
+				frame.getEventList().createTable(adminMethods.eventsTable());
 				frame.show(Frame.EVENTLIST);
 			}
 			if(cmd.equals("btnNoteList")) {
@@ -107,10 +108,10 @@ public class AdminThread implements Runnable {
 
 			if(cmd.equals("btnDelete")) {
 
-				String calendar = frame.getCalendarList().getSelectedCalendar();
+				String calendarid = frame.getCalendarList().getSelectedCalendar();
 
-				if(calendar!=null){
-					adminMethods.deleteCalendar(calendar);
+				if(calendarid!=null){
+					adminMethods.deleteCalendar(calendarid);
 					frame.getCalendarList().createTable(adminMethods.calendarTable());
 				}
 
@@ -170,6 +171,15 @@ public class AdminThread implements Runnable {
 		public void actionPerformed(ActionEvent e) {
 
 			String cmd  = e.getActionCommand();
+
+			if(cmd.equals("btnDelete")) {
+				String eventid = frame.getEventList().getSelectedEvent();
+				
+				if(eventid!=null) {
+					adminMethods.deleteEvent(eventid);
+					frame.getEventList().createTable(adminMethods.eventsTable());
+				}
+			}
 
 			if(cmd.equals("btnBackToMain")) {
 				frame.show(Frame.MENU);

@@ -29,17 +29,18 @@ public class CalendarListPanel extends JPanel {
 		add(btnBackToMain);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(64, 40, 242, 183);
+		scrollPane.setBounds(36, 35, 305, 238);
 		add(scrollPane);
 		
 		btnDelete = new JButton("Set active/inactive");
-		btnDelete.setBounds(112, 234, 150, 29);
+		btnDelete.setBounds(112, 284, 150, 29);
 		add(btnDelete);
 
 	}
 	
 	public void createTable(Vector<?> data) {
 		columnNames = new Vector<Object>();
+		columnNames.add("CalendarID");
 		columnNames.add("Calendar");
 		columnNames.add("Active");
 		table = new JTable(data, columnNames);

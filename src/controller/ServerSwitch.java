@@ -10,7 +10,7 @@ import JsonClasses.UserInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class GiantSwitch {
+public class ServerSwitch {
 	private String userID;
 	private String answer;
 	private boolean authenticated = false;
@@ -73,11 +73,11 @@ public class GiantSwitch {
 			break;
 
 		case "getCalendar":
-			answer = calendarModel.getCalendar(userID);
+			System.out.println("Recieved getCalendar");
 			break;
 
 		case "getEvents":
-			System.out.println("Recieved getEvents");
+			answer = calendarModel.getCalendar(userID);
 			break;
 
 		case "createEvent":
