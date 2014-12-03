@@ -3,8 +3,8 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import view.MainFrame;
 import view.Frame;
+import view.MainFrame;
 
 public class AdminThread implements Runnable {
 
@@ -17,15 +17,15 @@ public class AdminThread implements Runnable {
 	private String email;
 	private String password;
 	private String authenticated;
-	
+
 	public AdminThread(){
 
 		switchMethods = new SwitchMethods();
 		adminMethods = new AdminMethods();
-		
+
 		mainScreen = new MainFrame();
 		mainScreen.getMain().addActionListener(new MainActionListener());
-		
+
 		frame = new Frame();
 		frame.getLogin().addActionListener(new LoginActionListener());
 		frame.getMenu().addActionListener(new MenuActionListener());
@@ -85,6 +85,7 @@ public class AdminThread implements Runnable {
 			String cmd  = e.getActionCommand();
 
 			if(cmd.equals("btnCalendarList")) {
+				frame.getCalendarList().createTable(adminMethods.calendarTable());
 				frame.show(Frame.CALENDARLIST);
 			}
 			if(cmd.equals("btnEventList")) {
@@ -103,6 +104,17 @@ public class AdminThread implements Runnable {
 		public void actionPerformed(ActionEvent e) {
 
 			String cmd  = e.getActionCommand();
+
+			if(cmd.equals("btnDelete")) {
+
+				String calendar = frame.getCalendarList().getSelectedCalendar();
+
+				if(calendar!=null){
+					adminMethods.deleteCalendar(calendar);
+					frame.getCalendarList().createTable(adminMethods.calendarTable());
+				}
+
+			}
 
 			if(cmd.equals("btnBackToMain")) {
 				frame.show(Frame.MENU);
@@ -127,27 +139,27 @@ public class AdminThread implements Runnable {
 			if(cmd.equals("btnAdd")) {
 				String username = frame.getUserList().getUsername();
 				String password = frame.getUserList().getPassword();
-				
+
 				frame.getUserList().reset();
-				
+
 				if(!username.equals("") && !password.equals("")) {
-					if(adminMethods.AddUser(username, password)){
+					if(adminMethods.addUser(username, password)){
 					} else {
 						frame.getUserList().userExists();
 					}
 				}
 				frame.getUserList().createTable(adminMethods.userTable());
 			}
-			
+
 			if(cmd.equals("btnDelete")) {
 				String username = frame.getUserList().getSelectedUser();
-				
+
 				if(username!=null){
-					adminMethods.DeleteUser(username);
+					adminMethods.deleteUser(username);
 					frame.getUserList().createTable(adminMethods.userTable());
 				}
 			}
-			
+
 			if(cmd.equals("btnBackToMain")) {
 				frame.getUserList().reset();
 				frame.show(Frame.MENU);
