@@ -40,7 +40,6 @@ public class CalendarListPanel extends JPanel {
 	
 	public void createTable(Vector<?> data) {
 		columnNames = new Vector<Object>();
-		columnNames.add("CalendarID");
 		columnNames.add("Calendar");
 		columnNames.add("Active");
 		table = new JTable(data, columnNames);

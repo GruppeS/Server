@@ -37,7 +37,7 @@ public class EventListPanel extends JPanel {
 	
 	public void createTable(Vector<?> data) {
 		columnNames = new Vector<Object>();
-		columnNames.add("CalendarID");
+		columnNames.add("Calendar");
 		columnNames.add("EventID");
 		columnNames.add("Event");
 		columnNames.add("Active");

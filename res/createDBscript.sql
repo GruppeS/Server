@@ -2,72 +2,68 @@ CREATE DATABASE IF NOT EXISTS cbscalendar;
 use cbscalendar;
 SET SESSION FOREIGN_KEY_CHECKS=0;
 
-/* Create Tables */
-
 CREATE TABLE IF NOT EXISTS calendars
 (
-	calendarid int NOT NULL AUTO_INCREMENT,
-	name varchar(255) NOT NULL,
+	calendar varchar(50) NOT NULL,
 	active boolean NOT NULL DEFAULT true,
-	createdBy int NOT NULL,
-	public boolean NOT NULL DEFAULT true,
-	PRIMARY KEY (CalendarID)
+	createdBy varchar(25) NOT NULL,
+	isPublic boolean NOT NULL DEFAULT true,
+	PRIMARY KEY (calendar)
 );
 
 CREATE TABLE IF NOT EXISTS usercalendars
 (
-	userid int NOT NULL,
-	calendarid int NOT NULL
+	ID int NOT NULL AUTO_INCREMENT,
+	username varchar(25) NOT NULL,
+	calendar varchar(50) NOT NULL,
+	PRIMARY KEY (ID)
 );
 
 CREATE TABLE IF NOT EXISTS events
 (
-	eventid int NOT NULL AUTO_INCREMENT,
-	activityid varchar(100) NOT NULL,
-	eventType varchar(50) NOT NULL,
-	title varchar(50) NOT NULL,
-	active boolean NOT NULL DEFAULT true,
+	eventID int NOT NULL AUTO_INCREMENT,
+	eventType varchar(25) NOT NULL,
 	description varchar(50) NOT NULL,
 	start datetime NOT NULL,
 	end datetime NOT NULL,
-	location varchar(50) NOT NULL,
-	createdBy int NOT NULL DEFAULT 1,
-	calendarid int NOT NULL,
-	PRIMARY KEY (eventid)
+	location varchar(25) NOT NULL,
+	active boolean NOT NULL DEFAULT true,
+	createdBy varchar(25) NOT NULL,
+	calendar varchar(50) NOT NULL,
+	PRIMARY KEY (eventID)
 );
 
 CREATE TABLE IF NOT EXISTS notes
 (
-	noteid int NOT NULL AUTO_INCREMENT,
-	eventid int NOT NULL,
-	createdBy int NOT NULL,
+	noteID int NOT NULL AUTO_INCREMENT,
+	eventID int NOT NULL,
+	createdBy varchar(40) NOT NULL,
 	text text,
 	active boolean NOT NULL DEFAULT true,
-	PRIMARY KEY (noteid)
+	PRIMARY KEY (noteID)
 );
 
 CREATE TABLE IF NOT EXISTS users
 (
-	userid int NOT NULL AUTO_INCREMENT,
-	username varchar(40) NOT NULL,
+	username varchar(25) NOT NULL,
 	active boolean NOT NULL DEFAULT true,
-	created datetime NOT NULL DEFAULT NOW(),
-	password varchar(200) NOT NULL,
+	password varchar(25) NOT NULL,
 	isAdmin boolean NOT NULL DEFAULT false,
-	PRIMARY KEY (userid)
+	PRIMARY KEY (username)
 );
 
 CREATE TABLE IF NOT EXISTS qotd
 (
+	qotdID int NOT NULL AUTO_INCREMENT,
 	date datetime NOT NULL DEFAULT NOW() ON UPDATE NOW(),
 	qotd varchar(500) NOT NULL,
-	msg_type varchar(10) NOT NULL DEFAULT "qotd",
-	primary KEY (date)
+	msg_type varchar(5) NOT NULL DEFAULT "qotd",
+	primary KEY (qotdID)
 );
 
 CREATE TABLE IF NOT EXISTS forecast
 (
-	forecastID int NOT NULL,
+	forecastID int NOT NULL AUTO_INCREMENT,
 	date datetime NOT NULL DEFAULT NOW() ON UPDATE NOW(),
 	day varchar (50) NOT NULL,
 	temperature varchar(10) NOT NULL,
@@ -76,51 +72,47 @@ CREATE TABLE IF NOT EXISTS forecast
 	primary KEY (forecastID)
 );
 
-/* Create Foreign Keys */
-
 ALTER TABLE calendars
 	ADD FOREIGN KEY (createdBy)
-	REFERENCES users (userid)
+	REFERENCES users (username)
 	ON UPDATE RESTRICT
 ;
 
 ALTER TABLE events
-	ADD FOREIGN KEY (calendarid)
-	REFERENCES calendar (calendarid)
+	ADD FOREIGN KEY (calendar)
+	REFERENCES calendars (calendar)
 	ON UPDATE RESTRICT
 ;
 
 ALTER TABLE events
 	ADD FOREIGN KEY (createdBy)
-	REFERENCES users (userid)
+	REFERENCES users (username)
 	ON UPDATE RESTRICT
 ;
 
 ALTER TABLE usercalendars
-	ADD FOREIGN KEY (calendarid)
-	REFERENCES calendar (calendarid)
+	ADD FOREIGN KEY (calendar)
+	REFERENCES calendars (calendar)
 	ON UPDATE RESTRICT
 ;
 
 ALTER TABLE usercalendars
-	ADD FOREIGN KEY (userid)
-	REFERENCES users (userid)
+	ADD FOREIGN KEY (username)
+	REFERENCES users (username)
 	ON UPDATE RESTRICT
 ;
 
 ALTER TABLE notes
-	ADD FOREIGN KEY (eventid)
-	REFERENCES events (eventid)
+	ADD FOREIGN KEY (eventID)
+	REFERENCES events (eventID)
 	ON UPDATE RESTRICT
 ;
 
 ALTER TABLE notes
 	ADD FOREIGN KEY (createdBy)
-	REFERENCES users (userid)
+	REFERENCES users (username)
 	ON UPDATE RESTRICT
 ;
-
-/* Create Test Accounts */
 
 INSERT INTO `cbscalendar`.`users`
 (`username`,
@@ -157,53 +149,45 @@ VALUES
 ;
 
 INSERT INTO `cbscalendar`.`usercalendars`
-(`userid`,
-`calendarid`)
+(`username`,
+`calendar`)
 VALUES
-(2,
-1)
+("bjsc13ac",
+"test")
 ;
 
 INSERT INTO `cbscalendar`.`calendars`
-(`name`,
-`active`,
-`createdBy`,
-`public`)
+(`calendar`,
+`createdBy`)
 VALUES
 ("test",
-true,
-2,
-false)
+"bjsc13ac")
 ;
 
 INSERT INTO `cbscalendar`.`events`
-(`activityid`,
-`eventType`,
-`title`,
+(`eventType`,
 `description`,
 `start`,
 `end`,
 `location`,
 `createdBy`,
-`calendarid`)
+`calendar`)
 VALUES
 ("test",
 "test",
-"test",
-"test",
 now(),
 now(),
 "test",
-2,
-1)
+"bjsc13ac",
+"test")
 ;
 
 INSERT INTO `cbscalendar`.`notes`
-(`eventid`,
+(`eventID`,
 `createdBy`,
 `text`)
 VALUES
 (1,
-2,
-"Test note description")
+"bjsc13ac",
+"test")
 ;

@@ -11,7 +11,6 @@ import java.util.Date;
 
 import model.Model;
 import model.UrlReader;
-import model.QueryBuild.QueryBuilder;
 import JsonClasses.Event;
 import JsonClasses.Events;
 
@@ -26,14 +25,12 @@ public class CalendarModel extends Model {
 	private Gson gson;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
-	private QueryBuilder qb;
 
 	public CalendarModel() {
 		e = new EncryptUserID();
 		urlRead = new UrlReader();
 		events = new Events();
 		gson = new GsonBuilder().create();
-		qb = new QueryBuilder();
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -66,7 +63,7 @@ public class CalendarModel extends Model {
 			}
 
 			getCustomEvents(username);
-
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -76,30 +73,20 @@ public class CalendarModel extends Model {
 
 	public void getCustomEvents(String username) {		
 		try {
-			String[] fields = {"userid"};
-			rs = qb.selectFrom(fields, "users").where("username", "=", username).executeQuery();
-
-			int userid = -1;
-
-			if(rs.next()) {
-				userid = rs.getInt("userid");
-			}
-
-			pstmt = doQuery("SELECT * FROM events WHERE active = true AND calendarid IN (SELECT calendarid FROM calendars WHERE active = true AND (public = true OR calendarid IN (SELECT calendarid FROM usercalendars WHERE userid = ?)))");
-			pstmt.setInt(1, userid);
+			pstmt = doQuery("SELECT * FROM events WHERE active = true AND calendar IN (SELECT calendar FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?)))");
+			pstmt.setString(1, username);
 			rs = pstmt.executeQuery();
 
 			while(rs.next()) {
 				try {
-					String activityid = rs.getString("activityid");
-					String eventid = rs.getString("eventid");
+					String eventid = rs.getString("eventID");
 					String type = rs.getString("eventType");
 					String description = rs.getString("description");
 					String location = rs.getString("location");
 					String start = rs.getString("start");
 					String end = rs.getString("end");
-
-					events.events.add(new Event(activityid, eventid, type, description, location, null, null));
+					
+					events.events.add(new Event(null, eventid, type, description, location, null, null));
 
 					int size = (events.getEvents().size())-1;
 
@@ -108,7 +95,7 @@ public class CalendarModel extends Model {
 					Date dateEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(end);
 					events.getEvents().get(size).setStartdate(dateStart);
 					events.getEvents().get(size).setEnddate(dateEnd);
-					
+
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
