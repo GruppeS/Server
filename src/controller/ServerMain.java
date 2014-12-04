@@ -19,7 +19,7 @@ public class ServerMain {
 	public static void main(String args[]) throws SQLException, IOException {
 
 		new DatabaseInit().go();
-		
+
 		new QOTDModel().saveQuote();
 		new ForecastModel().saveForecast();
 

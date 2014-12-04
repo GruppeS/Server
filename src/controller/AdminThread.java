@@ -111,7 +111,7 @@ public class AdminThread implements Runnable {
 				String calendarid = frame.getCalendarList().getSelectedCalendar();
 
 				if(calendarid!=null){
-					adminMethods.deleteCalendar(calendarid);
+					adminMethods.deleteCalendar(calendarid, "admin");
 					frame.getCalendarList().createTable(adminMethods.calendarTable());
 				}
 			}
@@ -130,7 +130,7 @@ public class AdminThread implements Runnable {
 				String noteid = frame.getNoteList().getSelectedNote();
 				
 				if(noteid!=null) {
-					adminMethods.deleteNote(noteid);
+					adminMethods.deleteNote(noteid, "admin");
 					frame.getNoteList().createTable(adminMethods.notesTable());
 				}
 			}
@@ -184,7 +184,7 @@ public class AdminThread implements Runnable {
 				String eventid = frame.getEventList().getSelectedEvent();
 				
 				if(eventid!=null) {
-					adminMethods.deleteEvent(eventid);
+					adminMethods.deleteEvent(eventid, "admin");
 					frame.getEventList().createTable(adminMethods.eventsTable());
 				}
 			}

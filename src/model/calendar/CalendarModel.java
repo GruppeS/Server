@@ -11,6 +11,8 @@ import java.util.Date;
 
 import model.Model;
 import model.UrlReader;
+import JsonClasses.Calendar;
+import JsonClasses.Calendars;
 import JsonClasses.Event;
 import JsonClasses.Events;
 
@@ -21,6 +23,7 @@ public class CalendarModel extends Model {
 
 	private EncryptUserID e;
 	private UrlReader urlRead;
+	private Calendars calendars;
 	private Events events;
 	private Gson gson;
 	private PreparedStatement pstmt;
@@ -29,12 +32,13 @@ public class CalendarModel extends Model {
 	public CalendarModel() {
 		e = new EncryptUserID();
 		urlRead = new UrlReader();
+		calendars = new Calendars();
 		events = new Events();
 		gson = new GsonBuilder().create();
 	}
 
 	@SuppressWarnings("rawtypes")
-	public String getCalendar(String username) {
+	public String getCBSCalendar(String username) {
 
 		try {
 			String result = urlRead.readUrl("http://calendar.cbs.dk/events.php/"+username+"/"+e.crypt(username)+".json");
@@ -63,7 +67,7 @@ public class CalendarModel extends Model {
 			}
 
 			getCustomEvents(username);
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -85,7 +89,7 @@ public class CalendarModel extends Model {
 					String location = rs.getString("location");
 					String start = rs.getString("start");
 					String end = rs.getString("end");
-					
+
 					events.events.add(new Event(null, eventid, type, description, location, null, null));
 
 					int size = (events.getEvents().size())-1;
@@ -110,5 +114,31 @@ public class CalendarModel extends Model {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public String getCalendars(String username) {
+		try {
+			pstmt = doQuery("SELECT calendar, createdBy FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?))");
+			pstmt.setString(1, username);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				String calendar = rs.getString("calendar");
+				String createdBy = rs.getString("createdBy");
+				
+				calendars.calendars.add(new Calendar(calendar, createdBy, true));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return gson.toJson(calendars);
 	}
 }

@@ -109,30 +109,35 @@ public class AdminMethods {
 		return data;
 	}
 
-	public void deleteCalendar(String calendar) {
+	public void deleteCalendar(String calendar, String user) {
 
 		boolean active;
 		String activeBoolean = null;
 
 		try {
 			String table = "calendars";
-			String[] fields = {"active"};
+			String[] fields = {"active", "createdBy"};
+			String[] fieldsUpdate = {"active"};
 
 			crs = qb.selectFrom(fields, table).where("calendar", "=", calendar).executeQuery();
 
 			if(crs.next()) {
-				active = crs.getBoolean("active");
+				String username = crs.getString("createdBy");
 
-				if(active) {
-					activeBoolean = "0";
-				} else if (!active){
-					activeBoolean = "1";
+				if(username.equals(user) || user.equals("admin")) {
+					active = crs.getBoolean("active");
+
+					if(active) {
+						activeBoolean = "0";
+					} else if (!active){
+						activeBoolean = "1";
+					}
+					if(!activeBoolean.equals(null)) {
+						String[] values = {activeBoolean};
+
+						qb.update(table, fieldsUpdate, values).where("calendar", "=", calendar).execute();
+					}
 				}
-			}
-			if(!activeBoolean.equals(null)) {
-				String[] values = {activeBoolean};
-
-				qb.update(table, fields, values).where("calendar", "=", calendar).execute();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -163,30 +168,35 @@ public class AdminMethods {
 		return data;
 	}
 
-	public void deleteEvent(String eventID) {
+	public void deleteEvent(String eventID, String user) {
 
 		boolean active;
 		String activeBoolean = null;
 
 		try {
 			String table = "events";
-			String[] fields = {"active"};
+			String[] fields = {"active", "createdBy"};
+			String[] fieldsUpdate = {"active"};
 
 			crs = qb.selectFrom(fields, table).where("eventID", "=", eventID).executeQuery();
 
 			if(crs.next()) {
-				active = crs.getBoolean("active");
+				String username = crs.getString("createdBy");
 
-				if(active) {
-					activeBoolean = "0";
-				} else if (!active){
-					activeBoolean = "1";
+				if(username.equals(user) || user.equals("admin")) {
+					active = crs.getBoolean("active");
+
+					if(active) {
+						activeBoolean = "0";
+					} else if (!active){
+						activeBoolean = "1";
+					}
+					if(!activeBoolean.equals(null)) {
+						String[] values = {activeBoolean};
+
+						qb.update(table, fieldsUpdate, values).where("eventID", "=", eventID).execute();
+					}
 				}
-			}
-			if(!activeBoolean.equals(null)) {
-				String[] values = {activeBoolean};
-
-				qb.update(table, fields, values).where("eventID", "=", eventID).execute();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -217,31 +227,37 @@ public class AdminMethods {
 		return data;
 	}
 
-	public void deleteNote(String noteID) {
+	public void deleteNote(String noteID, String user) {
 
 		boolean active;
 		String activeBoolean = null;
 
 		try {
 			String table = "notes";
-			String[] fields = {"active"};
+			String[] fields = {"active", "createdBy"};
+			String[] fieldsUpdate = {"active"};
 
 			crs = qb.selectFrom(fields, table).where("noteID", "=", noteID).executeQuery();
 
 			if(crs.next()) {
-				active = crs.getBoolean("active");
+				String username = crs.getString("createdBy");
 
-				if(active) {
-					activeBoolean = "0";
-				} else if (!active){
-					activeBoolean = "1";
+				if(username.equals(user) || user.equals("admin")) {
+					active = crs.getBoolean("active");
+
+					if(active) {
+						activeBoolean = "0";
+					} else if (!active){
+						activeBoolean = "1";
+					}
+					if(!activeBoolean.equals(null)) {
+						String[] values = {activeBoolean};
+
+						qb.update(table, fieldsUpdate, values).where("noteID", "=", noteID).execute();
+					}
 				}
 			}
-			if(!activeBoolean.equals(null)) {
-				String[] values = {activeBoolean};
 
-				qb.update(table, fields, values).where("noteID", "=", noteID).execute();
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

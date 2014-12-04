@@ -14,12 +14,11 @@ public class CalendarListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private JButton btnBackToMain;
+	private JButton btnDelete;
 	private JScrollPane scrollPane;
 	private JTable table;
 	
 	Vector<Object> columnNames = new Vector<Object>();
-	private JButton btnDelete;
-	
 
 	public CalendarListPanel() {
 		setLayout(null);
@@ -27,15 +26,14 @@ public class CalendarListPanel extends JPanel {
 		btnBackToMain = new JButton("Back to Main Menu");
 		btnBackToMain.setBounds(112, 350, 150, 23);
 		add(btnBackToMain);
+
+		btnDelete = new JButton("Set active/inactive");
+		btnDelete.setBounds(112, 284, 150, 29);
+		add(btnDelete);
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(36, 35, 305, 238);
 		add(scrollPane);
-		
-		btnDelete = new JButton("Set active/inactive");
-		btnDelete.setBounds(112, 284, 150, 29);
-		add(btnDelete);
-
 	}
 	
 	public void createTable(Vector<?> data) {

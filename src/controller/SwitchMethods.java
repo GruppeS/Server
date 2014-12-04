@@ -1,5 +1,6 @@
 package controller;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import model.QueryBuild.QueryBuilder;
 
@@ -19,7 +20,7 @@ public class SwitchMethods
 		return null;
 	}
 	
-	public String createCalendar(String username, String calendar, boolean isPublic) {
+	public String createCalendar(String username, String calendar, boolean isPublic, ArrayList<String> users) {
 		try {
 			if(!qb.selectFrom("calendars").where("calendar", "=", calendar).executeQuery().next()) {
 				if(isPublic)
@@ -31,6 +32,11 @@ public class SwitchMethods
 					String[] keys = {"calendar", "createdBy", "isPublic"};
 					String[] values = {calendar, username, "0"};
 					qb.insertInto("calendar", keys).values(values).execute();
+				}
+				for(int i = 0; i<users.size(); i++) {
+					String[] keys = {"username", "calendar"};
+					String[] values = {users.get(i), calendar};
+					qb.insertInto("usercalendars", keys).values(values).execute();
 				}
 				return "Calendar created";
 			} else {

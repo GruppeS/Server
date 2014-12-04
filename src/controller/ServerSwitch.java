@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class ServerSwitch {
-	private String userID;
+	private String username;
 	private String answer;
 	private boolean authenticated = false;
 
@@ -30,33 +30,34 @@ public class ServerSwitch {
 			break;
 
 		case "logIn":
-			UserInfo AU = (UserInfo)gson.fromJson(jsonString, UserInfo.class);
+			UserInfo userInfo = (UserInfo)gson.fromJson(jsonString, UserInfo.class);
 
-			answer = switchMethods.authenticate(AU.getAuthUserEmail(), AU.getAuthUserPassword(), false);
+			answer = switchMethods.authenticate(userInfo.getUsername(), userInfo.getPassword(), false);
 
 			if(answer.equals("0"))
 			{
 				authenticated = true;
-				userID = AU.getAuthUserEmail();
+				username = userInfo.getUsername();
 			}
 			break;
 
 		case "getCalendars":
+			answer = calendarModel.getCalendars(username);
 			break;
 			
 		case "createCalendar":
 			Calendar CC = (Calendar)gson.fromJson(jsonString, Calendar.class);
-			answer = switchMethods.createCalendar(CC.getUsername(), CC.getCalendarname(), CC.getIsPublic());
+			answer = switchMethods.createCalendar(CC.getUsername(), CC.getCalendarname(), CC.getIsPublic(), CC.getUsers());
 			break;
 
 		case "deleteCalendar":
 			Calendar DC = (Calendar)gson.fromJson(jsonString, Calendar.class);
-			adminMethods.deleteCalendar(DC.getCalendarname());
+			adminMethods.deleteCalendar(DC.getCalendarname(), username);
 			answer = "Calendar deleted";
 			break;
 
 		case "getEvents":
-			answer = calendarModel.getCalendar(userID);
+			answer = calendarModel.getCBSCalendar(username);
 			break;
 
 		case "createEvent":
