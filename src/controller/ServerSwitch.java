@@ -47,13 +47,18 @@ public class ServerSwitch {
 			
 		case "createCalendar":
 			Calendar CC = (Calendar)gson.fromJson(jsonString, Calendar.class);
-			answer = switchMethods.createCalendar(CC.getUsername(), CC.getCalendarname(), CC.getIsPublic(), CC.getUsers());
+			answer = switchMethods.createCalendar(username, CC.getCalendarname(), CC.getIsPublic());
 			break;
 
 		case "deleteCalendar":
 			Calendar DC = (Calendar)gson.fromJson(jsonString, Calendar.class);
 			adminMethods.deleteCalendar(DC.getCalendarname(), username);
-			answer = "Calendar deleted";
+			answer = "Calendar deleted if user had the rights";
+			break;
+			
+		case "shareCalendar":
+			Calendar SC = (Calendar)gson.fromJson(jsonString, Calendar.class);
+			answer = switchMethods.shareCalendar(SC.getCalendarname(), SC.getShareWith());
 			break;
 
 		case "getEvents":
@@ -106,6 +111,8 @@ public class ServerSwitch {
 				return "createCalendar";
 			} else if (ID.contains("deleteCalendar")) {
 				return "deleteCalendar";
+			} else if (ID.contains("shareCalendar")) {
+				return "shareCalendar";
 			} else if (ID.contains("getEvents")) {
 				return "getEvents";
 			} else if (ID.contains("createEvent")){

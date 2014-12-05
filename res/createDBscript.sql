@@ -90,18 +90,6 @@ ALTER TABLE events
 	ON UPDATE RESTRICT
 ;
 
-ALTER TABLE usercalendars
-	ADD FOREIGN KEY (calendar)
-	REFERENCES calendars (calendar)
-	ON UPDATE RESTRICT
-;
-
-ALTER TABLE usercalendars
-	ADD FOREIGN KEY (username)
-	REFERENCES users (username)
-	ON UPDATE RESTRICT
-;
-
 ALTER TABLE notes
 	ADD FOREIGN KEY (eventID)
 	REFERENCES events (eventID)

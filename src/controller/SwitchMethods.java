@@ -15,28 +15,26 @@ public class SwitchMethods
 	public String getCalendars() {
 		return null;
 	}
-	
+
 	public String getNotes() {
 		return null;
 	}
-	
-	public String createCalendar(String username, String calendar, boolean isPublic, ArrayList<String> users) {
+
+	public String createCalendar(String username, String calendar, boolean isPublic) {
 		try {
 			if(!qb.selectFrom("calendars").where("calendar", "=", calendar).executeQuery().next()) {
 				if(isPublic)
 				{
 					String[] keys = {"calendar", "createdBy"};
 					String[] values = {calendar, username};
-					qb.insertInto("calendar", keys).values(values).execute();
+					qb.insertInto("calendars", keys).values(values).execute();
 				} else {
 					String[] keys = {"calendar", "createdBy", "isPublic"};
 					String[] values = {calendar, username, "0"};
-					qb.insertInto("calendar", keys).values(values).execute();
-				}
-				for(int i = 0; i<users.size(); i++) {
-					String[] keys = {"username", "calendar"};
-					String[] values = {users.get(i), calendar};
-					qb.insertInto("usercalendars", keys).values(values).execute();
+					qb.insertInto("calendars", keys).values(values).execute();
+					String[] keys2 = {"username", "calendar"};
+					String[] values2 = {username, calendar};
+					qb.insertInto("usercalendars", keys2).values(values2).execute();
 				}
 				return "Calendar created";
 			} else {
@@ -46,7 +44,23 @@ public class SwitchMethods
 			return "error";
 		}
 	}
-	
+
+	public String shareCalendar(String calendar, String username) {
+		try {
+			String[] fields = {"calendar"};
+			if(qb.selectFrom(fields, "calendars").where("calendar", "=", calendar).executeQuery().next()) {
+				String[] fieldsInsert = {"username", "calendar"};
+				String[] values = {username, calendar};
+				qb.insertInto("usercalendars", fieldsInsert).values(values).execute();
+				return "Calendar shared";
+			} else {
+				return "Calendar does not exist";
+			}
+		} catch (SQLException e) {
+			return "error";
+		}
+	}
+
 	// TO DO
 	public String createEvent(String username, String calendar, boolean isPublic) {
 		try {
@@ -69,7 +83,7 @@ public class SwitchMethods
 			return "error";
 		}
 	}
-	
+
 	// TO DO
 	public String createNote(String username, String calendar, boolean isPublic) {
 		try {

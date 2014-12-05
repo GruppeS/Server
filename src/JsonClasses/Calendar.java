@@ -1,14 +1,12 @@
 package JsonClasses;
 
-import java.util.ArrayList;
-
 @SuppressWarnings("unused")
 public class Calendar
 {
 	private String overallID;
 	private String calendar;
 	private String createdBy;
-	private ArrayList<String> users;
+	private String shareWith;
 	private boolean isPublic;
 
 	public Calendar(String calendar, String createdBy, boolean isPublic) {
@@ -20,8 +18,8 @@ public class Calendar
 	public void setOverallID(String overallID) {
 		this.overallID = overallID;
 	}
-	public void setUsers(ArrayList<String> users) {
-		this.users = users;
+	public void setShareWith(String username) {
+		this.shareWith = username;
 	}
 	public String getCalendarname() {
 		return calendar;
@@ -32,7 +30,7 @@ public class Calendar
 	public boolean getIsPublic() {
 		return isPublic;
 	}
-	public ArrayList<String> getUsers() {
-		return users;
+	public String getShareWith() {
+		return shareWith;
 	}
 }
