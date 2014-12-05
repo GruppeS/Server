@@ -1,6 +1,6 @@
 package controller;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Date;
 
 import model.QueryBuild.QueryBuilder;
 
@@ -11,14 +11,6 @@ public class SwitchMethods
 	QueryBuilder qb = new QueryBuilder();
 
 	private CachedRowSetImpl crs;
-
-	public String getCalendars() {
-		return null;
-	}
-
-	public String getNotes() {
-		return null;
-	}
 
 	public String createCalendar(String username, String calendar, boolean isPublic) {
 		try {
@@ -61,23 +53,21 @@ public class SwitchMethods
 		}
 	}
 
-	// TO DO
-	public String createEvent(String username, String calendar, boolean isPublic) {
+	public String createEvent(String username, String calendar, String description, Date start, Date end, String location) {
 		try {
-			if(!qb.selectFrom("calendars").where("calendar", "=", calendar).executeQuery().next()) {
-				if(isPublic)
-				{
-					String[] keys = {"calendar", "createdBy"};
-					String[] values = {calendar, username};
-					qb.insertInto("calendar", keys).values(values).execute();
+			
+			crs = qb.selectFrom("calendars").where("calendar", "=", calendar).executeQuery();
+			if(crs.next()) {
+				if(crs.getString("createdBy").equals(username)) {
+					String[] keys = {"eventType", "description", "start", "end", "location", "createdBy", "calendar"};
+					String[] values = {"Userevent", description, start.toString(), end.toString(), location, username, calendar};
+					qb.insertInto("events", keys).values(values).execute();
+					return "Event created";
 				} else {
-					String[] keys = {"calendar", "createdBy", "isPublic"};
-					String[] values = {calendar, username, "0"};
-					qb.insertInto("calendar", keys).values(values).execute();
+					return "Only calendar creator can create events";
 				}
-				return "Calendar created";
 			} else {
-				return "Calendar exists";
+				return "Calendar does not exist";
 			}
 		} catch (SQLException e) {
 			return "error";

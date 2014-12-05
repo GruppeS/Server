@@ -66,7 +66,7 @@ public class CalendarModel extends Model {
 				}
 			}
 
-			getCustomEvents(username);
+			getCustomEvents(username, false);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -75,7 +75,12 @@ public class CalendarModel extends Model {
 		return gson.toJson(events);
 	}
 
-	public void getCustomEvents(String username) {		
+	public String getCustomEvents(String username, boolean onlyCustomEvents) {
+		
+		if(onlyCustomEvents) {
+			events.events.clear();
+		}
+		
 		try {
 			pstmt = doQuery("SELECT * FROM events WHERE active = true AND calendar IN (SELECT calendar FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?)))");
 			pstmt.setString(1, username);
@@ -104,7 +109,7 @@ public class CalendarModel extends Model {
 					e.printStackTrace();
 				}
 			}
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -114,6 +119,13 @@ public class CalendarModel extends Model {
 				e.printStackTrace();
 			}
 		}
+		
+		if(onlyCustomEvents) {
+			return gson.toJson(events);
+		} else {
+			return "error";
+		}
+		
 	}
 
 	public String getCalendars(String username) {

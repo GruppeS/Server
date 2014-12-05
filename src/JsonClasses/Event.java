@@ -9,6 +9,7 @@ public class Event {
 	private String type;
 	private String description;
 	private String location;
+	private String calendar;
 	private ArrayList<String> start;
 	private ArrayList<String> end;
 	private Date startDate;
@@ -56,6 +57,13 @@ public class Event {
 		return end;
 	}
 
+	public void setCalendar(String calendar) {
+		this.calendar = calendar;
+	}
+	public String getCalendar() {
+		return this.calendar;
+	}
+	
 	public void setStartdate(Date start) {
 		this.startDate = start;
 	}

@@ -3,6 +3,7 @@ import model.Forecast.ForecastModel;
 import model.QOTD.QOTDModel;
 import model.calendar.CalendarModel;
 import JsonClasses.Calendar;
+import JsonClasses.Event;
 import JsonClasses.QOTD;
 import JsonClasses.UserInfo;
 
@@ -44,7 +45,7 @@ public class ServerSwitch {
 		case "getCalendars":
 			answer = calendarModel.getCalendars(username);
 			break;
-			
+
 		case "createCalendar":
 			Calendar CC = (Calendar)gson.fromJson(jsonString, Calendar.class);
 			answer = switchMethods.createCalendar(username, CC.getCalendarname(), CC.getIsPublic());
@@ -55,7 +56,7 @@ public class ServerSwitch {
 			adminMethods.deleteCalendar(DC.getCalendarname(), username);
 			answer = "Calendar deleted if user had the rights";
 			break;
-			
+
 		case "shareCalendar":
 			Calendar SC = (Calendar)gson.fromJson(jsonString, Calendar.class);
 			answer = switchMethods.shareCalendar(SC.getCalendarname(), SC.getShareWith());
@@ -65,12 +66,21 @@ public class ServerSwitch {
 			answer = calendarModel.getCBSCalendar(username);
 			break;
 
+		case "getCustomEvents":
+			answer = calendarModel.getCustomEvents(username, true);
+			break;
+
 		case "createEvent":
+			Event CE = (Event)gson.fromJson(jsonString, Event.class);
+			answer = switchMethods.createEvent(username, CE.getCalendar(), CE.getDescription(), CE.getStartdate(), CE.getEnddate(), CE.getLocation());
 			break;
 
 		case "deleteEvent":
+			Event DE = (Event)gson.fromJson(jsonString, Event.class);
+			adminMethods.deleteEvent(DE.getEventid(), username);
+			answer = "Event deleted if user had the rights";
 			break;
-			
+
 		case "getNotes":
 			break;
 
@@ -115,6 +125,8 @@ public class ServerSwitch {
 				return "shareCalendar";
 			} else if (ID.contains("getEvents")) {
 				return "getEvents";
+			} else if (ID.contains("getCustomEvents")) {
+				return "getCustomEvents";
 			} else if (ID.contains("createEvent")){
 				return "createEvent";
 			}else if  (ID.contains("deleteEvent")){
