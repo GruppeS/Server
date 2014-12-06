@@ -67,7 +67,8 @@ public class ServerSwitch {
 			break;
 
 		case "getCustomEvents":
-			answer = calendarModel.getCustomEvents(username, true);
+			Event CustomE = (Event)gson.fromJson(jsonString, Event.class);
+			answer = calendarModel.getCustomEvents(username, true, CustomE.getCalendar());
 			break;
 
 		case "createEvent":

@@ -66,7 +66,7 @@ public class CalendarModel extends Model {
 				}
 			}
 
-			getCustomEvents(username, false);
+			getCustomEvents(username, false, null);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -75,16 +75,20 @@ public class CalendarModel extends Model {
 		return gson.toJson(events);
 	}
 
-	public String getCustomEvents(String username, boolean onlyCustomEvents) {
-		
-		if(onlyCustomEvents) {
-			events.events.clear();
-		}
-		
+	public String getCustomEvents(String username, boolean onlyCustomEvents, String fromCalendar) {
+
 		try {
-			pstmt = doQuery("SELECT * FROM events WHERE active = true AND calendar IN (SELECT calendar FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?)))");
-			pstmt.setString(1, username);
-			rs = pstmt.executeQuery();
+			if(onlyCustomEvents) {
+				events.events.clear();
+				pstmt = doQuery("SELECT * FROM events WHERE active = true AND calendar = ? AND calendar IN (SELECT calendar FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?)))");
+				pstmt.setString(1, fromCalendar);
+				pstmt.setString(2, username);
+				rs = pstmt.executeQuery();
+			} else {
+				pstmt = doQuery("SELECT * FROM events WHERE active = true AND calendar IN (SELECT calendar FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?)))");
+				pstmt.setString(1, username);
+				rs = pstmt.executeQuery();
+			}
 
 			while(rs.next()) {
 				try {
@@ -109,7 +113,7 @@ public class CalendarModel extends Model {
 					e.printStackTrace();
 				}
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -119,26 +123,26 @@ public class CalendarModel extends Model {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if(onlyCustomEvents) {
 			return gson.toJson(events);
 		} else {
 			return "error";
 		}
-		
+
 	}
 
 	public String getCalendars(String username) {
 		try {
 			pstmt = doQuery("SELECT calendar, createdBy FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?))");
 			pstmt.setString(1, username);
-			
+
 			rs = pstmt.executeQuery();
-			
+
 			while(rs.next()) {
 				String calendar = rs.getString("calendar");
 				String createdBy = rs.getString("createdBy");
-				
+
 				calendars.calendars.add(new Calendar(calendar, createdBy, true));
 			}
 

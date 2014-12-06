@@ -132,7 +132,6 @@ public class Execute extends Model {
 			sql += " );";
 			try {
 				getConnection(false);
-				getConn();
 				sqlStatement = getConn().prepareStatement(sql);
 				int x = 0;
 				for (int i = 0; i < getValues().getValues().length; i++) {

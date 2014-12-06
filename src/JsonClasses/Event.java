@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Event {
+	@SuppressWarnings("unused")
+	private String overallID;
 	private String activityid;
 	private String eventid;
 	private String type;
@@ -27,6 +29,10 @@ public class Event {
 		this.end = end;
 	}
 
+	public void setOverallID(String overallID) {
+		this.overallID = overallID;
+	}
+	
 	public String getActivityid(){
 		return activityid;
 	}

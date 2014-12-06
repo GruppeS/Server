@@ -55,12 +55,14 @@ public class SwitchMethods
 
 	public String createEvent(String username, String calendar, String description, Date start, Date end, String location) {
 		try {
+			java.sql.Timestamp sqlDateStart = new java.sql.Timestamp(start.getTime());
+			java.sql.Timestamp sqlDateEnd = new java.sql.Timestamp(end.getTime());
 			
 			crs = qb.selectFrom("calendars").where("calendar", "=", calendar).executeQuery();
 			if(crs.next()) {
 				if(crs.getString("createdBy").equals(username)) {
 					String[] keys = {"eventType", "description", "start", "end", "location", "createdBy", "calendar"};
-					String[] values = {"Userevent", description, start.toString(), end.toString(), location, username, calendar};
+					String[] values = {"Userevent", description, sqlDateStart.toString(), sqlDateEnd.toString(), location, username, calendar};
 					qb.insertInto("events", keys).values(values).execute();
 					return "Event created";
 				} else {
