@@ -2,7 +2,6 @@ package model.calendar;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,6 +10,7 @@ import java.util.Date;
 
 import model.Model;
 import model.UrlReader;
+import model.note.NoteModel;
 import JsonClasses.Calendar;
 import JsonClasses.Calendars;
 import JsonClasses.Event;
@@ -25,15 +25,16 @@ public class CalendarModel extends Model {
 	private UrlReader urlRead;
 	private Calendars calendars;
 	private Events events;
+	private NoteModel noteModel;
 	private Gson gson;
 	private PreparedStatement pstmt;
-	private ResultSet rs;
 
 	public CalendarModel() {
 		e = new EncryptUserID();
 		urlRead = new UrlReader();
 		calendars = new Calendars();
 		events = new Events();
+		noteModel = new NoteModel();
 		gson = new GsonBuilder().create();
 	}
 
@@ -83,21 +84,21 @@ public class CalendarModel extends Model {
 				pstmt = doQuery("SELECT * FROM events WHERE active = true AND calendar = ? AND calendar IN (SELECT calendar FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?)))");
 				pstmt.setString(1, fromCalendar);
 				pstmt.setString(2, username);
-				rs = pstmt.executeQuery();
+				resultSet = pstmt.executeQuery();
 			} else {
 				pstmt = doQuery("SELECT * FROM events WHERE active = true AND calendar IN (SELECT calendar FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?)))");
 				pstmt.setString(1, username);
-				rs = pstmt.executeQuery();
+				resultSet = pstmt.executeQuery();
 			}
 
-			while(rs.next()) {
+			while(resultSet.next()) {
 				try {
-					String eventid = rs.getString("eventID");
-					String type = rs.getString("eventType");
-					String description = rs.getString("description");
-					String location = rs.getString("location");
-					String start = rs.getString("start");
-					String end = rs.getString("end");
+					String eventid = resultSet.getString("eventID");
+					String type = resultSet.getString("eventType");
+					String description = resultSet.getString("description");
+					String location = resultSet.getString("location");
+					String start = resultSet.getString("start");
+					String end = resultSet.getString("end");
 
 					events.events.add(new Event(null, eventid, type, description, location, null, null));
 
@@ -118,7 +119,7 @@ public class CalendarModel extends Model {
 			e.printStackTrace();
 		} finally {
 			try {
-				rs.close();
+				resultSet.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -127,7 +128,8 @@ public class CalendarModel extends Model {
 		if(onlyCustomEvents) {
 			return gson.toJson(events);
 		} else {
-			return "error";
+			events = noteModel.getNotes(events);
+			return null;
 		}
 
 	}
@@ -137,11 +139,11 @@ public class CalendarModel extends Model {
 			pstmt = doQuery("SELECT calendar, createdBy FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?))");
 			pstmt.setString(1, username);
 
-			rs = pstmt.executeQuery();
+			resultSet = pstmt.executeQuery();
 
-			while(rs.next()) {
-				String calendar = rs.getString("calendar");
-				String createdBy = rs.getString("createdBy");
+			while(resultSet.next()) {
+				String calendar = resultSet.getString("calendar");
+				String createdBy = resultSet.getString("createdBy");
 
 				calendars.calendars.add(new Calendar(calendar, createdBy, true));
 			}
@@ -150,7 +152,7 @@ public class CalendarModel extends Model {
 			e.printStackTrace();
 		} finally {
 			try {
-				rs.close();
+				resultSet.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

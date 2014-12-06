@@ -57,7 +57,7 @@ public class SwitchMethods
 		try {
 			java.sql.Timestamp sqlDateStart = new java.sql.Timestamp(start.getTime());
 			java.sql.Timestamp sqlDateEnd = new java.sql.Timestamp(end.getTime());
-			
+
 			crs = qb.selectFrom("calendars").where("calendar", "=", calendar).executeQuery();
 			if(crs.next()) {
 				if(crs.getString("createdBy").equals(username)) {
@@ -76,23 +76,37 @@ public class SwitchMethods
 		}
 	}
 
-	// TO DO
-	public String createNote(String username, String calendar, boolean isPublic) {
+	public String createNote(String username, String note, String eventID) {
 		try {
-			if(!qb.selectFrom("calendars").where("calendar", "=", calendar).executeQuery().next()) {
-				if(isPublic)
-				{
-					String[] keys = {"calendar", "createdBy"};
-					String[] values = {calendar, username};
-					qb.insertInto("calendar", keys).values(values).execute();
-				} else {
-					String[] keys = {"calendar", "createdBy", "isPublic"};
-					String[] values = {calendar, username, "0"};
-					qb.insertInto("calendar", keys).values(values).execute();
-				}
-				return "Calendar created";
+			String tableName = "notes";
+
+			if(!qb.selectFrom(tableName).where("eventID", "=", eventID).executeQuery().next()) {
+				String[] fields = {"createdBy", "note", "eventID"};
+				String[] values = {username, note, eventID};
+				qb.insertInto(tableName, fields).values(values).execute();
+				return "Note created";
 			} else {
-				return "Calendar exists";
+				String[] fields = {"createdBy", "note"};
+				String[] values = {username, note};
+				qb.update(tableName, fields, values).where("eventID", "=", eventID).execute();
+				return "Note updated";
+			}
+		} catch (SQLException e) {
+			return "error";
+		}
+	}
+
+	public String deleteNote(String eventID) {
+		try {
+			String tableName = "notes";
+
+			if(qb.selectFrom(tableName).where("eventID", "=", eventID).executeQuery().next()) {
+				String[] fields = {"active"};
+				String[] values = {"0"};
+				qb.update(tableName, fields, values).where("eventID", "=", eventID);
+				return "Note deleted";
+			} else {
+				return "Note didn't exist";
 			}
 		} catch (SQLException e) {
 			return "error";

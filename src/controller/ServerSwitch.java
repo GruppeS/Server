@@ -82,10 +82,7 @@ public class ServerSwitch {
 			answer = "Event deleted if user had the rights";
 			break;
 
-		case "getNotes":
-			break;
-
-		case "saveNote":
+		case "createNote":
 			break;
 
 		case "deleteNote":
@@ -130,12 +127,10 @@ public class ServerSwitch {
 				return "getCustomEvents";
 			} else if (ID.contains("createEvent")){
 				return "createEvent";
-			}else if  (ID.contains("deleteEvent")){
+			} else if  (ID.contains("deleteEvent")){
 				return "deleteEvent";
-			} else if (ID.contains("getNotes")) {
-				return "getNotes";
-			} else if (ID.contains("saveNote")) {
-				return "saveNote";
+			} else if (ID.contains("createNote")) {
+				return "createNote";
 			}else if (ID.contains("deleteNote")) {
 				return "deleteNote";
 			} else if (ID.contains("getQuote")) {

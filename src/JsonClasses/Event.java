@@ -12,6 +12,7 @@ public class Event {
 	private String description;
 	private String location;
 	private String calendar;
+	private String note;
 	private ArrayList<String> start;
 	private ArrayList<String> end;
 	private Date startDate;
@@ -75,6 +76,13 @@ public class Event {
 	}
 	public Date getStartdate(){
 		return startDate;
+	}
+	
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
 	}
 
 	public void setEnddate(Date end) {
