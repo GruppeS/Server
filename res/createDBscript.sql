@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS notes
 	eventID int,
 	cbsEventID varchar(90),
 	createdBy varchar(40) NOT NULL,
-	text text,
+	text text NOT NULL,
 	active boolean NOT NULL DEFAULT true,
 	PRIMARY KEY (noteID)
 );

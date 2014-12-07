@@ -97,99 +97,114 @@ public class SwitchMethods
 		}
 	}
 
-//	public String createNote(String username, String note, String eventID) {
-//		try {
-//			String tableName = "notes";
-//			boolean cbs = false;
-//
-//			if(eventID.length()>50) {
-//				crs = qb.selectFrom(tableName).where("cbsEventID", "=", eventID).executeQuery();
-//				cbs = true;
-//			}
-//			if(eventID.length()<50){
-//				crs = qb.selectFrom(tableName).where("eventID", "=", eventID).executeQuery();
-//				cbs = false;
-//			}
-//
-//			if(eventID != null && note != null) {
-//				if(!crs.next() && cbs) {
-//					String[] fields = {"createdBy", "text", "cbsEventID"};
-//					String[] values = {username, note, eventID};
-//					qb.insertInto(tableName, fields).values(values).execute();
-//					return "CBS note created";
-//				} 
-//				if(!crs.next() && !cbs) {
-//					String[] fields = {"createdBy", "text", "eventID"};
-//					String[] values = {username, note, eventID};
-//					qb.insertInto(tableName, fields).values(values).execute();
-//					return "Custom event note created";
-//				}
-//				if(crs.next() && cbs) {
-//					String[] fields = {"createdBy", "text", "active"};
-//					String[] values = {username, note, "1"};
-//					qb.update(tableName, fields, values).where("cbsEventID", "=", eventID).execute();
-//					return "CBS note updated";
-//				}
-//				if (crs.next() && !cbs){
-//					String[] fields = {"createdBy", "text", "active"};
-//					String[] values = {username, note, "1"};
-//					qb.update(tableName, fields, values).where("eventID", "=", eventID).execute();
-//					return "Custom event note updated";
-//				}
-//			} else {
-//				return "No event selected or no note to create";
-//			}
-//		} catch (SQLException e) {
-//			return "error";
-//		} finally {
-//			try {
-//				crs.close();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-//
-//	public String deleteNote(String eventID) {
-//		try {
-//			String tableName = "notes";
-//			boolean cbs = false;
-//
-//			if(eventID.length()>50) {
-//				crs = qb.selectFrom(tableName).where("cbsEventID", "=", eventID).executeQuery();
-//				cbs = true;
-//			}
-//			if(eventID.length()<50){
-//				crs = qb.selectFrom(tableName).where("eventID", "=", eventID).executeQuery();
-//				cbs = false;
-//			}
-//
-//			if(eventID != null) {
-//				if(crs.next() && cbs) {
-//					String[] fields = {"active"};
-//					String[] values = {"0"};
-//					qb.update(tableName, fields, values).where("cbsEventID", "=", eventID).execute();
-//					return "CBS note deleted";
-//				}
-//				if(crs.next() && !cbs){
-//					String[] fields = {"active"};
-//					String[] values = {"0"};
-//					qb.update(tableName, fields, values).where("eventID", "=", eventID).execute();
-//					return "Custom event note deleted";
-//				} else {
-//					return "No event selected";
-//				}
-//			}
-//		} catch (SQLException e) {
-//			return "error";
-//		} finally {
-//			try {
-//				crs.close();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
+	public String createNote(String username, String note, String eventID) {
+		try {
+			String tableName = "notes";
+			boolean cbsEvent = false;
+			boolean eventExists = false;
+
+			try {
+				Integer.parseInt(eventID);
+				cbsEvent = false;
+				crs = qb.selectFrom(tableName).where("eventID", "=", eventID).executeQuery();
+			} catch(NumberFormatException e) { 
+				cbsEvent = true; 
+				crs = qb.selectFrom(tableName).where("cbsEventID", "=", eventID).executeQuery();
+			}
+			
+			if(crs.next()) {
+				eventExists = true;
+			}
+
+			if(eventID != null && note != null) {
+	
+				if(!eventExists && cbsEvent) {
+					String[] fields = {"createdBy", "text", "cbsEventID"};
+					String[] values = {username, note, eventID};
+					qb.insertInto(tableName, fields).values(values).execute();
+					return "CBS note created";
+				} 
+				if(!eventExists && !cbsEvent) {
+					String[] fields = {"createdBy", "text", "eventID"};
+					String[] values = {username, note, eventID};
+					qb.insertInto(tableName, fields).values(values).execute();
+					return "Custom event note created";
+				}
+				if(eventExists && cbsEvent) {
+					String[] fields = {"createdBy", "text", "active"};
+					String[] values = {username, note, "1"};
+					qb.update(tableName, fields, values).where("cbsEventID", "=", eventID).execute();
+					return "CBS note updated";
+				}
+				if (eventExists && !cbsEvent){
+					String[] fields = {"createdBy", "text", "active"};
+					String[] values = {username, note, "1"};
+					qb.update(tableName, fields, values).where("eventID", "=", eventID).execute();
+					return "Custom event note updated";
+				} else {
+					return "error";
+				}
+			} else {
+				return "No event selected or no note to create";
+			}
+		} catch (SQLException e) {
+			return "error";
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public String deleteNote(String eventID) {
+		try {
+			String tableName = "notes";
+			boolean eventExists = false;
+			boolean cbsEvent = false;
+
+			try {
+				Integer.parseInt(eventID);
+				cbsEvent = false;
+				crs = qb.selectFrom(tableName).where("eventID", "=", eventID).executeQuery();
+			} catch(NumberFormatException e) { 
+				cbsEvent = true; 
+				crs = qb.selectFrom(tableName).where("cbsEventID", "=", eventID).executeQuery();
+			}
+
+			if(crs.next()) {
+				eventExists = true;
+			}
+			
+			if(eventID != null) {
+				if(eventExists && cbsEvent) {
+					String[] fields = {"active"};
+					String[] values = {"0"};
+					qb.update(tableName, fields, values).where("cbsEventID", "=", eventID).execute();
+					return "CBS note deleted";
+				}
+				if(eventExists && !cbsEvent){
+					String[] fields = {"active"};
+					String[] values = {"0"};
+					qb.update(tableName, fields, values).where("eventID", "=", eventID).execute();
+					return "Custom event note deleted";
+				} else {
+					return "No event selected";
+				}
+			} else {
+				return "Please specify an event";
+			}
+		} catch (SQLException e) {
+			return "error";
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public String authenticate(String username, String password, boolean isAdmin) {
 
