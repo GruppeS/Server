@@ -33,13 +33,19 @@ public class ServerSwitch {
 		case "logIn":
 			UserInfo userInfo = (UserInfo)gson.fromJson(jsonString, UserInfo.class);
 
-			answer = switchMethods.authenticate(userInfo.getUsername(), userInfo.getPassword(), false);
-
-			if(answer.equals("0"))
+			String authentication = switchMethods.authenticate(userInfo.getUsername(), userInfo.getPassword(), false);
+			
+			if(authentication.equals("0"))
 			{
 				authenticated = true;
 				username = userInfo.getUsername();
 			}
+			
+			userInfo.setUsername(null);
+			userInfo.setPassword(null);
+			userInfo.setAuthenticated(authentication);
+			
+			answer = gson.toJson(userInfo);
 			break;
 
 		case "getCalendars":
@@ -83,9 +89,13 @@ public class ServerSwitch {
 			break;
 
 		case "createNote":
+			Event CN = (Event)gson.fromJson(jsonString, Event.class);
+			answer = switchMethods.createNote(username, CN.getNote(), CN.getEventid());
 			break;
 
 		case "deleteNote":
+			Event DN = (Event)gson.fromJson(jsonString, Event.class);
+			answer = switchMethods.deleteNote(DN.getEventid());
 			break;
 
 		case "getQuote":

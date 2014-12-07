@@ -11,12 +11,15 @@ import org.json.simple.parser.JSONParser;
 
 import com.sun.rowset.CachedRowSetImpl;
 
+import config.Configurations;
+
 public class QOTDModel {
 
 	UrlReader urlRead = new UrlReader();
 	QueryBuilder qb = new QueryBuilder();
+	Configurations config = new Configurations();
 
-	private CachedRowSetImpl rs;
+	private CachedRowSetImpl crs;
 
 	public void saveQuote() {
 		try {
@@ -44,31 +47,43 @@ public class QOTDModel {
 	public String getQuote(){
 		String quote = null;
 		try {
-			rs = qb.selectFrom("qotd").all().executeQuery();
+			crs = qb.selectFrom("qotd").all().executeQuery();
 			
-			if(rs.next()) {
-				quote = rs.getString("qotd");
+			if(crs.next()) {
+				quote = crs.getString("qotd");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return quote;
 	}
 
 	public void updateQuote(){
 		Date date = new Date();
-		long maxTimeNoUpdate = 86400;
+		long maxTimeNoUpdate = Long.parseLong(config.getQOTD_expiration_time());
 
 		long dateNow = date.getTime()/1000L;
 		long dateLastQuote = 0;
 		
 		try {
-			rs = qb.selectFrom("qotd").all().executeQuery();
-			if(rs.next()){
-				dateLastQuote = rs.getDate("date").getTime()/1000L;
+			crs = qb.selectFrom("qotd").all().executeQuery();
+			if(crs.next()){
+				dateLastQuote = crs.getDate("date").getTime()/1000L;
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 
 		if(dateNow-dateLastQuote > maxTimeNoUpdate){

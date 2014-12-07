@@ -18,13 +18,16 @@ import JsonClasses.Forecasts;
 
 import com.sun.rowset.CachedRowSetImpl;
 
+import config.Configurations;
+
 public class ForecastModel {
 
 	UrlReader urlReader = new UrlReader();
-	QueryBuilder qb = new QueryBuilder();	
+	QueryBuilder qb = new QueryBuilder();
 	Forecasts forecasts = new Forecasts();
+	Configurations config = new Configurations();
 	
-	private CachedRowSetImpl rs;
+	private CachedRowSetImpl crs;
 
 	@SuppressWarnings("rawtypes")
 	public void saveForecast() {
@@ -33,7 +36,7 @@ public class ForecastModel {
 		String weatherDescription = null;		
 		
 		try {			
-			result = urlReader.readUrl("http://api.openweathermap.org/data/2.5/forecast/daily?lat=55.681589&lon=12.529092&cnt=14&mode=json&units=metric");
+			result = urlReader.readUrl("http://api.openweathermap.org/data/2.5/forecast/daily?lat=" + config.getWeather_lat() + "&lon=" + config.getWeather_lon() + "&cnt=" + config.getWeather_future_in_days() + "&mode=json&units=metric");
 
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
@@ -41,7 +44,7 @@ public class ForecastModel {
 			JSONArray list = (JSONArray) jsonObject.get("list");
 
 			Iterator i = list.iterator();
-
+			
 			boolean dataIsPresent;
 			if(qb.selectFrom("forecast").all().executeQuery().next()){
 				dataIsPresent = true;
@@ -73,13 +76,14 @@ public class ForecastModel {
 
 				String count_String = Integer.toString(count);
 				
+				String table = "forecast";
 				String[] fields = {"forecastID", "day", "temperature", "summary"};
 				String[] values = {count_String, string_date, temperature, weatherDescription};
 
-				if(!dataIsPresent){
-					qb.insertInto("forecast", fields).values(values).execute();
+				if(dataIsPresent){
+					qb.update(table, fields, values).where("forecastID", "=", count_String).execute();
 				} else {
-					qb.update("forecast", fields, values).where("forecastID", "=", count_String).execute();
+					qb.insertInto(table, fields).values(values).execute();
 				}
 				count++;
 			} 
@@ -96,35 +100,47 @@ public class ForecastModel {
 	
 	public Forecasts getForecast() {
 		try {
-			rs = qb.selectFrom("forecast").where("msg_type", "=", "forecast").executeQuery();
+			crs = qb.selectFrom("forecast").where("msg_type", "=", "forecast").executeQuery();
 			
-			while(rs.next()){
-				String date = rs.getString("day");
-				String temperature = rs.getString("temperature");
-				String weatherDescription = rs.getString("summary");
-				forecasts.forecastlist.add(new Forecast(date, temperature, weatherDescription));
+			while(crs.next()){
+				String date = crs.getString("day");
+				String temperature = crs.getString("temperature");
+				String weatherDescription = crs.getString("summary");
+				forecasts.forecasts.add(new Forecast(date, temperature, weatherDescription));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return forecasts;
 	}
 
-	public void updateForecast() throws SQLException{
+	public void updateForecast() {
 		Date date = new Date();
-		long maxTimeNoUpdate = 3600;
+		long maxTimeNoUpdate = Long.parseLong(config.getWeather_expiration_time());
 
 		long timeNow = date.getTime()/1000L;
 		long timeLastForecast = 0;
 		
 		try {
-			rs = qb.selectFrom("forecast").all().executeQuery();
-			if(rs.next()){
-				timeLastForecast = rs.getDate("date").getTime()/1000L;
+			crs = qb.selectFrom("forecast").all().executeQuery();
+			if(crs.next()){
+				timeLastForecast = crs.getDate("date").getTime()/1000L;
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		if(timeNow-timeLastForecast > maxTimeNoUpdate){

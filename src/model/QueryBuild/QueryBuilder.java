@@ -5,15 +5,8 @@ public class QueryBuilder {
 	private String selectValue;
 	private String tableName;
 	private String fields;
-	private boolean softDelete;
 	private boolean isUpdate;
 
-	protected void setSoftDelete(boolean b){
-		this.softDelete = b;
-	}
-	protected boolean isSoftDelete(){
-		return softDelete;
-	}
 	protected boolean isUpdate() {
 		return isUpdate;
 	}
@@ -77,7 +70,6 @@ public class QueryBuilder {
 		}
 		queryBuilder.setFields(sb.toString());
 		return new Values(queryBuilder);
-
 	}
 
 	public Where update(String tableName, String[] fields, String[] values) {
@@ -95,13 +87,6 @@ public class QueryBuilder {
 		queryBuilder.setFields(setQuery);
 		queryBuilder.setUpdate(true);
 
-		return new Where(queryBuilder);
-	}
-
-	public Where deleteFrom(String tableName){
-		QueryBuilder queryBuilder = new QueryBuilder();
-		queryBuilder.setTableName(tableName);
-		queryBuilder.setSoftDelete(true);
 		return new Where(queryBuilder);
 	}
 }

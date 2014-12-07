@@ -46,21 +46,21 @@ public class CalendarModel extends Model {
 
 			events = gson.fromJson(result, Events.class);
 
-			for(int i = 0; i<events.getEvents().size(); i++) {
+			for(int i = 0; i<events.events.size(); i++) {
 
 				try {
-					ArrayList start = events.getEvents().get(i).getStart();
-					ArrayList end = events.getEvents().get(i).getEnd();
+					ArrayList start = events.events.get(i).getStart();
+					ArrayList end = events.events.get(i).getEnd();
 
 					String tempStringStart = start.get(0)+"-"+start.get(2)+"-"+Integer.toString(Integer.parseInt((String) start.get(1))+1)+" "+start.get(3)+":"+start.get(4);
 
 					Date tempDateStart = new SimpleDateFormat("yyyy-dd-MM HH:mm").parse(tempStringStart);
-					events.getEvents().get(i).setStartdate(tempDateStart);
+					events.events.get(i).setStartdate(tempDateStart);
 
 					String tempStringEnd = end.get(0)+"-"+end.get(2)+"-"+Integer.toString(Integer.parseInt((String) end.get(1))+1)+" "+end.get(3)+":"+end.get(4);
 
 					Date tempDateEnd = new SimpleDateFormat("yyyy-dd-MM HH:mm").parse(tempStringEnd);
-					events.getEvents().get(i).setEnddate(tempDateEnd);
+					events.events.get(i).setEnddate(tempDateEnd);
 
 				} catch (ParseException e1) {
 					e1.printStackTrace();
@@ -77,54 +77,51 @@ public class CalendarModel extends Model {
 	}
 
 	public String getCustomEvents(String username, boolean onlyCustomEvents, String fromCalendar) {
-
 		try {
 			if(onlyCustomEvents) {
 				events.events.clear();
 				pstmt = doQuery("SELECT * FROM events WHERE active = true AND calendar = ? AND calendar IN (SELECT calendar FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?)))");
 				pstmt.setString(1, fromCalendar);
 				pstmt.setString(2, username);
-				resultSet = pstmt.executeQuery();
+				rs = pstmt.executeQuery();
 			} else {
 				pstmt = doQuery("SELECT * FROM events WHERE active = true AND calendar IN (SELECT calendar FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?)))");
 				pstmt.setString(1, username);
-				resultSet = pstmt.executeQuery();
+				rs = pstmt.executeQuery();
 			}
-
-			while(resultSet.next()) {
+			while(rs.next()) {
 				try {
-					String eventid = resultSet.getString("eventID");
-					String type = resultSet.getString("eventType");
-					String description = resultSet.getString("description");
-					String location = resultSet.getString("location");
-					String start = resultSet.getString("start");
-					String end = resultSet.getString("end");
+					String eventid = rs.getString("eventID");
+					String type = rs.getString("eventType");
+					String description = rs.getString("description");
+					String location = rs.getString("location");
+					String start = rs.getString("start");
+					String end = rs.getString("end");
 
 					events.events.add(new Event(null, eventid, type, description, location, null, null));
 
-					int size = (events.getEvents().size())-1;
+					int size = (events.events.size())-1;
 
 					Date dateStart = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(start);
 
 					Date dateEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(end);
-					events.getEvents().get(size).setStartdate(dateStart);
-					events.getEvents().get(size).setEnddate(dateEnd);
-
+					events.events.get(size).setStartdate(dateStart);
+					events.events.get(size).setEnddate(dateEnd);
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				resultSet.close();
+				rs.close();
+				pstmt.close();
+				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-
 		if(onlyCustomEvents) {
 			return gson.toJson(events);
 		} else {
@@ -139,20 +136,21 @@ public class CalendarModel extends Model {
 			pstmt = doQuery("SELECT calendar, createdBy FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?))");
 			pstmt.setString(1, username);
 
-			resultSet = pstmt.executeQuery();
+			rs = pstmt.executeQuery();
 
-			while(resultSet.next()) {
-				String calendar = resultSet.getString("calendar");
-				String createdBy = resultSet.getString("createdBy");
+			while(rs.next()) {
+				String calendar = rs.getString("calendar");
+				String createdBy = rs.getString("createdBy");
 
 				calendars.calendars.add(new Calendar(calendar, createdBy, true));
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				resultSet.close();
+				rs.close();
+				pstmt.close();
+				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

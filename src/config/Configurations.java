@@ -16,11 +16,11 @@ public class Configurations {
 	private String dbname;
 	private String password;
 	private String serverport;
-	private String ffcryptkey;
 	private String weather_expiration_time;
 	private String weather_lat;
 	private String weather_lon;
 	private String weather_future_in_days;
+	private String qotd_expiration_time;
 
 	public Configurations() {
 		ReadFile();
@@ -68,13 +68,6 @@ public class Configurations {
 		this.dbname = dbname;
 	}
 
-	public String getFfcryptkey() {
-		return ffcryptkey;
-	}
-	public void setFfcryptkey(String ffcryptkey) {
-		this.ffcryptkey = ffcryptkey;
-	}
-
 	public String getWeather_expiration_time() {
 		return weather_expiration_time;
 	}
@@ -102,6 +95,13 @@ public class Configurations {
 	public void setWeather_future_in_days(String weather_future_in_days) {
 		this.weather_future_in_days = weather_future_in_days;
 	}
+	
+	public String getQOTD_expiration_time() {
+		return qotd_expiration_time;
+	}
+	public void setQOTD_expiration_time(String qotd_expiration_time) {
+		this.qotd_expiration_time = qotd_expiration_time;
+	}
 
 	public void ReadFile() {
 		JSONParser jsonParser = new JSONParser();
@@ -118,11 +118,11 @@ public class Configurations {
 			setDbname((String) jsonObject.get("dbname"));
 			setPassword((String) jsonObject.get("password"));
 			setServerport((String) jsonObject.get("serverport"));
-			setFfcryptkey((String) jsonObject.get("ffcryptkey"));
-			setWeather_expiration_time((String) jsonObject.get("weather_expiration_date"));
+			setWeather_expiration_time((String) jsonObject.get("weather_expiration_time"));
 			setWeather_lat((String) jsonObject.get("weather_lat"));
 			setWeather_lon((String) jsonObject.get("weather_lon"));
 			setWeather_future_in_days((String) jsonObject.get("weather_future_in_days"));
+			setQOTD_expiration_time((String) jsonObject.get("qotd_expiration_time"));
 
 		} catch (ParseException e) {
 			e.printStackTrace();

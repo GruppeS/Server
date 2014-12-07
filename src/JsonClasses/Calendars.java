@@ -8,7 +8,4 @@ public class Calendars {
 	private String overallID = "getCalendars";
 	public ArrayList<Calendar> calendars = new ArrayList<Calendar>();
 	
-	public ArrayList<Calendar> getCalendars() {
-		return calendars;
-	}
 }

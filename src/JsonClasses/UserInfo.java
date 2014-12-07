@@ -6,6 +6,7 @@ public class UserInfo {
 	private String overallID = "logIn";
 	private String username;
 	private String password;
+	private String authenticated;
 
 	public String getUsername() {
 		return username;
@@ -18,5 +19,11 @@ public class UserInfo {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getAuthenticated() {
+		return authenticated;
+	}
+	public void setAuthenticated(String authenticated) {
+		this.authenticated = authenticated;
 	}
 }

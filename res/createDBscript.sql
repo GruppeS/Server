@@ -36,10 +36,11 @@ CREATE TABLE IF NOT EXISTS events
 CREATE TABLE IF NOT EXISTS notes
 (
 	noteID int NOT NULL AUTO_INCREMENT,
-	eventID int NOT NULL,
+	eventID int,
+	cbsEventID varchar(90),
 	createdBy varchar(40) NOT NULL,
 	text text,
-	active boolean NOT NULL DEFAULT true ON UPDATE true,
+	active boolean NOT NULL DEFAULT true,
 	PRIMARY KEY (noteID)
 );
 
@@ -166,16 +167,6 @@ VALUES
 now(),
 now(),
 "test",
-"bjsc13ac",
-"test")
-;
-
-INSERT INTO `cbscalendar`.`notes`
-(`eventID`,
-`createdBy`,
-`text`)
-VALUES
-(1,
 "bjsc13ac",
 "test")
 ;

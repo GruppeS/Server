@@ -14,7 +14,9 @@ public class SwitchMethods
 
 	public String createCalendar(String username, String calendar, boolean isPublic) {
 		try {
-			if(!qb.selectFrom("calendars").where("calendar", "=", calendar).executeQuery().next()) {
+			crs = qb.selectFrom("calendars").where("calendar", "=", calendar).executeQuery();
+
+			if(!crs.next()) {
 				if(isPublic)
 				{
 					String[] keys = {"calendar", "createdBy"};
@@ -34,13 +36,20 @@ public class SwitchMethods
 			}
 		} catch (SQLException e) {
 			return "error";
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public String shareCalendar(String calendar, String username) {
 		try {
 			String[] fields = {"calendar"};
-			if(qb.selectFrom(fields, "calendars").where("calendar", "=", calendar).executeQuery().next()) {
+			crs = qb.selectFrom(fields, "calendars").where("calendar", "=", calendar).executeQuery();
+			if(crs.next()) {
 				String[] fieldsInsert = {"username", "calendar"};
 				String[] values = {username, calendar};
 				qb.insertInto("usercalendars", fieldsInsert).values(values).execute();
@@ -50,6 +59,12 @@ public class SwitchMethods
 			}
 		} catch (SQLException e) {
 			return "error";
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -73,66 +88,140 @@ public class SwitchMethods
 			}
 		} catch (SQLException e) {
 			return "error";
-		}
-	}
-
-	public String createNote(String username, String note, String eventID) {
-		try {
-			String tableName = "notes";
-
-			if(!qb.selectFrom(tableName).where("eventID", "=", eventID).executeQuery().next()) {
-				String[] fields = {"createdBy", "note", "eventID"};
-				String[] values = {username, note, eventID};
-				qb.insertInto(tableName, fields).values(values).execute();
-				return "Note created";
-			} else {
-				String[] fields = {"createdBy", "note"};
-				String[] values = {username, note};
-				qb.update(tableName, fields, values).where("eventID", "=", eventID).execute();
-				return "Note updated";
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			return "error";
 		}
 	}
 
-	public String deleteNote(String eventID) {
+//	public String createNote(String username, String note, String eventID) {
+//		try {
+//			String tableName = "notes";
+//			boolean cbs = false;
+//
+//			if(eventID.length()>50) {
+//				crs = qb.selectFrom(tableName).where("cbsEventID", "=", eventID).executeQuery();
+//				cbs = true;
+//			}
+//			if(eventID.length()<50){
+//				crs = qb.selectFrom(tableName).where("eventID", "=", eventID).executeQuery();
+//				cbs = false;
+//			}
+//
+//			if(eventID != null && note != null) {
+//				if(!crs.next() && cbs) {
+//					String[] fields = {"createdBy", "text", "cbsEventID"};
+//					String[] values = {username, note, eventID};
+//					qb.insertInto(tableName, fields).values(values).execute();
+//					return "CBS note created";
+//				} 
+//				if(!crs.next() && !cbs) {
+//					String[] fields = {"createdBy", "text", "eventID"};
+//					String[] values = {username, note, eventID};
+//					qb.insertInto(tableName, fields).values(values).execute();
+//					return "Custom event note created";
+//				}
+//				if(crs.next() && cbs) {
+//					String[] fields = {"createdBy", "text", "active"};
+//					String[] values = {username, note, "1"};
+//					qb.update(tableName, fields, values).where("cbsEventID", "=", eventID).execute();
+//					return "CBS note updated";
+//				}
+//				if (crs.next() && !cbs){
+//					String[] fields = {"createdBy", "text", "active"};
+//					String[] values = {username, note, "1"};
+//					qb.update(tableName, fields, values).where("eventID", "=", eventID).execute();
+//					return "Custom event note updated";
+//				}
+//			} else {
+//				return "No event selected or no note to create";
+//			}
+//		} catch (SQLException e) {
+//			return "error";
+//		} finally {
+//			try {
+//				crs.close();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
+//
+//	public String deleteNote(String eventID) {
+//		try {
+//			String tableName = "notes";
+//			boolean cbs = false;
+//
+//			if(eventID.length()>50) {
+//				crs = qb.selectFrom(tableName).where("cbsEventID", "=", eventID).executeQuery();
+//				cbs = true;
+//			}
+//			if(eventID.length()<50){
+//				crs = qb.selectFrom(tableName).where("eventID", "=", eventID).executeQuery();
+//				cbs = false;
+//			}
+//
+//			if(eventID != null) {
+//				if(crs.next() && cbs) {
+//					String[] fields = {"active"};
+//					String[] values = {"0"};
+//					qb.update(tableName, fields, values).where("cbsEventID", "=", eventID).execute();
+//					return "CBS note deleted";
+//				}
+//				if(crs.next() && !cbs){
+//					String[] fields = {"active"};
+//					String[] values = {"0"};
+//					qb.update(tableName, fields, values).where("eventID", "=", eventID).execute();
+//					return "Custom event note deleted";
+//				} else {
+//					return "No event selected";
+//				}
+//			}
+//		} catch (SQLException e) {
+//			return "error";
+//		} finally {
+//			try {
+//				crs.close();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
+
+	public String authenticate(String username, String password, boolean isAdmin) {
+
 		try {
-			String tableName = "notes";
+			crs = qb.selectFrom("users").where("username", "=", username).executeQuery();
 
-			if(qb.selectFrom(tableName).where("eventID", "=", eventID).executeQuery().next()) {
-				String[] fields = {"active"};
-				String[] values = {"0"};
-				qb.update(tableName, fields, values).where("eventID", "=", eventID);
-				return "Note deleted";
-			} else {
-				return "Note didn't exist";
-			}
-		} catch (SQLException e) {
-			return "error";
-		}
-	}
-
-	public String authenticate(String username, String password, boolean isAdmin) throws Exception {
-
-		crs = qb.selectFrom("users").where("username", "=", username).executeQuery();
-
-		if (crs.next()){
-			if(crs.getBoolean("active")==true) {
-				if(crs.getString("password").equals(password)) {
-					if((crs.getBoolean("isAdmin") == true && isAdmin) || (crs.getBoolean("isAdmin") == false && !isAdmin)) {
-						return "0";
+			if (crs.next()){
+				if(crs.getBoolean("active")==true) {
+					if(crs.getString("password").equals(password)) {
+						if((crs.getBoolean("isAdmin") == true && isAdmin) || (crs.getBoolean("isAdmin") == false && !isAdmin)) {
+							return "0";
+						} else {
+							return "4";
+						}
 					} else {
-						return "4";
+						return "3";
 					}
 				} else {
-					return "3";
+					return "2";
 				}
 			} else {
-				return "2";
+				return "1";
 			}
-		} else {
-			return "1";
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return "error";
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

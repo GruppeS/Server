@@ -34,6 +34,12 @@ public class AdminMethods {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return data;
 	}
@@ -41,7 +47,8 @@ public class AdminMethods {
 	public boolean addUser(String username, String password) {
 		boolean succes = false;
 		try {
-			if(qb.selectFrom("users").where("username", "=", username).executeQuery().next()) {
+			crs = qb.selectFrom("users").where("username", "=", username).executeQuery();
+			if(crs.next()) {
 				succes = false;
 			} else {
 				String[] fields = {"username", "password"};
@@ -51,6 +58,12 @@ public class AdminMethods {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return succes;
 	}
@@ -82,15 +95,21 @@ public class AdminMethods {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public Vector<Vector<Object>> calendarTable() {
 		try {
+			data.clear();
+			
 			String[] keys = {"calendar", "active"};
 			crs = qb.selectFrom(keys, "calendars").all().executeQuery();
-
-			data.clear();
 
 			while(crs.next()) {
 				Vector<Object> row = new Vector<Object>();
@@ -105,6 +124,12 @@ public class AdminMethods {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return data;
 	}
@@ -141,6 +166,12 @@ public class AdminMethods {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -164,6 +195,12 @@ public class AdminMethods {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return data;
 	}
@@ -200,6 +237,12 @@ public class AdminMethods {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -223,6 +266,12 @@ public class AdminMethods {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return data;
 	}
@@ -260,6 +309,12 @@ public class AdminMethods {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

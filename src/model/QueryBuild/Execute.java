@@ -64,6 +64,13 @@ public class Execute extends Model {
 
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally {
+				try {
+					sqlStatement.close();
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		} else {
 			sql = SELECT + getQueryBuilder().getSelectValue() +
@@ -80,6 +87,7 @@ public class Execute extends Model {
 			} finally {
 				try {
 					sqlStatement.close();
+					conn.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -92,22 +100,7 @@ public class Execute extends Model {
 	public void execute() throws SQLException {
 		String sql = null;
 
-		if (getQueryBuilder().isSoftDelete()) {
-			sql = UPDATE + getQueryBuilder().getTableName() + " SET active = 0" +
-					WHERE + getWhere().getWhereKey() + " " + getWhere().getWhereOperator() + " " + getWhere().getWhereValue() + ";  ";
-			try {
-				getConnection(false);
-				sqlStatement = getConn().prepareStatement(sql);
-
-				sqlStatement.execute();
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} finally {
-				sqlStatement.close();
-			}
-
-		} else if(getQueryBuilder().isUpdate()) {
+		if (getQueryBuilder().isUpdate()) {
 			sql = UPDATE + getQueryBuilder().getTableName() + " SET " + getQueryBuilder().getFields() + "" + WHERE + getWhere().getWhereKey() + " " + getWhere().getWhereOperator() + " ?;";
 			try {
 				getConnection(false);
@@ -115,11 +108,12 @@ public class Execute extends Model {
 				sqlStatement.setString(1, getWhere().getWhereValue());
 
 				sqlStatement.execute();
-				
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} finally {
 				sqlStatement.close();
+				conn.close();
 			}
 		} else {
 			sql = INSERTINTO + getQueryBuilder().getTableName() + " (" + getQueryBuilder().getFields() + ")" + VALUES + "(";
@@ -145,6 +139,7 @@ public class Execute extends Model {
 				e.printStackTrace();
 			} finally {
 				sqlStatement.close();
+				conn.close();
 			}
 		}
 	}

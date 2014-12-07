@@ -1,8 +1,6 @@
 package model;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -30,7 +28,7 @@ public abstract class Model {
 	private Statement stmt;
 	protected Connection conn = null;
 	protected PreparedStatement sqlStatement;
-	protected ResultSet resultSet;
+	protected ResultSet rs;
 
 	public boolean doesDatabaseExist() throws SQLException {
 
@@ -68,50 +66,6 @@ public abstract class Model {
 
 		return sqlStatement;
 	}
-	
-	public int doUpdate(String update) throws SQLException {
-		getConnection(false);
-		int temp = 0;
-
-		try {
-			setStmt(getConn().createStatement());
-			temp = getStmt().executeUpdate(update);
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
-
-		finally {
-			if (getStmt() != null) {
-				try {
-					getStmt().close();
-				} catch (SQLException sqlEx) {
-					setStmt(null);
-				}
-			}
-		}
-
-		return temp;
-	}
-
-	public String readFromFile(String path) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(path));
-		try {
-			StringBuilder sb = new StringBuilder();
-			String line = br.readLine();
-
-			while (line != null) {
-				sb.append(line);
-				sb.append(System.lineSeparator());
-				line = br.readLine();
-			}
-			return sb.toString();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			br.close();
-		}
-		return "";
-	}
 
 	public void getConnection(Boolean init) throws SQLException {
 		if(init) {
@@ -123,10 +77,6 @@ public abstract class Model {
 
 	public Statement getStmt() {
 		return stmt;
-	}
-
-	private void setStmt(Statement stmt) {
-		this.stmt = stmt;
 	}
 
 	public Connection getConn() {

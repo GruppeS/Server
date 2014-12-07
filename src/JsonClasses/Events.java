@@ -8,7 +8,4 @@ public class Events {
 	private String overallID = "getEvents";
 	public ArrayList<Event> events = new ArrayList<Event>();
  
-    public ArrayList<Event> getEvents() {
-        return events;
-    }
 }
