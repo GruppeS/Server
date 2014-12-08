@@ -9,5 +9,6 @@
 	"weather_lon": "12.529092",
 	"weather_future_in_days": "7",
 	"qotd_expiration_time": "86400",
-	"dbname": "cbscalendar"
+	"dbname": "cbscalendar",
+	"encryptionkey": "3.1470"
 }

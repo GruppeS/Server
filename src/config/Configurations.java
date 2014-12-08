@@ -24,6 +24,7 @@ public class Configurations {
 	private String weather_lon;
 	private String weather_future_in_days;
 	private String qotd_expiration_time;
+	private String encryptionkey;
 
 	/**
 	 * Constructor triggers method ReadFile
@@ -174,6 +175,20 @@ public class Configurations {
 	public void setQOTD_expiration_time(String qotd_expiration_time) {
 		this.qotd_expiration_time = qotd_expiration_time;
 	}
+	
+	/**
+	 * @return encryptionkey
+	 */
+	public String getEncryptionkey() {
+		return encryptionkey;
+	}
+	
+	/**
+	 * @param encryptionkey
+	 */
+	public void setEncryptionkey(String encryptionkey) {
+		this.encryptionkey = encryptionkey;
+	}
 
 	/**
 	 * Parses configuration json into a java object and gets/sets variables to this class
@@ -198,6 +213,7 @@ public class Configurations {
 			setWeather_lon((String) jsonObject.get("weather_lon"));
 			setWeather_future_in_days((String) jsonObject.get("weather_future_in_days"));
 			setQOTD_expiration_time((String) jsonObject.get("qotd_expiration_time"));
+			setEncryptionkey ((String) jsonObject.get("encryptionkey"));
 
 		} catch (ParseException e) {
 			e.printStackTrace();

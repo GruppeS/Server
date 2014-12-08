@@ -21,7 +21,7 @@ public class ServerSwitch {
 	 * @param jsonString
 	 * @return answer
 	 */
-	public String GiantSwitchMethod(String jsonString) {
+	public String giantSwitchMethod(String jsonString) {
 
 		ForecastModel forecastModel = new ForecastModel();
 		QOTDModel quoteModel = new QOTDModel();

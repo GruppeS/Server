@@ -12,8 +12,9 @@ public class ClientThread implements Runnable {
 
 	private Socket clientSocket;
 	private ServerSwitch serverSwitch = new ServerSwitch();
-	private ObjectOutputStream output;
+	private Encryption encryption = new Encryption();
 	private ObjectInputStream input;
+	private ObjectOutputStream output;
 	private boolean active = true;
 
 	/**
@@ -22,12 +23,10 @@ public class ClientThread implements Runnable {
 	 */
 	public ClientThread(Socket clientSocket) {
 		this.clientSocket = clientSocket;
-
 		try {
 			output = new ObjectOutputStream(clientSocket.getOutputStream());
 			output.flush();
 			input = new ObjectInputStream(clientSocket.getInputStream());
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -36,6 +35,7 @@ public class ClientThread implements Runnable {
 	/**
 	 * While client has an open socket inputstream listens for input.
 	 * Inputs gets handled by the server switch which returns an answer which gets written to the outputstream.
+	 * Inputs and outputs gets encrypted/decrypted using XOR
 	 * If client closes his socket the terminate method will be called
 	 */
 	public void run() {
@@ -43,13 +43,13 @@ public class ClientThread implements Runnable {
 		while(active)
 		{
 			try {
-				String message = (String) input.readObject();
-				System.out.println("Incomming: " + message);
-				String reply = serverSwitch.GiantSwitchMethod(message);
+				byte[] requestEncrypted = (byte[]) input.readObject();
+				String requestDecrypted = encryption.decrypt(requestEncrypted);
+				System.out.println("Request: " + requestDecrypted);
+				String reply = serverSwitch.giantSwitchMethod(requestDecrypted);
 				System.out.println("Reply: " + reply);
-				output.writeObject(reply);
+				output.writeObject(encryption.encrypt(reply));
 				output.flush();
-
 			} catch (IOException e) {
 				terminate();
 			} catch (ClassNotFoundException e) {
