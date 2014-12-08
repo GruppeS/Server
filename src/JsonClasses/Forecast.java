@@ -1,5 +1,8 @@
 package JsonClasses;
 
+/**
+ * Json class used to get forcasts
+ */
 public class Forecast {
 
 	private String date;

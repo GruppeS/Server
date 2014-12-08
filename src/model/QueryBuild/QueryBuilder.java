@@ -32,6 +32,12 @@ public class QueryBuilder {
 		this.fields = fields;
 	}
 
+	/**
+	 * SELECT values FROM tableName
+	 * @param values
+	 * @param tableName
+	 * @return
+	 */
 	public Where selectFrom(String[] values, String tableName) {
 
 		QueryBuilder queryBuilder = new QueryBuilder();
@@ -47,6 +53,11 @@ public class QueryBuilder {
 		return new Where(queryBuilder);
 	}
 
+	/**
+	 * SELECT * FROM tableName
+	 * @param tableName
+	 * @return
+	 */
 	public Where selectFrom(String tableName) {
 
 		QueryBuilder queryBuilder = new QueryBuilder();
@@ -56,6 +67,12 @@ public class QueryBuilder {
 		return new Where(queryBuilder);
 	}
 
+	/**
+	 * INSERT INTO tableName fields
+	 * @param tableName
+	 * @param fields
+	 * @return
+	 */
 	public Values insertInto(String tableName, String[] fields){
 
 		QueryBuilder queryBuilder = new QueryBuilder();
@@ -72,6 +89,13 @@ public class QueryBuilder {
 		return new Values(queryBuilder);
 	}
 
+	/**
+	 * UPDATE tableName SET ([fields, values], [fields, values] ...)
+	 * @param tableName
+	 * @param fields
+	 * @param values
+	 * @return
+	 */
 	public Where update(String tableName, String[] fields, String[] values) {
 		QueryBuilder queryBuilder = new QueryBuilder();
 		queryBuilder.setTableName(tableName);

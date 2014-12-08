@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import view.Frame;
 import view.MainFrame;
 
+/**
+ * AdminThread implements Runnable so that it can be run as a thread
+ */
 public class AdminThread implements Runnable {
 
 	private MainFrame mainScreen;
@@ -18,6 +21,9 @@ public class AdminThread implements Runnable {
 	private String password;
 	private String authenticated;
 
+	/**
+	 * Constructor initializes objects and adds actionlisteners to admin panels
+	 */
 	public AdminThread(){
 
 		switchMethods = new SwitchMethods();
@@ -35,12 +41,20 @@ public class AdminThread implements Runnable {
 		frame.getEventList().addActionListener(new EventListActionListener());
 	}
 
+	/**
+	 * Shows the main frame
+	 */
 	public void run() {
 		mainScreen.show(MainFrame.MAIN);
 		mainScreen.setResizable(false);
 		mainScreen.setVisible(true);
 	}
 
+	/**
+	 * Actionlistener for main panel
+	 * AdminBtn opens up a new frame with login panel for admin
+	 * TerminateBtn terminates the server
+	 */
 	private class MainActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
@@ -56,6 +70,10 @@ public class AdminThread implements Runnable {
 			}
 		}
 	}
+	/**
+	 * Actionlistener for login panel
+	 * LoginBtn calls authenticate method in switchmethods class
+	 */
 	private class LoginActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
@@ -71,6 +89,7 @@ public class AdminThread implements Runnable {
 				}
 				if (authenticated.equals("0")){
 					frame.show(Frame.MENU);
+					frame.getLogin().reset();
 				}
 				else if(!authenticated.equals("0")){
 					frame.getLogin().incorrect();
@@ -78,6 +97,13 @@ public class AdminThread implements Runnable {
 			}
 		}
 	}
+	/**
+	 * Actionlistener for admin menu panel
+	 * CalendarListBtn shows calendarlist panel and calls admin method calendarTable
+	 * EventListBtn shows eventlist panel and calls admin method eventsTable
+	 * NoteListBtn shows notelist panel and calls admin method notesTable
+	 * UserListBtn shows userlist panel and calls admin method userTable
+	 */
 	private class MenuActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
@@ -100,7 +126,12 @@ public class AdminThread implements Runnable {
 				frame.show(Frame.USERLIST);
 			}
 		}	
-	}	
+	}
+	/**
+	 * Actionlistener for calendarlist panel
+	 * DeleteBtn calls admin method deleteCalendar with the selected calendar
+	 * BackToMainBtn returns to menu panel
+	 */
 	private class CalendarListActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
@@ -121,6 +152,11 @@ public class AdminThread implements Runnable {
 			}
 		}
 	}
+	/**
+	 * Actionlistener for notelist panel
+	 * DeleteBtn calls admin method deleteNote with the selected note
+	 * BackToMainBtn returns to menu panel
+	 */
 	private class NoteListActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
@@ -128,18 +164,24 @@ public class AdminThread implements Runnable {
 
 			if(cmd.equals("btnDelete")) {
 				String noteid = frame.getNoteList().getSelectedNote();
-				
+
 				if(noteid!=null) {
-					adminMethods.deleteNote(noteid, "admin");
+					adminMethods.deleteNote(noteid);
 					frame.getNoteList().createTable(adminMethods.notesTable());
 				}
 			}
-			
+
 			if(cmd.equals("btnBackToMain")) {
 				frame.show(Frame.MENU);
 			}
 		}
 	}
+	/**
+	 * Actionlistener for userlist panel
+	 * AddBtn calls admin method addUser with the typed username and password (these cannot be empty)
+	 * DeleteBtn calls admin method deleteUser with the selected user
+	 * BackToMainBtn returns to menu panel
+	 */
 	private class UserListActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
@@ -175,6 +217,11 @@ public class AdminThread implements Runnable {
 			}
 		}
 	}
+	/**
+	 * Actionlistener for eventlist panel
+	 * DeleteBtn calls admin method deleteEvent with the selected event and admin credential
+	 * BackToMainBtn returns to menu panel
+	 */
 	private class EventListActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
@@ -182,7 +229,7 @@ public class AdminThread implements Runnable {
 
 			if(cmd.equals("btnDelete")) {
 				String eventid = frame.getEventList().getSelectedEvent();
-				
+
 				if(eventid!=null) {
 					adminMethods.deleteEvent(eventid, "admin");
 					frame.getEventList().createTable(adminMethods.eventsTable());

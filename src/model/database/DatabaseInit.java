@@ -1,13 +1,13 @@
 package model.database;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import model.Model;
 
 public class DatabaseInit extends Model {
 
-	public void go() throws SQLException, IOException {
+	/**
+	 * Calls method doesDatabaseExist to determine if database exists. If not then readfromSqlFile is called to create the database
+	 */
+	public void go() {
 
 		if (doesDatabaseExist()) {
 			System.out.println("Database environment does exist");

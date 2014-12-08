@@ -2,10 +2,7 @@ package controller;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
 
-import model.Forecast.ForecastModel;
-import model.QOTD.QOTDModel;
 import model.database.DatabaseInit;
 import config.Configurations;
 
@@ -16,12 +13,14 @@ public class ServerMain {
 	private static Configurations cf = new Configurations();
 	private static int port = cf.getServerport();
 
-	public static void main(String args[]) throws SQLException, IOException {
+	/**
+	 * Main calls database initialization and creates a serversocket.
+	 * Contains a while loop that creates a socket everytime a connection is made, and creates a new client thread.
+	 * @param args
+	 */
+	public static void main(String args[]) {
 
 		new DatabaseInit().go();
-
-		new QOTDModel().saveQuote();
-		new ForecastModel().saveForecast();
 
 		new Thread( new AdminThread() ).start();
 

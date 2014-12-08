@@ -37,17 +37,28 @@ public class Where {
 
 	}
 
-	 public Execute all(){
+	/**
+	 * Select all columns from table
+	 * @return
+	 */
+	public Execute all(){
 		return new Execute(getQueryBuilder(), true);
-	 }
+	}
 
-	 public Execute where(String key, String operator, String value){
+	/**
+	 * WHERE key operate value
+	 * @param key
+	 * @param operator
+	 * @param value
+	 * @return
+	 */
+	public Execute where(String key, String operator, String value){
 
-		 Where where = new Where();
-		 where.setWhereKey(key);
-		 where.setWhereOperator(operator);
-		 where.setWhereValue(value);
+		Where where = new Where();
+		where.setWhereKey(key);
+		where.setWhereOperator(operator);
+		where.setWhereValue(value);
 
-		 return new Execute(getQueryBuilder(), where);
-	 }
+		return new Execute(getQueryBuilder(), where);
+	}
 }

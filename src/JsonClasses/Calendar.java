@@ -1,5 +1,8 @@
 package JsonClasses;
 
+/**
+ * Json class used to get calendars, create calendar, delete calendar and share calendar
+ */
 @SuppressWarnings("unused")
 public class Calendar
 {

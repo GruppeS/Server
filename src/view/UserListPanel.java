@@ -27,50 +27,53 @@ public class UserListPanel extends JPanel {
 	private JTextField username;
 	private JTextField password;
 	private JLabel lblUserExists;
-	
+
 	Vector<Object> columnNames = new Vector<Object>();
 
+	/**
+	 * Sets swing objects
+	 */
 	public UserListPanel() {
 		setLayout(null);
-		
+
 		btnAdd = new JButton("Add");
 		btnAdd.setBounds(228, 240, 69, 23);
 		add(btnAdd);
-		
+
 		btnDelete = new JButton("Set active/inactive");
 		btnDelete.setBounds(35, 297, 150, 23);
 		add(btnDelete);
-		
+
 		btnBackToMain = new JButton("Back to Main Menu");
 		btnBackToMain.setBounds(123, 348, 150, 23);
 		add(btnBackToMain);
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(25, 56, 173, 222);
 		add(scrollPane);
-		
+
 		lblAddNewUser = new JLabel("Add new user:");
 		lblAddNewUser.setBounds(228, 65, 80, 14);
 		add(lblAddNewUser);
-		
+
 		lblUser = new JLabel("Username:");
 		lblUser.setBounds(228, 106, 100, 14);
 		add(lblUser);
-		
+
 		lblPassword = new JLabel("Password:");
 		lblPassword.setBounds(228, 172, 127, 14);
 		add(lblPassword);
-		
+
 		username = new JTextField();
 		username.setBounds(228, 131, 127, 20);
 		add(username);
 		username.setColumns(10);
-		
+
 		password = new JTextField();
 		password.setBounds(228, 197, 127, 20);
 		add(password);
 		password.setColumns(10);
-		
+
 		lblUserExists = new JLabel("User already exists");
 		lblUserExists.setFont(new Font("Calibri", Font.ITALIC, 11));
 		lblUserExists.setBounds(228, 286, 162, 14);
@@ -78,7 +81,11 @@ public class UserListPanel extends JPanel {
 		lblUserExists.setVisible(false);
 		add(lblUserExists);
 	}
-	
+
+	/**
+	 * sets the JTable
+	 * @param data
+	 */
 	public void createTable(Vector<?> data) {
 		columnNames = new Vector<Object>();
 		columnNames.add("User");
@@ -87,32 +94,46 @@ public class UserListPanel extends JPanel {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(table);
 	}
-	
+
+	/**
+	 * Sets lblUserExists visible
+	 */
 	public void userExists() {
 		lblUserExists.setVisible(true);
 	}
-	
+
+	/**
+	 * Gets the selected user by getting the selected row
+	 * @return String selectedUser
+	 */
 	public String getSelectedUser() {
 		String selectedUser;
-		
+
 		int row = table.getSelectedRow();
-		
+
 		if(row!=-1)
 		{
 			selectedUser = (table.getValueAt(row, 0)).toString();
 		} else {
 			selectedUser = null;
 		}
-		
+
 		return selectedUser;
 	}
-	
+
+	/**
+	 * Sets lblUserExists not visible and resets text in textfields
+	 */
 	public void reset() {
 		lblUserExists.setVisible(false);
 		username.setText("");
 		password.setText("");
 	}
-	
+
+	/**
+	 * Adds actionlisteners and actioncommands
+	 * @param l
+	 */
 	public void addActionListener(ActionListener l) {
 		btnAdd.addActionListener(l);
 		btnAdd.setActionCommand("btnAdd");
@@ -121,10 +142,16 @@ public class UserListPanel extends JPanel {
 		btnBackToMain.addActionListener(l);
 		btnBackToMain.setActionCommand("btnBackToMain");
 	}
-	
+
+	/**
+	 * @return String username
+	 */
 	public String getUsername() {
 		return username.getText();
 	}
+	/**
+	 * @return String password
+	 */
 	public String getPassword() {
 		return password.getText();
 	}

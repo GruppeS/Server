@@ -12,6 +12,13 @@ public class SwitchMethods
 
 	private CachedRowSetImpl crs;
 
+	/**
+	 * Creates a calendar if it doesn't exists and sets public boolean and creator
+	 * @param username
+	 * @param calendar
+	 * @param isPublic
+	 * @return status
+	 */
 	public String createCalendar(String username, String calendar, boolean isPublic) {
 		try {
 			crs = qb.selectFrom("calendars").where("calendar", "=", calendar).executeQuery();
@@ -45,6 +52,12 @@ public class SwitchMethods
 		}
 	}
 
+	/**
+	 * Shares a specific calendar with a specific user
+	 * @param calendar
+	 * @param username
+	 * @return status
+	 */
 	public String shareCalendar(String calendar, String username) {
 		try {
 			String[] fields = {"calendar"};
@@ -68,6 +81,16 @@ public class SwitchMethods
 		}
 	}
 
+	/**
+	 * Creates an event in a specific calendar, sets creator, description, startDate, endDate and location (Only calendar creator can create events)
+	 * @param username
+	 * @param calendar
+	 * @param description
+	 * @param start
+	 * @param end
+	 * @param location
+	 * @return status
+	 */
 	public String createEvent(String username, String calendar, String description, Date start, Date end, String location) {
 		try {
 			java.sql.Timestamp sqlDateStart = new java.sql.Timestamp(start.getTime());
@@ -97,6 +120,14 @@ public class SwitchMethods
 		}
 	}
 
+	/**
+	 * Creates a note in a specific event and sets its creator.
+	 * Note is created if there is no note on the event, and it updates if there already was a note (Max one note for each event)
+	 * @param username
+	 * @param note
+	 * @param eventID
+	 * @return status
+	 */
 	public String createNote(String username, String note, String eventID) {
 		try {
 			String tableName = "notes";
@@ -111,13 +142,13 @@ public class SwitchMethods
 				cbsEvent = true; 
 				crs = qb.selectFrom(tableName).where("cbsEventID", "=", eventID).executeQuery();
 			}
-			
+
 			if(crs.next()) {
 				eventExists = true;
 			}
 
 			if(eventID != null && note != null) {
-	
+
 				if(!eventExists && cbsEvent) {
 					String[] fields = {"createdBy", "text", "cbsEventID"};
 					String[] values = {username, note, eventID};
@@ -158,56 +189,14 @@ public class SwitchMethods
 		}
 	}
 
-	public String deleteNote(String eventID) {
-		try {
-			String tableName = "notes";
-			boolean eventExists = false;
-			boolean cbsEvent = false;
-
-			try {
-				Integer.parseInt(eventID);
-				cbsEvent = false;
-				crs = qb.selectFrom(tableName).where("eventID", "=", eventID).executeQuery();
-			} catch(NumberFormatException e) { 
-				cbsEvent = true; 
-				crs = qb.selectFrom(tableName).where("cbsEventID", "=", eventID).executeQuery();
-			}
-
-			if(crs.next()) {
-				eventExists = true;
-			}
-			
-			if(eventID != null) {
-				if(eventExists && cbsEvent) {
-					String[] fields = {"active"};
-					String[] values = {"0"};
-					qb.update(tableName, fields, values).where("cbsEventID", "=", eventID).execute();
-					return "CBS note deleted";
-				}
-				if(eventExists && !cbsEvent){
-					String[] fields = {"active"};
-					String[] values = {"0"};
-					qb.update(tableName, fields, values).where("eventID", "=", eventID).execute();
-					return "Custom event note deleted";
-				} else {
-					return "No event selected";
-				}
-			} else {
-				return "Please specify an event";
-			}
-		} catch (SQLException e) {
-			return "error";
-		} finally {
-			try {
-				crs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
+	/**
+	 * Checks if user with specified username and password exists. Returns codes based on the result
+	 * @param username
+	 * @param password
+	 * @param isAdmin
+	 * @return 0 if authenticated, 1 if user doesn't exist, 2 if user not active, 3 if passwords don't match, 4 if wrong platform
+	 */
 	public String authenticate(String username, String password, boolean isAdmin) {
-
 		try {
 			crs = qb.selectFrom("users").where("username", "=", username).executeQuery();
 

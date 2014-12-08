@@ -17,6 +17,9 @@ public class MenuPanel extends JPanel {
 	private JButton btnUserList;
 	private JLabel  lblMainMenu;
 
+	/**
+	 * Sets swing objects
+	 */
 	public MenuPanel() {
 		setLayout(null);
 
@@ -41,7 +44,11 @@ public class MenuPanel extends JPanel {
 		btnUserList.setBounds(120, 122, 150, 50);
 		add(btnUserList);
 	}
-	
+
+	/**
+	 * Adds actionlisteners and actioncommands
+	 * @param l
+	 */
 	public void addActionListener(ActionListener l)
 	{
 		btnCalendarList.addActionListener(l);

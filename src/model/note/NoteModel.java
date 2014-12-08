@@ -12,6 +12,12 @@ public class NoteModel {
 	CachedRowSetImpl crs;
 	QueryBuilder qb = new QueryBuilder();
 
+	/**
+	 * Gets all notes from database and then starts comparing them with the eventIDs and cbsEventIDs in the arraylist in the Events class.
+	 * If there is a match, the note is added to the event
+	 * @param events
+	 * @return Events
+	 */
 	public Events getNotes(Events events) {
 		try {
 			crs = qb.selectFrom("notes").all().executeQuery();
@@ -22,11 +28,11 @@ public class NoteModel {
 
 			while(crs.next()) {
 				eventID = crs.getString("eventID");
-				
+
 				if(eventID == null) {
 					eventID = crs.getString("cbsEventID");
 				}
-				
+
 				active = crs.getBoolean("active");
 				note = crs.getString("text");
 

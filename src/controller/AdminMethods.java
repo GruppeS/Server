@@ -14,6 +14,10 @@ public class AdminMethods {
 	private Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 	private CachedRowSetImpl crs;
 
+	/**
+	 * Gets two dimensional vector containing users and their status from database
+	 * @return Vector<Vector<Object>>
+	 */
 	public Vector<Vector<Object>> userTable() {
 		try {
 			String[] keys = {"username", "active"};
@@ -44,6 +48,12 @@ public class AdminMethods {
 		return data;
 	}
 
+	/**
+	 * Adds a user to database if another user with same username doesn't exist
+	 * @param username
+	 * @param password
+	 * @return boolean if succeeded
+	 */
 	public boolean addUser(String username, String password) {
 		boolean succes = false;
 		try {
@@ -68,6 +78,10 @@ public class AdminMethods {
 		return succes;
 	}
 
+	/**
+	 * Sets user active/inactive - Admin cannot be deleted
+	 * @param username
+	 */
 	public void deleteUser(String username) {
 
 		boolean active;
@@ -104,10 +118,14 @@ public class AdminMethods {
 		}
 	}
 
+	/**
+	 * Gets two dimensional vector containing calendars and their status
+	 * @return Vector<Vector<Object>>
+	 */
 	public Vector<Vector<Object>> calendarTable() {
 		try {
 			data.clear();
-			
+
 			String[] keys = {"calendar", "active"};
 			crs = qb.selectFrom(keys, "calendars").all().executeQuery();
 
@@ -134,6 +152,11 @@ public class AdminMethods {
 		return data;
 	}
 
+	/**
+	 * Set a calendar active/inactive - Only admin and calendar creator is allowed
+	 * @param calendar
+	 * @param user
+	 */
 	public void deleteCalendar(String calendar, String user) {
 
 		boolean active;
@@ -175,6 +198,10 @@ public class AdminMethods {
 		}
 	}
 
+	/**
+	 * Gets two dimensional vector containing eventID, description, status and which calendar it belongs to
+	 * @return Vector<Vector<Object>>
+	 */
 	public Vector<Vector<Object>> eventsTable() {
 		try {
 			String[] keys = {"calendar", "eventID", "description", "active"};
@@ -205,6 +232,11 @@ public class AdminMethods {
 		return data;
 	}
 
+	/**
+	 * Sets an event active/inactive - Only admin and event creator is allowed
+	 * @param eventID
+	 * @param user
+	 */
 	public void deleteEvent(String eventID, String user) {
 
 		boolean active;
@@ -246,9 +278,13 @@ public class AdminMethods {
 		}
 	}
 
+	/**
+	 * Gets two dimensional vector containing noteID, note text, status and which event it belongs to
+	 * @return Vector<Vector<Object>>
+	 */
 	public Vector<Vector<Object>> notesTable() {
 		try {
-			String[] keys = {"eventID", "noteID", "text", "active"};
+			String[] keys = {"eventID", "cbsEventID", "noteID", "text", "active"};
 			crs = qb.selectFrom(keys, "notes").all().executeQuery();
 
 			data.clear();
@@ -276,39 +312,59 @@ public class AdminMethods {
 		return data;
 	}
 
-	public void deleteNote(String noteID, String user) {
-
-		boolean active;
-		String activeBoolean = null;
-
+	/**
+	 * Set a note active/inactive on a specific event
+	 * @param eventID
+	 * @return status
+	 */
+	public String deleteNote(String eventID) {
 		try {
-			String table = "notes";
-			String[] fields = {"active", "createdBy"};
-			String[] fieldsUpdate = {"active"};
+			String tableName = "notes";
+			String activeBoolean = "0";
+			boolean active;
+			boolean eventExists = false;
+			boolean cbsEvent = false;
 
-			crs = qb.selectFrom(fields, table).where("noteID", "=", noteID).executeQuery();
+			try {
+				Integer.parseInt(eventID);
+				cbsEvent = false;
+				crs = qb.selectFrom(tableName).where("eventID", "=", eventID).executeQuery();
+			} catch(NumberFormatException e) { 
+				cbsEvent = true; 
+				crs = qb.selectFrom(tableName).where("cbsEventID", "=", eventID).executeQuery();
+			}
 
 			if(crs.next()) {
-				String username = crs.getString("createdBy");
+				eventExists = true;
+				active = crs.getBoolean("active");
 
-				if(username.equals(user) || user.equals("admin")) {
-					active = crs.getBoolean("active");
-
-					if(active) {
-						activeBoolean = "0";
-					} else if (!active){
-						activeBoolean = "1";
-					}
-					if(!activeBoolean.equals(null)) {
-						String[] values = {activeBoolean};
-
-						qb.update(table, fieldsUpdate, values).where("noteID", "=", noteID).execute();
-					}
+				if(!active) {
+					activeBoolean = "1";
+				} else {
+					activeBoolean = "0";
 				}
 			}
 
+			if(eventID != null) {
+				if(eventExists && cbsEvent) {
+					String[] fields = {"active"};
+					String[] values = {activeBoolean};
+					qb.update(tableName, fields, values).where("cbsEventID", "=", eventID).execute();
+					return "CBS note deleted";
+				}
+				if(eventExists && !cbsEvent){
+					String[] fields = {"active"};
+					String[] values = {activeBoolean};
+					qb.update(tableName, fields, values).where("eventID", "=", eventID).execute();
+					return "Custom event note deleted";
+				} else {
+					return "No event selected";
+				}
+			} else {
+				return "Please specify an event";
+			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			return "error";
 		} finally {
 			try {
 				crs.close();

@@ -51,6 +51,11 @@ public class Execute extends Model {
 		this.values = values;
 	}
 
+	/**
+	 * Executes SQL and returns CachedRowSetImpl
+	 * @return CachedRowSetImpl
+	 * @throws SQLException
+	 */
 	public CachedRowSetImpl executeQuery() throws SQLException {
 		String sql = "";
 		CachedRowSetImpl crs = new CachedRowSetImpl();
@@ -96,6 +101,10 @@ public class Execute extends Model {
 		return crs;
 	}
 
+	/**
+	 * Executes SQL Query
+	 * @throws SQLException
+	 */
 	@SuppressWarnings("unused")
 	public void execute() throws SQLException {
 		String sql = null;
@@ -106,9 +115,7 @@ public class Execute extends Model {
 				getConnection(false);
 				sqlStatement = getConn().prepareStatement(sql);
 				sqlStatement.setString(1, getWhere().getWhereValue());
-
 				sqlStatement.execute();
-
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} finally {
@@ -132,9 +139,7 @@ public class Execute extends Model {
 					x = i;
 					sqlStatement.setString(x+1, getValues().getValues()[i]);
 				}
-
 				sqlStatement.execute();
-
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} finally {

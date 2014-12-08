@@ -15,7 +15,13 @@ public class ServerSwitch {
 	private String answer;
 	private boolean authenticated = false;
 
-	public String GiantSwitchMethod(String jsonString) throws Exception {
+	/**
+	 * Triggers the proper case based on the returned string from determine method.
+	 * Uses gson libary to deserialize json into proper java class, and call proper methods to obtain answer to client.
+	 * @param jsonString
+	 * @return answer
+	 */
+	public String GiantSwitchMethod(String jsonString) {
 
 		ForecastModel forecastModel = new ForecastModel();
 		QOTDModel quoteModel = new QOTDModel();
@@ -24,7 +30,7 @@ public class ServerSwitch {
 		CalendarModel calendarModel = new CalendarModel();
 		Gson gson = new GsonBuilder().create();
 
-		switch (Determine(jsonString)) {
+		switch (determine(jsonString)) {
 
 		case "error":
 			answer = "Not supported by API";
@@ -34,17 +40,17 @@ public class ServerSwitch {
 			UserInfo userInfo = (UserInfo)gson.fromJson(jsonString, UserInfo.class);
 
 			String authentication = switchMethods.authenticate(userInfo.getUsername(), userInfo.getPassword(), false);
-			
+
 			if(authentication.equals("0"))
 			{
 				authenticated = true;
 				username = userInfo.getUsername();
 			}
-			
+
 			userInfo.setUsername(null);
 			userInfo.setPassword(null);
 			userInfo.setAuthenticated(authentication);
-			
+
 			answer = gson.toJson(userInfo);
 			break;
 
@@ -95,7 +101,7 @@ public class ServerSwitch {
 
 		case "deleteNote":
 			Event DN = (Event)gson.fromJson(jsonString, Event.class);
-			answer = switchMethods.deleteNote(DN.getEventid());
+			answer = adminMethods.deleteNote(DN.getEventid());
 			break;
 
 		case "getQuote":
@@ -114,38 +120,43 @@ public class ServerSwitch {
 		return answer;
 	}
 
-	public String Determine(String ID) {
+	/**
+	 * Determines if string from client contains any of the string and returns the ID
+	 * @param json
+	 * @return ID
+	 */
+	public String determine(String json) {
 
 		if (!authenticated) {
-			if (ID.contains("logIn")) {
+			if (json.contains("logIn")) {
 				return "logIn";
 			} else {
 				return "error";
 			}
 		} else if (authenticated) {
-			if (ID.contains("getCalendars")) {
+			if (json.contains("getCalendars")) {
 				return "getCalendars";
-			} else if (ID.contains("createCalendar")) {
+			} else if (json.contains("createCalendar")) {
 				return "createCalendar";
-			} else if (ID.contains("deleteCalendar")) {
+			} else if (json.contains("deleteCalendar")) {
 				return "deleteCalendar";
-			} else if (ID.contains("shareCalendar")) {
+			} else if (json.contains("shareCalendar")) {
 				return "shareCalendar";
-			} else if (ID.contains("getEvents")) {
+			} else if (json.contains("getEvents")) {
 				return "getEvents";
-			} else if (ID.contains("getCustomEvents")) {
+			} else if (json.contains("getCustomEvents")) {
 				return "getCustomEvents";
-			} else if (ID.contains("createEvent")){
+			} else if (json.contains("createEvent")){
 				return "createEvent";
-			} else if  (ID.contains("deleteEvent")){
+			} else if  (json.contains("deleteEvent")){
 				return "deleteEvent";
-			} else if (ID.contains("createNote")) {
+			} else if (json.contains("createNote")) {
 				return "createNote";
-			}else if (ID.contains("deleteNote")) {
+			}else if (json.contains("deleteNote")) {
 				return "deleteNote";
-			} else if (ID.contains("getQuote")) {
+			} else if (json.contains("getQuote")) {
 				return "getQuote";
-			} else if (ID.contains("getForecast")) {
+			} else if (json.contains("getForecast")) {
 				return "getForecast";
 			} else {
 				return "error";

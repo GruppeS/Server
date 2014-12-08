@@ -91,9 +91,15 @@ ALTER TABLE events
 	ON UPDATE RESTRICT
 ;
 
-ALTER TABLE notes
-	ADD FOREIGN KEY (eventID)
-	REFERENCES events (eventID)
+ALTER TABLE usercalendars
+	ADD FOREIGN KEY (calendar)
+	REFERENCES calendars (calendar)
+	ON UPDATE RESTRICT
+;
+
+ALTER TABLE usercalendars
+	ADD FOREIGN KEY (username)
+	REFERENCES users (username)
 	ON UPDATE RESTRICT
 ;
 
@@ -135,38 +141,4 @@ INSERT INTO `cbscalendar`.`users`
 VALUES
 ("hefr13ae",
 "pass")
-;
-
-INSERT INTO `cbscalendar`.`usercalendars`
-(`username`,
-`calendar`)
-VALUES
-("bjsc13ac",
-"test")
-;
-
-INSERT INTO `cbscalendar`.`calendars`
-(`calendar`,
-`createdBy`)
-VALUES
-("test",
-"bjsc13ac")
-;
-
-INSERT INTO `cbscalendar`.`events`
-(`eventType`,
-`description`,
-`start`,
-`end`,
-`location`,
-`createdBy`,
-`calendar`)
-VALUES
-("test",
-"test",
-now(),
-now(),
-"test",
-"bjsc13ac",
-"test")
 ;

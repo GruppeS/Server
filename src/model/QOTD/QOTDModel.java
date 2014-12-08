@@ -21,6 +21,11 @@ public class QOTDModel {
 
 	private CachedRowSetImpl crs;
 
+	/**
+	 * Reads data from qotd server and deserializes it using gson.
+	 * The quote is retrieved from the object and added to the database.
+	 * If a qotd is already present in the database, it will be updated with the new one
+	 */
 	public void saveQuote() {
 		try {
 			String json = urlRead.readUrl("http://dist-sso.it-kartellet.dk/quote/");
@@ -44,11 +49,15 @@ public class QOTDModel {
 		}
 	}
 
+	/**
+	 * Selects qotd from database and returns it
+	 * @return String qotd
+	 */
 	public String getQuote(){
 		String quote = null;
 		try {
 			crs = qb.selectFrom("qotd").all().executeQuery();
-			
+
 			if(crs.next()) {
 				quote = crs.getString("qotd");
 			}
@@ -64,17 +73,21 @@ public class QOTDModel {
 		return quote;
 	}
 
+	/**
+	 * Gets the creation date of qotd in database and checks if it should be updated according to the QOTD_expiration_time in config
+	 * if it is outdated the method saveQuote will be called
+	 */
 	public void updateQuote(){
 		Date date = new Date();
 		long maxTimeNoUpdate = Long.parseLong(config.getQOTD_expiration_time());
 
-		long dateNow = date.getTime()/1000L;
-		long dateLastQuote = 0;
-		
+		long timeNow = date.getTime()/1000L;
+		long timeLastQuote = 0;
+
 		try {
 			crs = qb.selectFrom("qotd").all().executeQuery();
 			if(crs.next()){
-				dateLastQuote = crs.getDate("date").getTime()/1000L;
+				timeLastQuote = crs.getDate("date").getTime()/1000L;
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -86,8 +99,11 @@ public class QOTDModel {
 			}
 		}
 
-		if(dateNow-dateLastQuote > maxTimeNoUpdate){
+		if(timeNow-timeLastQuote > maxTimeNoUpdate){
+			System.out.println("UPDATING QUOTE");
 			saveQuote();
-		} 
+		} else {
+			System.out.println("QUOTE IS UP TO DATE");
+		}
 	}
 }

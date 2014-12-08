@@ -1,6 +1,5 @@
 package model.calendar;
 
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -38,44 +37,55 @@ public class CalendarModel extends Model {
 		gson = new GsonBuilder().create();
 	}
 
+	/**
+	 * Reads data from calendar.cbs.dk and deserializes it using gson.
+	 * Every date is converted from arraylists into dates using SimpleDateFormat
+	 * Finally the method getCustomEvents is called to add all custom events too
+	 * @param username
+	 * @return events
+	 */
 	@SuppressWarnings("rawtypes")
 	public String getCBSCalendar(String username) {
 
-		try {
-			String result = urlRead.readUrl("http://calendar.cbs.dk/events.php/"+username+"/"+e.crypt(username)+".json");
+		String result = urlRead.readUrl("http://calendar.cbs.dk/events.php/"+username+"/"+e.crypt(username)+".json");
 
-			events = gson.fromJson(result, Events.class);
+		events = gson.fromJson(result, Events.class);
 
-			for(int i = 0; i<events.events.size(); i++) {
+		for(int i = 0; i<events.events.size(); i++) {
 
-				try {
-					ArrayList start = events.events.get(i).getStart();
-					ArrayList end = events.events.get(i).getEnd();
+			try {
+				ArrayList start = events.events.get(i).getStart();
+				ArrayList end = events.events.get(i).getEnd();
 
-					String tempStringStart = start.get(0)+"-"+start.get(2)+"-"+Integer.toString(Integer.parseInt((String) start.get(1))+1)+" "+start.get(3)+":"+start.get(4);
+				String tempStringStart = start.get(0)+"-"+start.get(2)+"-"+Integer.toString(Integer.parseInt((String) start.get(1))+1)+" "+start.get(3)+":"+start.get(4);
 
-					Date tempDateStart = new SimpleDateFormat("yyyy-dd-MM HH:mm").parse(tempStringStart);
-					events.events.get(i).setStartdate(tempDateStart);
+				Date tempDateStart = new SimpleDateFormat("yyyy-dd-MM HH:mm").parse(tempStringStart);
+				events.events.get(i).setStartdate(tempDateStart);
 
-					String tempStringEnd = end.get(0)+"-"+end.get(2)+"-"+Integer.toString(Integer.parseInt((String) end.get(1))+1)+" "+end.get(3)+":"+end.get(4);
+				String tempStringEnd = end.get(0)+"-"+end.get(2)+"-"+Integer.toString(Integer.parseInt((String) end.get(1))+1)+" "+end.get(3)+":"+end.get(4);
 
-					Date tempDateEnd = new SimpleDateFormat("yyyy-dd-MM HH:mm").parse(tempStringEnd);
-					events.events.get(i).setEnddate(tempDateEnd);
+				Date tempDateEnd = new SimpleDateFormat("yyyy-dd-MM HH:mm").parse(tempStringEnd);
+				events.events.get(i).setEnddate(tempDateEnd);
 
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				}
+			} catch (ParseException e1) {
+				e1.printStackTrace();
 			}
-
-			getCustomEvents(username, false, null);
-
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+
+		getCustomEvents(username, false, null);
 
 		return gson.toJson(events);
 	}
 
+	/**
+	 * Selects the users events from the database and adds them to the arraylist events in the events class.
+	 * Datetimes from the database is made into dates via SimpleDateFormat
+	 * The SQL queries has been done using sub queries which the querybuilder does not support. Therefore the method doQuery has been used instead.
+	 * @param username
+	 * @param onlyCustomEvents
+	 * @param fromCalendar
+	 * @return custom events
+	 */
 	public String getCustomEvents(String username, boolean onlyCustomEvents, String fromCalendar) {
 		try {
 			if(onlyCustomEvents) {
@@ -131,6 +141,13 @@ public class CalendarModel extends Model {
 
 	}
 
+	/**
+	 * Selects all calendars the user has access to and puts them into the calendars arraylist in the calendars class
+	 * The calendars class is then serialized to a json object via gson.
+	 * The SQL query has been done using sub queries which the querybuilder does not support. Therefore the method doQuery has been used instead.
+	 * @param username
+	 * @return calendars json
+	 */
 	public String getCalendars(String username) {
 		try {
 			pstmt = doQuery("SELECT calendar, createdBy FROM calendars WHERE active = true AND (isPublic = true OR calendar IN (SELECT calendar FROM usercalendars WHERE username = ?))");

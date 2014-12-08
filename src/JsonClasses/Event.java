@@ -3,6 +3,9 @@ package JsonClasses;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Json class used for getting events, create event, delete event, create note and delete note
+ */
 public class Event {
 	@SuppressWarnings("unused")
 	private String overallID;
@@ -33,7 +36,7 @@ public class Event {
 	public void setOverallID(String overallID) {
 		this.overallID = overallID;
 	}
-	
+
 	public String getActivityid(){
 		return activityid;
 	}
@@ -70,14 +73,14 @@ public class Event {
 	public String getCalendar() {
 		return this.calendar;
 	}
-	
+
 	public void setStartdate(Date start) {
 		this.startDate = start;
 	}
 	public Date getStartdate(){
 		return startDate;
 	}
-	
+
 	public String getNote() {
 		return note;
 	}

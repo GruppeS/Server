@@ -1,6 +1,5 @@
 package model.Forecast;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Iterator;
@@ -26,15 +25,20 @@ public class ForecastModel {
 	QueryBuilder qb = new QueryBuilder();
 	Forecasts forecasts = new Forecasts();
 	Configurations config = new Configurations();
-	
+
 	private CachedRowSetImpl crs;
 
+	/**
+	 * Reads data from weather server and deserializes it using gson.
+	 * The jsonarray is then iterated over so that every day of forecasts gets added to the database.
+	 * If forecasts are already present in the database, they will be updated with the new ones
+	 */
 	@SuppressWarnings("rawtypes")
 	public void saveForecast() {
 
 		String result = null;
 		String weatherDescription = null;		
-		
+
 		try {			
 			result = urlReader.readUrl("http://api.openweathermap.org/data/2.5/forecast/daily?lat=" + config.getWeather_lat() + "&lon=" + config.getWeather_lon() + "&cnt=" + config.getWeather_future_in_days() + "&mode=json&units=metric");
 
@@ -44,16 +48,16 @@ public class ForecastModel {
 			JSONArray list = (JSONArray) jsonObject.get("list");
 
 			Iterator i = list.iterator();
-			
+
 			boolean dataIsPresent;
 			if(qb.selectFrom("forecast").all().executeQuery().next()){
 				dataIsPresent = true;
 			} else {
 				dataIsPresent = false;
 			}
-			
+
 			int count = 1;
-			
+
 			while (i.hasNext()) {
 
 				JSONObject innerObj = (JSONObject) i.next();
@@ -75,7 +79,7 @@ public class ForecastModel {
 				}
 
 				String count_String = Integer.toString(count);
-				
+
 				String table = "forecast";
 				String[] fields = {"forecastID", "day", "temperature", "summary"};
 				String[] values = {count_String, string_date, temperature, weatherDescription};
@@ -87,8 +91,6 @@ public class ForecastModel {
 				}
 				count++;
 			} 
-		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (ParseException ex) {
 			ex.printStackTrace();
 		} catch (NullPointerException ex) {
@@ -97,11 +99,15 @@ public class ForecastModel {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Selects forecasts from database and ads them to forecasts arraylist in Forecasts class
+	 * @return Forecasts
+	 */
 	public Forecasts getForecast() {
 		try {
 			crs = qb.selectFrom("forecast").where("msg_type", "=", "forecast").executeQuery();
-			
+
 			while(crs.next()){
 				String date = crs.getString("day");
 				String temperature = crs.getString("temperature");
@@ -117,17 +123,21 @@ public class ForecastModel {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return forecasts;
 	}
 
+	/**
+	 * Gets the creation date of forecasts in database and checks if they should be updated according to the Weather_expiration_time in config
+	 * if they are outdated the method saveForecast will be called
+	 */
 	public void updateForecast() {
 		Date date = new Date();
 		long maxTimeNoUpdate = Long.parseLong(config.getWeather_expiration_time());
 
 		long timeNow = date.getTime()/1000L;
 		long timeLastForecast = 0;
-		
+
 		try {
 			crs = qb.selectFrom("forecast").all().executeQuery();
 			if(crs.next()){
@@ -142,9 +152,12 @@ public class ForecastModel {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if(timeNow-timeLastForecast > maxTimeNoUpdate){
+			System.out.println("UPDATING FORECAST");
 			saveForecast();
+		} else {
+			System.out.println("FORECAST IS UP TO DATE");
 		}
 	}
 }

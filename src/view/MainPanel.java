@@ -2,8 +2,8 @@ package view;
 
 import java.awt.event.ActionListener;
 
-import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
 public class MainPanel extends JPanel {
 
@@ -11,6 +11,9 @@ public class MainPanel extends JPanel {
 	private JButton btnAdmin;
 	private JButton btnTerminate;
 
+	/**
+	 * Sets swing objects
+	 */
 	public MainPanel() {
 		setLayout(null);
 
@@ -23,6 +26,10 @@ public class MainPanel extends JPanel {
 		add(btnTerminate);
 	}
 
+	/**
+	 * Adds actionlisteners and actioncommands
+	 * @param l
+	 */
 	public void addActionListener(ActionListener l)
 	{
 		btnAdmin.addActionListener(l);
